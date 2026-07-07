@@ -1,0 +1,23 @@
+{
+  "name": "blog",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "serve": "vitepress serve docs",
+    "inject-leetcode": "node scripts/inject-leetcode-description.mjs",
+    "inject-leetcode:force": "node scripts/inject-leetcode-description.mjs --force"
+  },
+  "devDependencies": {
+    "vue": "3.2.44",
+    "vitepress": "1.0.0-alpha.28"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "@algolia/client-search"
+      ]
+    }
+  }
+}
