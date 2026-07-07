@@ -1,0 +1,12 @@
+{
+  "name": "doctor-dog-web",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev:home": "pnpm --filter home dev",
+    "dev:blog": "pnpm --filter blog dev",
+    "dev:en": "pnpm --filter en dev",
+    "dev:ai": "pnpm --filter ai dev",
+    "build": "pnpm -r --if-present run build"
+  }
+}
