@@ -1,0 +1,770 @@
+/* MCP 高德地图助手 - 主布局 */
+.mcp-gaode {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  background: linear-gradient(to bottom, #f8fafc 0%, #ffffff 100%);
+}
+
+.mcp-gaode-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: var(--ds-bg);
+  color: var(--ds-text-muted);
+}
+
+/* 侧栏 */
+.mcp-gaode-sidebar {
+  width: 300px;
+  flex-shrink: 0;
+  padding: 12px 20px 16px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  background: linear-gradient(to bottom, #ffffff 0%, #f9fafb 100%);
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.02);
+}
+
+.mcp-gaode-sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.mcp-gaode-sidebar-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.mcp-gaode-sidebar-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.mcp-gaode-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #22c55e 0%, #3b82f6 50%, #8b5cf6 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mcp-gaode-logo:hover {
+  transform: scale(1.05) rotate(5deg);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+.mcp-gaode-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.3px;
+}
+
+.mcp-gaode-desc {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.mcp-gaode-sidebar-heading {
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 12px 0;
+}
+
+.mcp-gaode-plugins {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mcp-gaode-plugin-tag {
+  font-size: 11px;
+  padding: 6px 10px;
+  background: linear-gradient(to bottom, #f1f5f9 0%, #e2e8f0 100%);
+  color: #475569;
+  border-radius: 8px;
+  font-family: ui-monospace, 'SF Mono', Monaco, monospace;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.mcp-gaode-plugin-tag:hover {
+  background: linear-gradient(to bottom, #e2e8f0 0%, #cbd5e1 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mcp-gaode-plugin-tag-used {
+  border: 2px solid #ef4444;
+  background: linear-gradient(to bottom, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2);
+}
+
+.mcp-gaode-plugin-tag-used:hover {
+  background: linear-gradient(to bottom, #fecaca 0%, #fca5a5 100%);
+  box-shadow: 0 3px 8px rgba(239, 68, 68, 0.3);
+}
+
+.mcp-gaode-tool-name-used {
+  color: #ef4444;
+  font-weight: 700;
+  padding: 2px 6px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 4px;
+  margin-left: 4px;
+}
+
+.mcp-gaode-recommended {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mcp-gaode-recommended-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #334155;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.mcp-gaode-recommended-btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--ds-primary);
+  transform: scaleY(0);
+  transition: transform 0.2s ease;
+}
+
+.mcp-gaode-recommended-btn:hover:not(:disabled) {
+  border-color: var(--ds-primary);
+  background: linear-gradient(to right, rgba(59, 130, 246, 0.05) 0%, rgba(59, 130, 246, 0.02) 100%);
+  transform: translateX(2px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+}
+
+.mcp-gaode-recommended-btn:hover:not(:disabled)::before {
+  transform: scaleY(1);
+}
+
+.mcp-gaode-recommended-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 主聊天区 */
+.mcp-gaode-main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  overflow: hidden;
+}
+
+.mcp-gaode-messages {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px 32px 16px;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.mcp-gaode-messages::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.mcp-gaode-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.mcp-gaode-empty-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.mcp-gaode-empty-icon {
+  font-size: 36px;
+  flex-shrink: 0;
+  color: #3b82f6;
+}
+
+.mcp-gaode-empty-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.mcp-gaode-empty-hint {
+  margin: 0;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.mcp-gaode-row {
+  margin-bottom: 14px;
+  display: flex;
+  animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mcp-gaode-row-user {
+  justify-content: flex-end;
+}
+
+.mcp-gaode-row-assistant,
+.mcp-gaode-row-function {
+  justify-content: flex-start;
+}
+
+/* 气泡 */
+.mcp-gaode-bubble {
+  max-width: 90%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  line-height: 1.7;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s ease;
+}
+
+.mcp-gaode-bubble:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mcp-gaode-bubble-user {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.mcp-gaode-bubble-user:hover {
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+.mcp-gaode-bubble-assistant {
+  background: #ffffff;
+  color: var(--ds-text);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.mcp-gaode-bubble-tool {
+  background: linear-gradient(to bottom, #f8fafc 0%, #f1f5f9 100%);
+  border: 1.5px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  width: 90%;
+  cursor: pointer;
+}
+
+.mcp-gaode-bubble-tool-start {
+  border-left: 4px solid var(--ds-primary);
+  background: linear-gradient(to right, rgba(59, 130, 246, 0.05) 0%, #f8fafc 10%);
+}
+
+.mcp-gaode-bubble-tool-result {
+  border-left: 4px solid #22c55e;
+  background: linear-gradient(to right, rgba(34, 197, 94, 0.05) 0%, #f8fafc 10%);
+}
+
+.mcp-gaode-bubble-tool-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.mcp-gaode-bubble-tool-header:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+}
+
+.mcp-gaode-bubble-tool-header .mcp-gaode-collapse-btn {
+  margin-left: auto;
+  margin-bottom: 0;
+  padding: 4px 8px;
+}
+
+.mcp-gaode-tool-icon {
+  color: var(--ds-primary);
+  font-size: 16px;
+  filter: drop-shadow(0 1px 2px rgba(59, 130, 246, 0.3));
+}
+
+.mcp-gaode-tool-title {
+  flex: 1;
+  letter-spacing: -0.2px;
+}
+
+.mcp-gaode-bubble-tool-body {
+  font-size: 12px;
+  color: #475569;
+  margin-top: 10px;
+}
+
+.mcp-gaode-collapse-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+  color: var(--ds-primary);
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.mcp-gaode-collapse-btn:hover {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: var(--ds-primary);
+  transform: scale(1.1);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.mcp-gaode-collapse-btn:active {
+  transform: scale(0.95);
+}
+
+.mcp-gaode-json-block,
+.mcp-gaode-json-preview {
+  margin: 0;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', ui-monospace, monospace;
+  font-size: 12px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.mcp-gaode-json-preview {
+  color: #64748b;
+}
+
+.mcp-gaode-bubble-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.7;
+}
+
+/* 减小 markdown 内容的间距 */
+.mcp-gaode-bubble-text.markdown-body {
+  line-height: 1.7;
+  margin: 6px !important;
+}
+
+.mcp-gaode-bubble-text.markdown-body p {
+  margin: 0px !important;
+  line-height: 1.7;
+}
+
+.mcp-gaode-bubble-text.markdown-body p:first-child {
+  margin-top: 0 !important;
+}
+
+.mcp-gaode-bubble-text.markdown-body p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.mcp-gaode-bubble-text.markdown-body ul,
+.mcp-gaode-bubble-text.markdown-body ol {
+  margin: -10px 0 !important;
+  padding-left: 20px;
+}
+
+.mcp-gaode-bubble-text.markdown-body li {
+  margin: -10px 0 !important;
+  line-height: 1.7;
+}
+
+.mcp-gaode-bubble-text.markdown-body h1,
+.mcp-gaode-bubble-text.markdown-body h2,
+.mcp-gaode-bubble-text.markdown-body h3,
+.mcp-gaode-bubble-text.markdown-body h4,
+.mcp-gaode-bubble-text.markdown-body h5,
+.mcp-gaode-bubble-text.markdown-body h6 {
+  margin: -10px 0 !important;
+}
+
+.mcp-gaode-bubble-text.markdown-body h1:first-child,
+.mcp-gaode-bubble-text.markdown-body h2:first-child,
+.mcp-gaode-bubble-text.markdown-body h3:first-child,
+.mcp-gaode-bubble-text.markdown-body h4:first-child,
+.mcp-gaode-bubble-text.markdown-body h5:first-child,
+.mcp-gaode-bubble-text.markdown-body h6:first-child {
+  margin-top: 0 !important;
+}
+
+/* HTML 格式（GUI 一致）：details/summary 折叠块样式 */
+.mcp-gaode-bubble-text details {
+  margin: 10px 0;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.mcp-gaode-bubble-text details:hover {
+  border-color: var(--ds-primary);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+}
+
+.mcp-gaode-bubble-text details summary {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #1e293b;
+  user-select: none;
+  list-style: none;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%);
+  transition: background 0.2s ease;
+}
+
+.mcp-gaode-bubble-text details summary:hover {
+  background: linear-gradient(to bottom, rgba(59, 130, 246, 0.05) 0%, rgba(59, 130, 246, 0.02) 100%);
+}
+
+.mcp-gaode-bubble-text details summary::-webkit-details-marker {
+  display: none;
+}
+
+.mcp-gaode-bubble-text details summary::before {
+  content: '▼ ';
+  display: inline-block;
+  margin-right: 6px;
+  transition: transform 0.3s ease;
+  color: var(--ds-primary);
+  font-weight: 700;
+}
+
+.mcp-gaode-bubble-text details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.mcp-gaode-bubble-text details pre {
+  margin: 0;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 0 0 10px 10px;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', ui-monospace, monospace;
+  font-size: 12px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.mcp-gaode-typing {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.mcp-gaode-typing-label {
+  font-weight: 500;
+  color: #475569;
+}
+
+.mcp-gaode-typing-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mcp-gaode-typing-dots i {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ds-primary) 0%, #8b5cf6 100%);
+  animation: mcp-gaode-typing-bounce 1.4s ease-in-out infinite both;
+}
+
+.mcp-gaode-typing-dots i:nth-child(1) { animation-delay: 0s; }
+.mcp-gaode-typing-dots i:nth-child(2) { animation-delay: 0.16s; }
+.mcp-gaode-typing-dots i:nth-child(3) { animation-delay: 0.32s; }
+
+@keyframes mcp-gaode-typing-bounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  30% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+}
+
+/* 输入区 */
+.mcp-gaode-input-wrap {
+  padding: 16px 20px;
+  background: linear-gradient(to top, #ffffff 0%, rgba(255, 255, 255, 0.95) 100%);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.mcp-gaode-input-box {
+  position: relative;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.mcp-gaode-input-box:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+.mcp-gaode-input-box:focus-within {
+  border-color: var(--ds-primary);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.mcp-gaode-input {
+  flex: 1;
+  resize: none;
+  border: none !important;
+  border-radius: 10px 10px 0 0;
+  padding: 12px 56px 40px 14px !important;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.mcp-gaode-input:hover,
+.mcp-gaode-input:focus,
+.mcp-gaode-input.ant-input:focus,
+.mcp-gaode-input.ant-input-focused {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none;
+}
+
+.mcp-gaode-send {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  min-width: 64px;
+  height: 32px;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--ds-primary) 0%, var(--ds-primary-hover) 100%);
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  transition: all 0.2s ease;
+}
+
+.mcp-gaode-send:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--ds-primary-hover) 0%, #1d4ed8 100%);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.mcp-gaode-send:active:not(:disabled) {
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+}
+
+@media (max-width: 768px) {
+  .mcp-gaode {
+    flex-direction: column;
+  }
+
+  .mcp-gaode-sidebar {
+    width: 100%;
+    max-height: 280px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .mcp-gaode-sidebar-card:first-child {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .mcp-gaode-plugins {
+    max-height: 100px;
+    overflow-y: auto;
+  }
+
+  .mcp-gaode-bubble {
+    max-width: 90%;
+  }
+
+  .mcp-gaode-messages {
+    padding: 20px 16px 16px;
+  }
+
+  .mcp-gaode-input-wrap {
+    padding: 16px 20px 24px;
+  }
+}
+
+/* ========== MCP 统一入口：助手选择放入输入框内 ========== */
+.mcp-unified {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: linear-gradient(to bottom, #f8fafc 0%, #ffffff 100%);
+}
+
+.mcp-unified-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* 开发中页面：中央卡片 + 底部输入框风格条 */
+.mcp-unified-developing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 200px;
+  padding: 24px;
+  background: linear-gradient(to bottom, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.mcp-unified-developing-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px 48px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 360px;
+}
+
+.mcp-unified-developing-icon {
+  font-size: 56px;
+  margin-bottom: 20px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.08));
+}
+
+.mcp-unified-developing-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.02em;
+}
+
+.mcp-unified-developing-hint {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* 开发中页面底部：与 AskInput 同风格的“输入框”容器，内仅助手选择 */
+.mcp-unified-input-only {
+  flex-shrink: 0;
+  padding: 16px 20px 20px;
+  background: linear-gradient(to top, #ffffff 0%, rgba(255, 255, 255, 0.95) 100%);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.mcp-unified-input-only-box {
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  background: #ffffff;
+  padding: 8px 12px 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}

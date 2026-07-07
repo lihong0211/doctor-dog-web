@@ -1,0 +1,149 @@
+.china-map-weather {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--ds-bg-body, #0d1117);
+  color: var(--ds-text, #e6edf3);
+}
+
+.china-map-weather-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--ds-border, #30363d);
+  flex-shrink: 0;
+}
+
+.china-map-weather-title {
+  margin: 0 0 4px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.china-map-weather-desc {
+  margin: 0 0 12px 0;
+  font-size: 0.875rem;
+  color: var(--ds-text-muted, #8b949e);
+}
+
+.china-map-weather-breadcrumb {
+  font-size: 0.8125rem;
+  color: var(--ds-text-muted, #8b949e);
+  margin-bottom: 12px;
+}
+
+.china-map-weather-breadcrumb .breadcrumb-sep {
+  margin: 0 4px;
+  color: var(--ds-text-muted, #6e7681);
+}
+
+.china-map-weather-breadcrumb .breadcrumb-item {
+  color: var(--ds-text, #e6edf3);
+}
+
+.china-map-weather-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.china-map-weather-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 16px;
+  padding: 16px 24px;
+}
+
+.china-map-weather-map-wrap {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--ds-border, #30363d);
+}
+
+.china-map-weather-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 17, 23, 0.8);
+  z-index: 1;
+}
+
+.china-map-weather-chart {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+}
+
+.china-map-weather-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.china-map-weather-card .ant-card-head {
+  border-bottom-color: var(--ds-border, #30363d);
+  color: var(--ds-text, #e6edf3);
+}
+
+.china-map-weather-card .ant-card-body {
+  background: var(--ds-bg-elevated, #161b22);
+  color: var(--ds-text, #e6edf3);
+}
+
+.weather-result {
+  text-align: center;
+  padding: 8px 0;
+}
+
+.weather-city {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.weather-temp {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ds-accent, #58a6ff);
+  margin-bottom: 4px;
+}
+
+.weather-desc {
+  font-size: 0.875rem;
+  color: var(--ds-text-muted, #8b949e);
+  margin-bottom: 8px;
+}
+
+.weather-meta {
+  font-size: 0.75rem;
+  color: var(--ds-text-muted, #8b949e);
+}
+
+.weather-error,
+.weather-placeholder {
+  font-size: 0.875rem;
+  color: var(--ds-text-muted, #8b949e);
+  text-align: center;
+  padding: 16px 0;
+}
+
+.weather-error {
+  color: var(--ds-danger, #f85149);
+}
+
+@media (max-width: 768px) {
+  .china-map-weather-body {
+    flex-direction: column;
+  }
+  .china-map-weather-sidebar {
+    width: 100%;
+  }
+  .china-map-weather-chart {
+    min-height: 300px;
+  }
+}

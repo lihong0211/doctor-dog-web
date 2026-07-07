@@ -1,0 +1,175 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - img "robot" [ref=e7]:
+        - img [ref=e8]
+      - strong [ref=e11]: AI Tech Lab
+    - generic [ref=e12]:
+      - tablist [ref=e13]:
+        - generic [ref=e15]:
+          - tab "体验中心" [ref=e17] [cursor=pointer]
+          - tab "技能中心" [selected] [ref=e19] [cursor=pointer]
+      - generic:
+        - generic:
+          - tabpanel "技能中心"
+  - generic [ref=e20]:
+    - complementary [ref=e21]:
+      - menu [ref=e24]:
+        - text: 核心技术
+        - group [ref=e25]:
+          - menuitem "api VectorDB" [ref=e26] [cursor=pointer]:
+            - img "api" [ref=e27]:
+              - img [ref=e28]
+            - generic [ref=e30]: VectorDB
+          - menuitem "book Knowledge Base" [ref=e31] [cursor=pointer]:
+            - img "book" [ref=e32]:
+              - img [ref=e33]
+            - generic [ref=e35]: Knowledge Base
+          - menuitem "database RAG" [ref=e36] [cursor=pointer]:
+            - img "database" [ref=e37]:
+              - img [ref=e38]
+            - generic [ref=e40]: RAG
+          - menuitem "code Text2SQL" [ref=e41] [cursor=pointer]:
+            - img "code" [ref=e42]:
+              - img [ref=e43]
+            - generic [ref=e45]: Text2SQL
+          - menuitem "link LangChain" [ref=e46] [cursor=pointer]:
+            - img "link" [ref=e47]:
+              - img [ref=e48]
+            - generic [ref=e50]: LangChain
+          - menuitem "tool Function Call" [ref=e51] [cursor=pointer]:
+            - img "tool" [ref=e52]:
+              - img [ref=e53]
+            - generic [ref=e55]: Function Call
+          - menuitem "cloud MCP" [ref=e56] [cursor=pointer]:
+            - img "cloud" [ref=e57]:
+              - img [ref=e58]
+            - generic [ref=e60]: MCP
+          - menuitem "swap A2A" [ref=e61] [cursor=pointer]:
+            - img "swap" [ref=e62]:
+              - img [ref=e63]
+            - generic [ref=e65]: A2A
+          - menuitem "robot Agent" [ref=e66] [cursor=pointer]:
+            - img "robot" [ref=e67]:
+              - img [ref=e68]
+            - generic [ref=e70]: Agent
+          - menuitem "experiment Fine-tuning" [ref=e71] [cursor=pointer]:
+            - img "experiment" [ref=e72]:
+              - img [ref=e73]
+            - generic [ref=e75]: Fine-tuning
+    - main [ref=e77]:
+      - generic [ref=e80]:
+        - generic [ref=e81]:
+          - generic [ref=e82]: AI TECH LAB / MODEL HUB
+          - heading "大模型体验中心" [level=1] [ref=e83]
+          - paragraph [ref=e84]: 选择一个模型，查看性能指标，开始推理对话
+        - generic [ref=e85]:
+          - generic [ref=e88]:
+            - generic [ref=e89]:
+              - generic [ref=e90]:
+                - generic [ref=e91]: Qwen2.5-7B
+                - generic [ref=e92]: Alibaba / DashScope
+              - generic [ref=e93]: READY
+            - paragraph [ref=e95]: 多语言理解与强推理能力，中文生态最佳
+            - generic [ref=e96]:
+              - generic [ref=e98]:
+                - generic [ref=e99]: SPEED
+                - generic [ref=e100]: 92%
+              - generic [ref=e104]:
+                - generic [ref=e105]: CONTEXT
+                - generic [ref=e106]: 128K
+              - generic [ref=e110]:
+                - generic [ref=e111]: REASONING
+                - generic [ref=e112]: 78%
+            - button "Try Now →" [ref=e115] [cursor=pointer]
+          - generic [ref=e118]:
+            - generic [ref=e119]:
+              - generic [ref=e120]:
+                - generic [ref=e121]: DeepSeek-V3
+                - generic [ref=e122]: DeepSeek
+              - generic [ref=e123]: READY
+            - paragraph [ref=e125]: 前沿代码生成与复杂多步推理
+            - generic [ref=e126]:
+              - generic [ref=e128]:
+                - generic [ref=e129]: SPEED
+                - generic [ref=e130]: 75%
+              - generic [ref=e134]:
+                - generic [ref=e135]: CONTEXT
+                - generic [ref=e136]: 64K
+              - generic [ref=e140]:
+                - generic [ref=e141]: REASONING
+                - generic [ref=e142]: 95%
+            - button "Try Now →" [ref=e145] [cursor=pointer]
+          - generic [ref=e148]:
+            - generic [ref=e149]:
+              - generic [ref=e150]:
+                - generic [ref=e151]: Llama 3.1 8B
+                - generic [ref=e152]: Meta / Ollama
+              - generic [ref=e153]: READY
+            - paragraph [ref=e155]: 高速轻量，本地推理优选，延迟极低
+            - generic [ref=e156]:
+              - generic [ref=e158]:
+                - generic [ref=e159]: SPEED
+                - generic [ref=e160]: 98%
+              - generic [ref=e164]:
+                - generic [ref=e165]: CONTEXT
+                - generic [ref=e166]: 128K
+              - generic [ref=e170]:
+                - generic [ref=e171]: REASONING
+                - generic [ref=e172]: 70%
+            - button "Try Now →" [ref=e175] [cursor=pointer]
+          - generic [ref=e178]:
+            - generic [ref=e179]:
+              - generic [ref=e180]:
+                - generic [ref=e181]: Mistral 7B
+                - generic [ref=e182]: Mistral AI / Ollama
+              - generic [ref=e183]: BETA
+            - paragraph [ref=e185]: 指令遵循精准优化，工具调用表现出色
+            - generic [ref=e186]:
+              - generic [ref=e188]:
+                - generic [ref=e189]: SPEED
+                - generic [ref=e190]: 90%
+              - generic [ref=e194]:
+                - generic [ref=e195]: CONTEXT
+                - generic [ref=e196]: 32K
+              - generic [ref=e200]:
+                - generic [ref=e201]: REASONING
+                - generic [ref=e202]: 72%
+            - button "Try Now →" [ref=e205] [cursor=pointer]
+          - generic [ref=e208]:
+            - generic [ref=e209]:
+              - generic [ref=e210]:
+                - generic [ref=e211]: Yi-34B
+                - generic [ref=e212]: Zero-One Everything
+              - generic [ref=e213]: READY
+            - paragraph [ref=e215]: 超长文本深度理解，文档处理首选
+            - generic [ref=e216]:
+              - generic [ref=e218]:
+                - generic [ref=e219]: SPEED
+                - generic [ref=e220]: 55%
+              - generic [ref=e224]:
+                - generic [ref=e225]: CONTEXT
+                - generic [ref=e226]: 200K
+              - generic [ref=e230]:
+                - generic [ref=e231]: REASONING
+                - generic [ref=e232]: 85%
+            - button "Try Now →" [ref=e235] [cursor=pointer]
+          - generic [ref=e238]:
+            - generic [ref=e239]:
+              - generic [ref=e240]:
+                - generic [ref=e241]: Gemma 2 9B
+                - generic [ref=e242]: Google DeepMind
+              - generic [ref=e243]: SOON
+            - paragraph [ref=e245]: 谷歌开源旗舰，轻量高效多任务
+            - generic [ref=e246]:
+              - generic [ref=e248]:
+                - generic [ref=e249]: SPEED
+                - generic [ref=e250]: 85%
+              - generic [ref=e254]:
+                - generic [ref=e255]: CONTEXT
+                - generic [ref=e256]: 8K
+              - generic [ref=e260]:
+                - generic [ref=e261]: REASONING
+                - generic [ref=e262]: 80%
+            - button "Coming Soon" [disabled] [ref=e265]
+        - paragraph [ref=e266]: DASHSCOPE API · OLLAMA LOCAL INFERENCE

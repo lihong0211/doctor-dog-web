@@ -1,0 +1,136 @@
+/* AskInput 组件 - 统一的大模型输入区域 */
+
+.ask-input-top-slot {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ask-input-wrap {
+  padding: 16px 20px 20px;
+  background: linear-gradient(to top, #ffffff 0%, rgba(255, 255, 255, 0.95) 100%);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.04);
+  flex-shrink: 0;
+}
+
+.ask-input-box {
+  position: relative;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  background: #ffffff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.ask-input-box:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+.ask-input-box:focus-within {
+  border-color: var(--ds-primary, #3b82f6);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12), 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.ask-input-inner-top-slot {
+  padding: 6px 12px 4px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.ask-input-textarea {
+  flex: 1;
+  resize: none;
+  border: none !important;
+  border-radius: 10px 10px 0 0;
+  padding: 8px 56px 36px 14px !important;
+  font-size: 14px;
+  line-height: 1.5;
+  transition: all 0.2s ease;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--ds-text, #1e293b);
+  min-height: 0;
+}
+
+/* 有 footer 行时不需要底部额外 padding，footer 本身提供空间 */
+.ask-input-textarea--with-footer {
+  padding: 12px 14px 8px !important;
+  border-radius: 10px 10px 0 0;
+}
+
+.ask-input-textarea:hover,
+.ask-input-textarea:focus,
+.ask-input-textarea.ant-input:focus,
+.ask-input-textarea.ant-input-focused {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none;
+}
+
+.ask-input-textarea::placeholder {
+  color: #94a3b8;
+}
+
+/* footer 行：包含 extraActions（左）和发送按钮（右） */
+.ask-input-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 4px 8px 6px;
+  min-height: 40px;
+}
+
+.ask-input-extra-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.ask-send-btn {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  min-width: 64px;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--ds-primary, #3b82f6) 0%, var(--ds-primary-hover, #2563eb) 100%) !important;
+  border: none !important;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  transition: all 0.2s ease;
+}
+
+/* footer 模式下发送按钮不需要绝对定位 */
+.ask-input-footer .ask-send-btn {
+  position: static;
+  flex-shrink: 0;
+}
+
+.ask-send-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--ds-primary-hover, #2563eb) 0%, #1d4ed8 100%) !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4) !important;
+  transform: translateY(-1px);
+}
+
+.ask-send-btn:active:not(:disabled) {
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3) !important;
+  transform: translateY(0);
+}
+
+.ask-send-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
