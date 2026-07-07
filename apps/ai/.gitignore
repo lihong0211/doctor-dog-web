@@ -2,5 +2,6 @@
 .cursor/
 .vscode/
 .DS_Store
-docs/  
+docs/
 hc/
+.playwright-mcp/
