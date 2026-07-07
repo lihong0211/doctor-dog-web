@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  @apply fixed;
+  @apply inset-0;
+  overflow: hidden;
+}
+
+#root {
+  @apply h-full;
+}
+
+button {
+  outline: none;
+  border: 0;
+}
+
+* {
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+}
+
+button, [type='button'], [type='reset'], [type='submit'] {
+  /* background-color: #1677ff; */
+}

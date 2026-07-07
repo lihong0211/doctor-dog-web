@@ -1,0 +1,35 @@
+.fly-scroll
+  &::-webkit-scrollbar
+    width 4px
+    background transparent
+    border-radius 2px
+  &::-webkit-scrollbar-thumb
+    border-radius 2px
+    background transparent
+  &::-webkit-scrollbar-button
+    display none
+    
+.fly-scroll:hover
+  &::-webkit-scrollbar-thumb
+    background rgba(114, 181, 34, 0.3)
+
+.gpt-scroll
+  &::-webkit-scrollbar
+    width 4px
+    background transparent
+    border-radius 2px
+  &::-webkit-scrollbar-thumb
+    border-radius 2px
+    background transparent
+  &::-webkit-scrollbar-button
+    display none
+
+.gpt-scroll:hover
+  &::-webkit-scrollbar-thumb
+    background rgba(0, 115, 255, 0.2)
+
+.ant-table-cell
+  font-size 12px!important;
+
+.ant-ribbon-text
+  font-size 12px!important;
