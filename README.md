@@ -34,3 +34,11 @@ DEPLOY_HOST=user@1.2.3.4 ./deploy/deploy.sh   # build + rsync + nginx reload
 See `deploy/nginx/doctor-dog.com.conf` for the Nginx routing config that
 needs to be in place on the server (replaces the old per-subdomain configs
 for `en.`, `blog.`, `ai.doctor-dog.com` — those subdomains are retired).
+
+**First-time deploy only:** `deploy.sh` does not modify the server's Nginx
+site config. Before running it for the first time, manually place
+`deploy/nginx/doctor-dog.com.conf` on the server and remove the old
+`en.`, `blog.`, and `ai.doctor-dog.com` subdomain server blocks (and the
+static-file-serving part of the old apex `doctor-dog.com` block), then run
+`nginx -t` on the server to confirm the new config is valid before the
+next `deploy.sh` run reloads it.

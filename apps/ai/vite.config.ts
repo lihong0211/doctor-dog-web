@@ -6,13 +6,27 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      // '/ai': {
-      //   target: 'https://home.doctor-dog.com',
-      //   changeOrigin: true,
-      // },
       '/ai': {
         target: 'http://localhost:3000',
         changeOrigin: true,
+        bypass(req) {
+          const url = req.url || ''
+          const isFrontendOwned =
+            url === '/ai' ||
+            url === '/ai/' ||
+            url.startsWith('/ai/@') ||
+            url.startsWith('/ai/src/') ||
+            url.startsWith('/ai/node_modules/') ||
+            url.startsWith('/ai/docs/') ||
+            url === '/ai/portal.html' ||
+            url === '/ai/waves.html' ||
+            url.startsWith('/ai/hub') ||
+            url.startsWith('/ai/models') ||
+            url.startsWith('/ai/experience') ||
+            url.startsWith('/ai/skills') ||
+            url.startsWith('/ai/portal')
+          if (isFrontendOwned) return url
+        },
       },
     },
   },
