@@ -1,0 +1,13 @@
+{
+  "name": "home",
+  "version": "1.0.0",
+  "description": "aliyun home page",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python3 -m http.server 8080",
+    "serve": "python3 -m http.server 8080"
+  },
+  "keywords": [],
+  "author": "lihong0211",
+  "license": "MIT"
+}
