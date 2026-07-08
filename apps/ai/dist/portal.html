@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>AI 门户</title>
+	<style>
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+		body { overflow: hidden; background: #000; font-family: Helvetica, sans-serif; }
+		#info { position: absolute; top: 12px; left: 12px; color: rgba(127,255,255,0.75); font-size: 14px; z-index: 10; }
+		#info a { color: #8ff; }
+		#container { width: 100%; height: 100vh; }
+		#menu { position: absolute; bottom: 20px; width: 100%; text-align: center; z-index: 10; }
+		.element {
+			width: 120px; height: 160px;
+			box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+			border: 1px solid rgba(127,255,255,0.25);
+			text-align: center; line-height: normal;
+			cursor: pointer;
+			pointer-events: auto;
+		}
+		.element:hover {
+			box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+			border: 1px solid rgba(127,255,255,0.75);
+		}
+		.element[data-placeholder="1"] { cursor: default; opacity: 0.7; }
+		.element .number { position: absolute; top: 20px; right: 20px; font-size: 12px; color: rgba(127,255,255,0.75); }
+		.element .symbol { position: absolute; top: 40px; left: 0; right: 0; font-size: 36px; font-weight: bold; color: rgba(255,255,255,0.75); text-shadow: 0 0 10px rgba(0,255,255,0.95); }
+		.element .details { position: absolute; bottom: 15px; left: 0; right: 0; font-size: 24px; color: rgba(127,255,255,0.75); }
+		button {
+			color: rgba(127,255,255,0.75); background: transparent;
+			outline: 1px solid rgba(127,255,255,0.75); border: 0; padding: 5px 10px; cursor: pointer; margin: 0 4px;
+		}
+		button:hover { background-color: rgba(0,255,255,0.5); }
+		button:active { color: #000; background-color: rgba(0,255,255,0.75); }
+	</style>
+</head>
+<body>
+	<div id="container"></div>
+	<div id="menu">
+		<button id="table">table</button>
+		<button id="sphere">sphere</button>
+		<button id="helix">helix</button>
+		<button id="grid">grid</button>
+	</div>
+	<script>
+		// 数据来自父页面注入的 portalSites（含 symbol/name/url/position/category）；单独打开时用兜底
+		if (window.parent !== window && window.parent.__PORTAL_SITES__) {
+			window.PORTAL_SITES = window.parent.__PORTAL_SITES__;
+			window.PORTAL_CATEGORY_COLORS = window.parent.__PORTAL_CATEGORY_COLORS__ || {};
+		} else {
+			var pos = [[1,1],[18,1],[1,2],[2,2],[13,2],[14,2],[15,2],[16,2],[17,2],[18,2],[1,3],[2,3],[13,3],[14,3],[15,3],[16,3],[17,3],[18,3],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4],[7,4],[8,4],[9,4],[10,4],[11,4],[12,4],[13,4],[14,4],[15,4],[16,4],[17,4],[18,4],[1,5],[2,5],[3,5],[4,5],[5,5],[6,5],[7,5],[8,5],[9,5],[10,5],[11,5],[12,5],[13,5],[14,5],[15,5],[16,5],[17,5],[18,5],[1,6],[2,6],[4,9],[5,9],[6,9],[7,9],[8,9],[9,9],[10,9],[11,9],[12,9],[13,9],[14,9],[15,9],[16,9],[17,9],[18,9],[4,6],[5,6],[6,6],[7,6],[8,6],[9,6],[10,6],[11,6],[12,6],[13,6],[14,6],[15,6],[16,6],[17,6],[18,6],[1,7],[2,7],[4,10],[5,10],[6,10],[7,10],[8,10],[9,10],[10,10],[11,10],[12,10],[13,10],[14,10],[15,10],[16,10],[17,10],[18,10],[4,7],[5,7],[6,7],[7,7],[8,7],[9,7],[10,7],[11,7],[12,7],[13,7],[14,7],[15,7],[16,7],[17,7],[18,7]];
+			var sym = ['H','He','Li','Be','B','C','N','O','F','Ne','Na','Mg','Al','Si','P','S','Cl','Ar','K','Ca','Sc','Ti','V','Cr','Mn','Fe','Co','Ni','Cu','Zn','Ga','Ge','As','Se','Br','Kr','Rb','Sr','Y','Zr','Nb','Mo','Tc','Ru','Rh','Pd','Ag','Cd','In','Sn','Sb','Te','I','Xe','Cs','Ba','La','Ce','Pr','Nd','Pm','Sm','Eu','Gd','Tb','Dy','Ho','Er','Tm','Yb','Lu','Hf','Ta','W','Re','Os','Ir','Pt','Au','Hg','Tl','Pb','Bi','Po','At','Rn','Fr','Ra','Ac','Th','Pa','U','Np','Pu','Am','Cm','Bk','Cf','Es','Fm','Md','No','Lr','Rf','Db','Sg','Bh','Hs','Mt','Ds','Rg','Cn','Nh','Fl','Mc','Lv','Ts','Og'];
+			var filledList = [{name:'通义千问',url:'https://tongyi.aliyun.com',category:'llm-cn'},{name:'文心一言',url:'https://yiyan.baidu.com',category:'llm-cn'},{name:'豆包',url:'https://www.doubao.com',category:'llm-cn'},{name:'智谱清言',url:'https://chatglm.cn',category:'llm-cn'},{name:'Coze',url:'https://www.coze.cn',category:'llm-cn'},{name:'ChatGPT',url:'https://chat.openai.com',category:'llm-global'},{name:'Claude',url:'https://claude.ai',category:'llm-global'},{name:'Kimi',url:'https://kimi.moonshot.cn',category:'llm-cn'},{name:'DeepSeek',url:'https://www.deepseek.com',category:'llm-cn'},{name:'Google Gemini',url:'https://gemini.google.com',category:'llm-global'},{name:'Dify',url:'https://dify.ai',category:'llm-cn'},{name:'Cursor',url:'https://cursor.com',category:'programming'},{name:'Phind',url:'https://www.phind.com',category:'llm-global'},{name:'Perplexity',url:'https://www.perplexity.ai',category:'search'},{name:'Poe',url:'https://poe.com',category:'llm-global'},{name:'Hugging Face',url:'https://huggingface.co',category:'llm-global'},{name:'Replicate',url:'https://replicate.com',category:'image'},{name:'Ollama',url:'https://ollama.com',category:'llm-global'},{name:'LM Studio',url:'https://lmstudio.ai',category:'llm-global'},{name:'Mistral',url:'https://mistral.ai',category:'llm-global'},{name:'Llama',url:'https://llama.meta.com',category:'llm-global'},{name:'Midjourney',url:'https://www.midjourney.com',category:'image'},{name:'Stable Diffusion',url:'https://stability.ai',category:'image'},{name:'Runway',url:'https://runwayml.com',category:'video'},{name:'Sora',url:'https://openai.com/sora',category:'video'},{name:'Vercel AI',url:'https://vercel.com/docs/ai',category:'programming'},{name:'Together',url:'https://together.ai',category:'llm-global'},{name:'Anthropic',url:'https://www.anthropic.com',category:'llm-global'},{name:'OpenAI',url:'https://openai.com',category:'llm-global'},{name:'AI Short',url:'https://www.aishort.top',category:'search'}];
+			window.PORTAL_CATEGORY_COLORS = {'voice':'rgba(0,180,216,0.55)','design':'rgba(255,159,67,0.55)','music':'rgba(156,39,176,0.5)','3d':'rgba(76,175,80,0.5)','llm-cn':'rgba(233,30,99,0.5)','llm-global':'rgba(33,150,243,0.55)','image':'rgba(255,193,7,0.5)','search':'rgba(0,150,136,0.55)','digital-human':'rgba(103,58,183,0.5)','programming':'rgba(244,67,54,0.55)','video':'rgba(0,188,212,0.55)','peripheral':'rgba(121,85,72,0.55)','':'rgba(80,80,80,0.4)'};
+			window.PORTAL_SITES = pos.map(function(p, i) { var f = filledList[i]; return { symbol: sym[i], name: f ? f.name : '', url: f ? f.url : '', position: p, category: f ? f.category : '' }; });
+		}
+	</script>
+	<script type="importmap">
+		{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+	</script>
+	<script type="module">
+		import * as THREE from 'three';
+		import TWEEN from 'three/addons/libs/tween.module.js';
+		import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
+		import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
+
+		const sites = window.PORTAL_SITES;
+		const categoryColors = window.PORTAL_CATEGORY_COLORS || {};
+		const table = [];
+		for (let i = 0; i < sites.length; i++) {
+			const [col, row] = sites[i].position;
+			table.push(sites[i].symbol, sites[i].name, '', col, row, sites[i].url, sites[i].category || '');
+		}
+
+		let camera, scene, renderer, controls;
+		const objects = [];
+		const targets = { table: [], sphere: [], helix: [], grid: [] };
+
+		function init() {
+			camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
+			camera.position.z = 3000;
+			scene = new THREE.Scene();
+
+			for (let i = 0; i < table.length; i += 7) {
+				const element = document.createElement('div');
+				element.className = 'element';
+				const category = table[i + 6] || '';
+				element.style.backgroundColor = categoryColors[category] || categoryColors[''] || 'rgba(80,80,80,0.4)';
+				element.dataset.url = table[i + 5];
+				if (!(table[i + 5] || '').trim()) element.dataset.placeholder = '1';
+				element.addEventListener('pointerdown', function(e) {
+					e.stopPropagation();
+				});
+				element.addEventListener('click', function(e) {
+					e.preventDefault();
+					e.stopPropagation();
+					const url = (this.dataset.url || '').trim();
+					if (!url) return;
+					if (window.parent !== window) {
+						window.parent.postMessage({ type: 'PORTAL_OPEN_URL', url: url }, '*');
+					} else {
+						window.open(url, '_blank', 'noopener,noreferrer');
+					}
+				});
+
+				const number = document.createElement('div');
+				number.className = 'number';
+				number.textContent = (i / 7) + 1;
+				element.appendChild(number);
+
+				const symbol = document.createElement('div');
+				symbol.className = 'symbol';
+				symbol.textContent = table[i] || '';
+				element.appendChild(symbol);
+
+				const details = document.createElement('div');
+				details.className = 'details';
+				details.textContent = table[i + 1] || '';
+				element.appendChild(details);
+
+				const objectCSS = new CSS3DObject(element);
+				objectCSS.position.x = Math.random() * 4000 - 2000;
+				objectCSS.position.y = Math.random() * 4000 - 2000;
+				objectCSS.position.z = Math.random() * 4000 - 2000;
+				scene.add(objectCSS);
+				objects.push(objectCSS);
+
+				const object = new THREE.Object3D();
+				const stepX = 140, stepY = 180;
+				const offsetX = 9.5 * stepX, offsetY = 5.5 * stepY;
+				object.position.x = (table[i + 3] * stepX) - offsetX;
+				object.position.y = -(table[i + 4] * stepY) + offsetY;
+				targets.table.push(object);
+			}
+
+			const vector = new THREE.Vector3();
+			for (let i = 0, l = objects.length; i < l; i++) {
+				const phi = Math.acos(-1 + (2 * i) / l);
+				const theta = Math.sqrt(l * Math.PI) * phi;
+				const object = new THREE.Object3D();
+				object.position.setFromSphericalCoords(800, phi, theta);
+				vector.copy(object.position).multiplyScalar(2);
+				object.lookAt(vector);
+				targets.sphere.push(object);
+			}
+
+			for (let i = 0, l = objects.length; i < l; i++) {
+				const theta = i * 0.175 + Math.PI;
+				const y = -(i * 8) + 450;
+				const object = new THREE.Object3D();
+				object.position.setFromCylindricalCoords(900, theta, y);
+				vector.x = object.position.x * 2;
+				vector.y = object.position.y;
+				vector.z = object.position.z * 2;
+				object.lookAt(vector);
+				targets.helix.push(object);
+			}
+
+			for (let i = 0; i < objects.length; i++) {
+				const object = new THREE.Object3D();
+				object.position.x = ((i % 5) * 400) - 800;
+				object.position.y = (-(Math.floor(i / 5) % 5) * 400) + 800;
+				object.position.z = (Math.floor(i / 25)) * 1000 - 2000;
+				targets.grid.push(object);
+			}
+
+			renderer = new CSS3DRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.domElement.style.pointerEvents = 'none';
+			document.getElementById('container').appendChild(renderer.domElement);
+
+			controls = new TrackballControls(camera, document.getElementById('container'));
+			controls.minDistance = 500;
+			controls.maxDistance = 6000;
+			controls.addEventListener('change', render);
+
+			document.getElementById('table').addEventListener('click', () => transform(targets.table, 2000));
+			document.getElementById('sphere').addEventListener('click', () => transform(targets.sphere, 2000));
+			document.getElementById('helix').addEventListener('click', () => transform(targets.helix, 2000));
+			document.getElementById('grid').addEventListener('click', () => transform(targets.grid, 2000));
+
+			transform(targets.table, 2000);
+			window.addEventListener('resize', onWindowResize);
+		}
+
+		function transform(targets, duration) {
+			TWEEN.removeAll();
+			for (let i = 0; i < objects.length; i++) {
+				const object = objects[i];
+				const target = targets[i];
+				new TWEEN.Tween(object.position).to({ x: target.position.x, y: target.position.y, z: target.position.z }, Math.random() * duration + duration).easing(TWEEN.Easing.Exponential.InOut).start();
+				new TWEEN.Tween(object.rotation).to({ x: target.rotation.x, y: target.rotation.y, z: target.rotation.z }, Math.random() * duration + duration).easing(TWEEN.Easing.Exponential.InOut).start();
+			}
+			new TWEEN.Tween({}).to({}, duration * 2).onUpdate(render).start();
+		}
+
+		function onWindowResize() {
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			render();
+		}
+
+		function animate() {
+			requestAnimationFrame(animate);
+			TWEEN.update();
+			controls.update();
+		}
+
+		function render() {
+			renderer.render(scene, camera);
+		}
+
+		init();
+		animate();
+	</script>
+</body>
+</html>
