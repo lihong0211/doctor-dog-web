@@ -1,13 +1,29 @@
 {
   "name": "home",
+  "private": true,
   "version": "1.0.0",
-  "description": "aliyun home page",
-  "main": "index.html",
+  "type": "module",
   "scripts": {
-    "dev": "python3 -m http.server 8080",
-    "serve": "python3 -m http.server 8080"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
-  "keywords": [],
-  "author": "lihong0211",
-  "license": "MIT"
+  "dependencies": {
+    "@fontsource/geist-sans": "^5.1.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.5.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13",
+    "typescript": "~5.6.2",
+    "vite": "^5.4.10"
+  }
 }
