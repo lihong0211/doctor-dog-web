@@ -7,6 +7,8 @@
     "dev:blog": "pnpm --filter blog dev",
     "dev:en": "pnpm --filter en dev",
     "dev:ai": "pnpm --filter ai dev",
+    "dev:404": "pnpm --filter error-404 dev",
+    "dev:portfolio": "pnpm --filter portfolio dev",
     "build": "pnpm -r --if-present run build"
   }
 }
