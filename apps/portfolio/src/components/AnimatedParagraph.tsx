@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import { useRef } from 'react'
+import { Fragment, useRef } from 'react'
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion'
 
 interface AnimatedParagraphProps {
@@ -43,18 +43,48 @@ export function AnimatedParagraph({ text, className, style }: AnimatedParagraphP
   })
 
   const chars = text.split('')
+  const totalChars = chars.length
+
+  // Group chars into words so line breaks only ever occur between words,
+  // not in the middle of one (each AnimatedChar is display:inline-block,
+  // which otherwise gives the browser a soft-wrap opportunity after every
+  // single letter).
+  const words: { char: string; index: number }[][] = []
+  let currentWord: { char: string; index: number }[] = []
+  chars.forEach((char, index) => {
+    if (char === ' ') {
+      if (currentWord.length) {
+        words.push(currentWord)
+        currentWord = []
+      }
+      words.push([{ char, index }])
+    } else {
+      currentWord.push({ char, index })
+    }
+  })
+  if (currentWord.length) words.push(currentWord)
 
   return (
     <p ref={containerRef} className={className} style={style}>
-      {chars.map((char, index) => (
-        <AnimatedChar
-          key={index}
-          char={char}
-          index={index}
-          totalChars={chars.length}
-          scrollYProgress={scrollYProgress}
-        />
-      ))}
+      {words.map((word, wordIndex) => {
+        const isSpace = word.length === 1 && word[0].char === ' '
+        const renderedChars = word.map(({ char, index }) => (
+          <AnimatedChar
+            key={index}
+            char={char}
+            index={index}
+            totalChars={totalChars}
+            scrollYProgress={scrollYProgress}
+          />
+        ))
+        return isSpace ? (
+          <Fragment key={wordIndex}>{renderedChars}</Fragment>
+        ) : (
+          <span key={wordIndex} style={{ display: 'inline-block' }}>
+            {renderedChars}
+          </span>
+        )
+      })}
     </p>
   )
 }
