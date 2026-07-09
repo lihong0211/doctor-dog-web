@@ -4,7 +4,7 @@ import { FadeIn } from '../components/FadeIn'
 import { GradientButton } from '../components/GradientButton'
 
 const BIO_TEXT =
-  "With more five years experience in design, i focus on branding, web design, user experience, i truly enjoy working businesses aim stand out present best image. Let's build something incredible together!"
+  "With more than five years of experience in design, i focus on branding, web design, and user experience, i truly enjoy working with businesses that aim to stand out and present their best image. Let's build something incredible together!"
 
 export default function About() {
   return (
