@@ -23,7 +23,7 @@ function AnimatedChar({
   const start = Math.max(0, charProgress - 0.1)
   const end = Math.min(1, charProgress + 0.05)
   const opacity = useTransform(scrollYProgress, [start, end], [0.2, 1])
-  const display = char === ' ' ? ' ' : char
+  const display = char === ' ' ? ' ' : char
 
   return (
     <span style={{ position: 'relative', display: 'inline-block' }}>
