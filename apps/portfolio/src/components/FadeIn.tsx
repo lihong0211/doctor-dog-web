@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import type { CSSProperties, ElementType, ReactNode } from 'react'
 import { motion, type Variants } from 'framer-motion'
 
@@ -22,7 +23,7 @@ export function FadeIn({
   style,
   as = 'div',
 }: FadeInProps) {
-  const MotionTag = motion.create(as)
+  const MotionTag = useMemo(() => motion.create(as), [as])
 
   const variants: Variants = {
     hidden: { opacity: 0, x, y },
