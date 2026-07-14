@@ -75,6 +75,13 @@ export const skillsRoutes: RouteItem[] = [
   { path: 'a2a', component: A2A, label: 'A2A' },
   { path: 'agent', component: Agent, label: 'Agent' },
   { path: 'fine-tuning', component: FineTuning, label: 'Fine Tuning' },
+  { path: 'coze', component: () => <PlaceholderPage title="Coze" />, label: 'Coze' },
+  { path: 'dify', component: () => <PlaceholderPage title="Dify" />, label: 'Dify' },
+  { path: 'skills', component: () => <PlaceholderPage title="Skills" />, label: 'Skills' },
+]
+
+/** 应用广场 / Apps：从体验中心（Hub）卡片启动的独立应用页面 */
+export const appRoutes: RouteItem[] = [
   { path: 'data-analysis', component: DataAnalysis, label: 'Data Analysis' },
   { path: 'github-chat', component: GitHubChat, label: 'GitHub Chat' },
   { path: 'youtube-chat', component: YouTubeChat, label: 'YouTube Chat' },
@@ -101,7 +108,4 @@ export const skillsRoutes: RouteItem[] = [
   { path: 'gmail-assistant', component: GmailAssistant, label: 'Gmail助手' },
   { path: 'music-gen', component: MusicGenerator, label: 'AI音乐生成' },
   { path: 'moss-tts', component: MossTTS, label: 'MOSS TTS Nano' },
-  { path: 'coze', component: () => <PlaceholderPage title="Coze" />, label: 'Coze' },
-  { path: 'dify', component: () => <PlaceholderPage title="Dify" />, label: 'Dify' },
-  { path: 'skills', component: () => <PlaceholderPage title="Skills" />, label: 'Skills' },
 ]
