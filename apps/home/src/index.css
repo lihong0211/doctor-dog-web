@@ -17,6 +17,19 @@ body {
   @apply bg-background text-foreground;
 }
 
+.hero-heading {
+  background: linear-gradient(180deg, #646973 0%, #bbccd7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.four-oh-four {
+  text-shadow:
+    0 0 80px rgba(255, 255, 255, 0.3),
+    0 0 160px rgba(255, 255, 255, 0.1);
+}
+
 .liquid-glass {
   background: rgba(255, 255, 255, 0.06);
   background-blend-mode: luminosity;
