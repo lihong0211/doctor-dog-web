@@ -51,8 +51,7 @@ const skillsSidebarItems = [
 ]
 
 function getSection(pathname: string): 'hub' | 'skills' {
-  if (pathname === '/hub') return 'hub'
-  return 'skills'
+  return pathname.startsWith('/skills/') ? 'skills' : 'hub'
 }
 
 export default function MainLayout() {
@@ -127,8 +126,8 @@ export default function MainLayout() {
           style={{ marginBottom: 0, flex: 1 }}
           tabBarStyle={{ marginBottom: 0, borderBottom: 'none' }}
           items={[
-            { key: 'hub', label: '体验中心' },
             { key: 'skills', label: '技能中心' },
+            { key: 'hub', label: '体验中心' },
           ]}
         />
       </div>
