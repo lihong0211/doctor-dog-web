@@ -79,10 +79,6 @@ importers:
         version: 5.4.21(@types/node@24.13.3)(less@4.6.7)(lightningcss@1.32.0)(stylus@0.59.0)
 
   apps/blog:
-    dependencies:
-      hls.js:
-        specifier: ^1.6.16
-        version: 1.6.16
     devDependencies:
       vitepress:
         specifier: 1.0.0-alpha.28

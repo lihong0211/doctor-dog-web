@@ -1,4 +1,5 @@
 import { BackgroundVideo } from './components/BackgroundVideo'
+import { FreedomSection } from './components/FreedomSection'
 import { HeroContent } from './components/HeroContent'
 import { LogoMarquee } from './components/LogoMarquee'
 import { Navbar } from './components/Navbar'
@@ -13,6 +14,7 @@ export default function Index() {
         <HeroContent />
         <LogoMarquee />
       </section>
+      <FreedomSection />
     </div>
   )
 }
