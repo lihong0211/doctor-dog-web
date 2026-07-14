@@ -32,7 +32,12 @@ each holding **one representative doc copied from `apps/blog`**:
 - `algorithm/` ← copy of `apps/blog/docs/ALGORITHM/README.md`
   (LeetCode 题解)
 - `ai/` ← copy of `apps/blog/docs/AI/home/README.md`
-- `backend/` ← copy of `apps/blog/docs/BACKEND/index.md` (概览)
+- `backend/` ← copy of `apps/blog/docs/BACKEND/ACID.md` (ACID). Note:
+  the spec originally named `BACKEND/index.md` as the representative
+  doc, but that file doesn't exist — the VitePress sidebar link to it
+  is already dead (masked by `ignoreDeadLinks: true` in
+  `apps/blog/docs/.vitepress/config.ts`). `ACID.md` is used instead: a
+  short, self-contained BACKEND doc with no existing frontmatter.
 
 Frontmatter: Starlight requires a `title` field per page — add one to
 each copied file if missing (source VitePress docs may rely on the
@@ -49,7 +54,7 @@ grouping (three groups, one link each):
 sidebar: [
   { label: '🧩 ALGORITHM', items: [{ label: 'LeetCode 题解', link: '/algorithm/' }] },
   { label: '🧠 AI', items: [{ label: 'Home 项目文档', link: '/ai/' }] },
-  { label: '⚙️ BACKEND', items: [{ label: '概览', link: '/backend/' }] },
+  { label: '⚙️ BACKEND', items: [{ label: 'ACID', link: '/backend/' }] },
 ]
 ```
 
