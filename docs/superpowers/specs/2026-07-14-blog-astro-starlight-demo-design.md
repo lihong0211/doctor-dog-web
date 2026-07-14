@@ -31,8 +31,7 @@ each holding **one representative doc copied from `apps/blog`**:
 
 - `algorithm/` ← copy of `apps/blog/docs/ALGORITHM/README.md`
   (LeetCode 题解)
-- `ai/` ← copy of `apps/blog/docs/AI/home/README.md` (or a similarly
-  representative AI/home doc, e.g. the RAG page)
+- `ai/` ← copy of `apps/blog/docs/AI/home/README.md`
 - `backend/` ← copy of `apps/blog/docs/BACKEND/index.md` (概览)
 
 Frontmatter: Starlight requires a `title` field per page — add one to
