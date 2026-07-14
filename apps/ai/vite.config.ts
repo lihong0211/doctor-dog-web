@@ -24,6 +24,7 @@ export default defineConfig({
             url.startsWith('/ai/models') ||
             url.startsWith('/ai/experience') ||
             url.startsWith('/ai/skills') ||
+            url.startsWith('/ai/apps') ||
             url.startsWith('/ai/portal')
           if (isFrontendOwned) return url
         },
