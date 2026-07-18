@@ -56,10 +56,10 @@ export default function SpeechTrainer() {
   const scoreColor = (s: number) => s >= 8 ? '#52c41a' : s >= 6 ? '#faad14' : '#f5222d'
 
   return (
-    <Layout style={{ height: '100%', background: '#f5f5f5' }}>
+    <Layout style={{ height: '100%', background: 'var(--ai-surface-2)' }}>
       <Content style={{ padding: 24, overflow: 'auto', height: '100%' }}>
         <Space align="center" style={{ marginBottom: 20 }}>
-          <AudioOutlined style={{ fontSize: 28, color: '#1677ff' }} />
+          <AudioOutlined style={{ fontSize: 28, color: 'var(--ai-primary)' }} />
           <Title level={3} style={{ margin: 0 }}>AI 演讲训练 Agent</Title>
         </Space>
 
@@ -112,7 +112,7 @@ export default function SpeechTrainer() {
                 <div><Text type="secondary">语速</Text><br /><Text strong>{result.words_per_minute}字/分</Text></div>
                 <div><Text type="secondary">语速评估</Text><br /><Text strong>{result.analysis.pace_assessment}</Text></div>
               </div>
-              <Paragraph style={{ background: '#fafafa', padding: 12, borderRadius: 6, lineHeight: 1.8 }}>
+              <Paragraph style={{ background: 'var(--ai-surface-2)', padding: 12, borderRadius: 6, lineHeight: 1.8 }}>
                 {result.transcript}
               </Paragraph>
             </Card>
@@ -145,7 +145,7 @@ export default function SpeechTrainer() {
               <Card title={<span style={{ color: '#fa8c16' }}>改进点</span>} size="small">
                 <List size="small" dataSource={result.analysis.improvements} renderItem={(item, i) => <List.Item>{i + 1}. {item}</List.Item>} />
               </Card>
-              <Card title={<span style={{ color: '#1677ff' }}>具体建议</span>} size="small">
+              <Card title={<span style={{ color: 'var(--ai-primary)' }}>具体建议</span>} size="small">
                 <List size="small" dataSource={result.analysis.suggestions} renderItem={(item, i) => <List.Item>{i + 1}. {item}</List.Item>} />
               </Card>
             </div>

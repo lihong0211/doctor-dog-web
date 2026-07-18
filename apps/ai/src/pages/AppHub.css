@@ -1,0 +1,38 @@
+.apphub { flex: 1; min-height: 0; overflow: auto; padding: 28px; background: var(--ai-canvas); color: var(--ai-text); }
+.apphub-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
+.apphub-eyebrow { margin-bottom: 7px; color: var(--ai-primary); font: 500 11px/1.4 'JetBrains Mono', monospace; letter-spacing: .08em; }
+.apphub h1 { margin: 0; color: var(--ai-text); font-size: 24px; font-weight: 650; line-height: 1.25; letter-spacing: -.02em; }
+.apphub-header p { margin: 8px 0 0; color: var(--ai-text-tertiary); font-size: 13px; }
+.apphub-summary { display: grid; justify-items: end; gap: 3px; color: var(--ai-text-secondary); font: 500 11px/1.5 'JetBrains Mono', monospace; }
+.apphub-summary span { display: flex; align-items: center; gap: 7px; color: var(--ai-success); }
+.apphub-summary i, .apphub-status i { width: 6px; height: 6px; display: inline-block; border-radius: 50%; background: currentColor; }
+.apphub-summary small { color: var(--ai-text-tertiary); font: inherit; }
+.apphub-tools { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.apphub-search { width: 280px; height: 40px; flex: 0 0 280px; display: flex; align-items: center; gap: 10px; padding: 0 12px; color: var(--ai-text-tertiary); background: var(--ai-surface-2); border: 1px solid var(--ai-border); border-radius: 8px; }
+.apphub-search:focus-within { border-color: var(--ai-primary); box-shadow: 0 0 0 2px rgba(0,201,141,.14); }
+.apphub-search input { width: 100%; min-width: 0; border: 0; outline: 0; color: var(--ai-text); background: transparent; font: inherit; }
+.apphub-search input::placeholder { color: var(--ai-text-tertiary); }
+.apphub-filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.apphub-filters button { min-height: 36px; display: inline-flex; align-items: center; gap: 7px; padding: 0 12px; border: 1px solid var(--ai-border); border-radius: 999px; color: var(--ai-text-secondary); background: var(--ai-surface-1); cursor: pointer; }
+.apphub-filters button:hover { color: var(--ai-text); border-color: var(--ai-border-strong); }
+.apphub-filters button.is-active { color: var(--ai-primary); border-color: rgba(0,201,141,.38); background: var(--ai-primary-muted); }
+.apphub-filters button span { color: var(--ai-text-tertiary); font: 500 10px/1 'JetBrains Mono', monospace; }
+.apphub-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.apphub-card { min-height: 218px; display: flex; flex-direction: column; padding: 20px; border: 1px solid var(--ai-border); border-radius: 12px; background: var(--ai-surface-2); transition: transform 150ms ease, border-color 150ms ease, background-color 150ms ease; }
+.apphub-card:hover { transform: translateY(-2px); border-color: var(--ai-border-strong); background: var(--ai-surface-3); }
+.apphub-card-top { display: flex; align-items: center; justify-content: space-between; }
+.apphub-card-icon { width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid rgba(0,201,141,.24); border-radius: 10px; color: var(--ai-primary); background: var(--ai-primary-muted); font-size: 18px; }
+.apphub-status { display: inline-flex; align-items: center; gap: 6px; color: var(--ai-text-tertiary); font: 600 10px/1 'JetBrains Mono', monospace; letter-spacing: .08em; }
+.apphub-status.is-live { color: var(--ai-success); }
+.apphub-status.is-beta { color: var(--ai-warning); }
+.apphub-card h2 { margin: 16px 0 7px; color: var(--ai-text); font-size: 15px; line-height: 1.4; }
+.apphub-card p { flex: 1; margin: 0; color: var(--ai-text-secondary); font-size: 13px; line-height: 1.55; }
+.apphub-tags { min-height: 23px; display: flex; flex-wrap: wrap; gap: 5px; margin-top: 14px; }
+.apphub-tags span { padding: 3px 7px; border: 1px solid var(--ai-border); border-radius: 4px; color: var(--ai-text-tertiary); background: var(--ai-surface-1); font: 500 10px/1.3 'JetBrains Mono', monospace; }
+.apphub-launch { height: 36px; display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding: 0; border: 0; color: var(--ai-primary); background: transparent; font-weight: 500; cursor: pointer; }
+.apphub-launch:disabled { color: var(--ai-text-tertiary); cursor: not-allowed; }
+.apphub-empty { display: grid; place-items: center; min-height: 320px; border: 1px dashed var(--ai-border); border-radius: 12px; background: var(--ai-surface-1); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+@media (max-width: 1099px) { .apphub-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .apphub-tools { align-items: flex-start; flex-direction: column; } }
+@media (max-width: 699px) { .apphub { padding: 20px 16px; } .apphub-header { align-items: flex-start; } .apphub-summary { display: none; } .apphub-search { width: 100%; flex-basis: 40px; } .apphub-grid { grid-template-columns: 1fr; } .apphub-filters { flex-wrap: nowrap; width: 100%; overflow-x: auto; padding-bottom: 4px; } .apphub-filters button { min-height: 44px; flex-shrink: 0; } }
+@media (prefers-reduced-motion: reduce) { .apphub-card { transition: none; } .apphub-card:hover { transform: none; } }

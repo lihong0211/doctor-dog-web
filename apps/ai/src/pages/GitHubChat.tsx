@@ -76,10 +76,10 @@ export default function GitHubChat() {
   }
 
   return (
-    <Layout style={{ height: '100%', background: '#f5f7fa' }}>
+    <Layout style={{ height: '100%', background: 'var(--ai-canvas)' }}>
       <Content style={{ padding: 24, overflow: 'auto', height: '100%', display: 'flex', flexDirection: 'column' }}>
         <Space align="center" style={{ marginBottom: 20 }}>
-          <GithubOutlined style={{ fontSize: 24, color: '#1677ff' }} />
+          <GithubOutlined style={{ fontSize: 24, color: 'var(--ai-primary)' }} />
           <Title level={4} style={{ margin: 0 }}>Chat with GitHub</Title>
         </Space>
 
@@ -161,7 +161,7 @@ export default function GitHubChat() {
                       maxWidth: '80%',
                       padding: '8px 14px',
                       borderRadius: msg.role === 'user' ? '16px 4px 16px 16px' : '4px 16px 16px 16px',
-                      background: msg.role === 'user' ? '#1677ff' : '#fff',
+                      background: msg.role === 'user' ? 'var(--ai-primary)' : '#fff',
                       color: msg.role === 'user' ? '#fff' : '#000',
                       boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
                       whiteSpace: 'pre-wrap',

@@ -42,7 +42,7 @@ export default function ReasoningAgent() {
   }
 
   return (
-    <Layout style={{ height: '100%', background: '#f5f0ff' }}>
+    <Layout style={{ height: '100%', background: 'var(--ai-canvas)' }}>
       <Content style={{ padding: 24, overflow: 'auto', height: '100%' }}>
         <Space align="center" style={{ marginBottom: 20 }}>
           <BulbOutlined style={{ fontSize: 28, color: '#722ed1' }} />
@@ -84,7 +84,7 @@ export default function ReasoningAgent() {
               key="think"
               header={<span><ThunderboltOutlined style={{ color: '#722ed1' }} /> 推理过程 <Text type="secondary" style={{ fontSize: 12 }}>（Chain of Thought）</Text></span>}
             >
-              <div style={{ maxHeight: 300, overflow: 'auto', fontFamily: 'monospace', fontSize: 13, lineHeight: 1.7, color: '#595959', background: '#fafafa', padding: 12, borderRadius: 6 }}>
+              <div style={{ maxHeight: 300, overflow: 'auto', fontFamily: 'monospace', fontSize: 13, lineHeight: 1.7, color: '#595959', background: 'var(--ai-surface-2)', padding: 12, borderRadius: 6 }}>
                 {thinking}
                 {loading && <span style={{ animation: 'blink 1s step-end infinite' }}>▊</span>}
               </div>

@@ -48,7 +48,7 @@ const AGENT_UI_CONFIG: Record<string, AgentUiConfig> = {
       '人工智能产业链投资机会',
       '半导体行业近期走势分析',
     ],
-    tabColor: { bg: 'rgba(59, 130, 246, 0.12)', border: '#3b82f6', selectedBg: '#3b82f6' },
+    tabColor: { bg: 'rgba(59, 130, 246, 0.12)', border: 'var(--ai-primary)', selectedBg: 'var(--ai-primary)' },
   },
   fund_qa_agent: {
     defaultInput: '上海迪士尼乐园的开放时间是多少？',

@@ -36,10 +36,10 @@ export default function WebScraper() {
     setSchemaFields(prev => prev.map((f, idx) => idx === i ? { ...f, [k]: v } : f))
 
   return (
-    <Layout style={{ height: '100%', background: '#f5f7fa' }}>
+    <Layout style={{ height: '100%', background: 'var(--ai-canvas)' }}>
       <Content style={{ padding: 24, overflow: 'auto', height: '100%' }}>
         <Space align="center" style={{ marginBottom: 16 }}>
-          <SearchOutlined style={{ fontSize: 24, color: '#1677ff' }} />
+          <SearchOutlined style={{ fontSize: 24, color: 'var(--ai-primary)' }} />
           <Title level={4} style={{ margin: 0 }}>网页智能提取</Title>
         </Space>
 
@@ -62,7 +62,7 @@ export default function WebScraper() {
               {showSchema ? '▼' : '▶'} 自定义提取字段（可选）
             </Button>
             {showSchema && (
-              <div style={{ marginTop: 8, padding: 12, background: '#fafafa', borderRadius: 6 }}>
+              <div style={{ marginTop: 8, padding: 12, background: 'var(--ai-surface-2)', borderRadius: 6 }}>
                 {schemaFields.map((f, i) => (
                   <Space key={i} style={{ display: 'flex', marginBottom: 8 }}>
                     <Input

@@ -54,7 +54,7 @@ export default function MentalWellbeing() {
   }
 
   return (
-    <Layout style={{ height: '100%', background: '#fff0f6' }}>
+    <Layout style={{ height: '100%', background: 'var(--ai-canvas)' }}>
       <Content style={{ padding: 24, height: '100%', display: 'flex', flexDirection: 'column' }}>
         <Space align="center" style={{ marginBottom: 12 }}>
           <SmileOutlined style={{ fontSize: 28, color: '#eb2f96' }} />

@@ -60,7 +60,7 @@ export default function NegotiationSimulator() {
   const currentScenario = scenarios.find(s => s.key === scenario)
 
   return (
-    <Layout style={{ height: '100%', background: '#fff7e6' }}>
+    <Layout style={{ height: '100%', background: 'var(--ai-canvas)' }}>
       <Content style={{ padding: 24, height: '100%', display: 'flex', flexDirection: 'column' }}>
         <Space align="center" style={{ marginBottom: 12 }}>
           <SwapOutlined style={{ fontSize: 28, color: '#fa541c' }} />
