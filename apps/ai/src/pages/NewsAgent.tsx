@@ -38,13 +38,13 @@ export default function NewsAgent() {
     <Layout style={{ height: '100%', background: '#f5f7fa' }}>
       <Content style={{ padding: 24, overflow: 'auto', height: '100%' }}>
         <Space align="center" style={{ marginBottom: 16 }}>
-          <GlobalOutlined style={{ fontSize: 24, color: '#1677ff' }} />
+          <GlobalOutlined style={{ fontSize: 24, color: 'var(--ai-primary)' }} />
           <Title level={4} style={{ margin: 0 }}>AI 新闻摘要</Title>
         </Space>
 
         {/* 今日要闻总结 */}
         <Card
-          style={{ marginBottom: 20, background: 'linear-gradient(135deg, #1677ff 0%, #0958d9 100%)', border: 'none' }}
+          style={{ marginBottom: 20, background: 'linear-gradient(135deg, var(--ai-primary) 0%, #0958d9 100%)', border: 'none' }}
           bodyStyle={{ padding: '16px 20px' }}
           extra={
             <Button
@@ -90,7 +90,7 @@ export default function NewsAgent() {
                     </Text>
                   )}
                 </div>
-                <a href={a.url} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600, fontSize: 13, lineHeight: 1.4, display: 'block', marginBottom: 6, color: '#1677ff' }}>
+                <a href={a.url} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600, fontSize: 13, lineHeight: 1.4, display: 'block', marginBottom: 6, color: 'var(--ai-primary)' }}>
                   {a.title}
                 </a>
                 {a.summary && <Text type="secondary" style={{ fontSize: 12, lineHeight: 1.5 }}>{a.summary}</Text>}

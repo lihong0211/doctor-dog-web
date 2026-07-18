@@ -664,9 +664,9 @@ export default function MCPPpt(props: MCPPptProps = {}) {
               <img src={getQrcodeUrl()} width={200} height={200} alt="微信收款码"
                 style={{ border: '1px solid #e5e7eb', borderRadius: 8, marginBottom: 12 }} />
               {outTradeNo && (
-                <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 16 }}>
+                <div style={{ fontSize: 12, color: 'var(--ai-text-secondary)', marginBottom: 16 }}>
                   付款时请备注订单号后4位：
-                  <strong style={{ color: '#1f2937' }}>{outTradeNo.slice(-4)}</strong>
+                  <strong style={{ color: 'var(--ai-text)' }}>{outTradeNo.slice(-4)}</strong>
                 </div>
               )}
               <Button type="primary" block onClick={handleClaimPayment}>我已付款</Button>

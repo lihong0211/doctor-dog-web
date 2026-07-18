@@ -84,7 +84,7 @@ export default function ReasoningAgent() {
               key="think"
               header={<span><ThunderboltOutlined style={{ color: '#722ed1' }} /> 推理过程 <Text type="secondary" style={{ fontSize: 12 }}>（Chain of Thought）</Text></span>}
             >
-              <div style={{ maxHeight: 300, overflow: 'auto', fontFamily: 'monospace', fontSize: 13, lineHeight: 1.7, color: '#595959', background: '#fafafa', padding: 12, borderRadius: 6 }}>
+              <div style={{ maxHeight: 300, overflow: 'auto', fontFamily: 'monospace', fontSize: 13, lineHeight: 1.7, color: '#595959', background: 'var(--ai-surface-2)', padding: 12, borderRadius: 6 }}>
                 {thinking}
                 {loading && <span style={{ animation: 'blink 1s step-end infinite' }}>▊</span>}
               </div>

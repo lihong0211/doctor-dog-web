@@ -15,7 +15,7 @@ const OPTIONS: { value: MCPAssistantKey; label: string; icon: string }[] = [
 ]
 
 const TAB_COLORS: Record<MCPAssistantKey, { bg: string; border: string; selectedBg: string }> = {
-  gaode: { bg: 'rgba(59, 130, 246, 0.12)', border: '#3b82f6', selectedBg: '#3b82f6' },
+  gaode: { bg: 'rgba(59, 130, 246, 0.12)', border: 'var(--ai-primary)', selectedBg: 'var(--ai-primary)' },
   ppt: { bg: 'rgba(139, 92, 246, 0.12)', border: '#8b5cf6', selectedBg: '#8b5cf6' },
   weather: { bg: 'rgba(34, 197, 94, 0.12)', border: '#22c55e', selectedBg: '#22c55e' },
   tts: { bg: 'rgba(100, 116, 139, 0.12)', border: '#64748b', selectedBg: '#64748b' },

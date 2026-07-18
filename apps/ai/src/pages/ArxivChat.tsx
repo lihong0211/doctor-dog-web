@@ -61,7 +61,7 @@ export default function ArxivChat() {
   }
 
   return (
-    <Layout style={{ height: '100%', background: '#f5f5f5' }}>
+    <Layout style={{ height: '100%', background: 'var(--ai-surface-2)' }}>
       <Content style={{ padding: 24, height: '100%', display: 'flex', flexDirection: 'column' }}>
         <Space align="center" style={{ marginBottom: 16 }}>
           <ReadOutlined style={{ fontSize: 28, color: '#13c2c2' }} />

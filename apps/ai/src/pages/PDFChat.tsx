@@ -64,7 +64,7 @@ export default function PDFChat() {
   }
 
   return (
-    <Layout style={{ height: '100%', background: '#f5f5f5' }}>
+    <Layout style={{ height: '100%', background: 'var(--ai-surface-2)' }}>
       <Content style={{ padding: 24, height: '100%', display: 'flex', flexDirection: 'column' }}>
         <Space align="center" style={{ marginBottom: 16 }}>
           <FilePdfOutlined style={{ fontSize: 28, color: '#f5222d' }} />

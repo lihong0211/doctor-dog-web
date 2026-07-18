@@ -33,13 +33,13 @@ export default function ResumeMatcher() {
 
   const scoreColor = result
     ? result.score >= 80 ? '#52c41a' : result.score >= 60 ? '#faad14' : '#ff4d4f'
-    : '#1677ff'
+    : 'var(--ai-primary)'
 
   return (
     <Layout style={{ height: '100%', background: '#f5f7fa' }}>
       <Content style={{ padding: 24, overflow: 'auto', height: '100%' }}>
         <Space align="center" style={{ marginBottom: 16 }}>
-          <FileTextOutlined style={{ fontSize: 24, color: '#1677ff' }} />
+          <FileTextOutlined style={{ fontSize: 24, color: 'var(--ai-primary)' }} />
           <Title level={4} style={{ margin: 0 }}>简历与职位匹配</Title>
         </Space>
 
@@ -103,7 +103,7 @@ export default function ResumeMatcher() {
                   {result.gaps.map((g, i) => <Tag key={i} color="error">{g}</Tag>)}
                 </Space>
               </Card>
-              <Card title={<span style={{ color: '#1677ff' }}>💡 建议</span>} size="small">
+              <Card title={<span style={{ color: 'var(--ai-primary)' }}>💡 建议</span>} size="small">
                 <List
                   size="small"
                   dataSource={result.suggestions}

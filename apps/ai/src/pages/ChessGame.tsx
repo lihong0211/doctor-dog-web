@@ -50,10 +50,10 @@ export default function ChessGame() {
   }
 
   return (
-    <Layout style={{ height: '100%', background: '#fafafa' }}>
+    <Layout style={{ height: '100%', background: 'var(--ai-surface-2)' }}>
       <Content style={{ padding: 24, overflow: 'auto', height: '100%' }}>
         <Space align="center" style={{ marginBottom: 20 }}>
-          <AppstoreOutlined style={{ fontSize: 28, color: '#1677ff' }} />
+          <AppstoreOutlined style={{ fontSize: 28, color: 'var(--ai-primary)' }} />
           <Title level={3} style={{ margin: 0 }}>AI 象棋对弈</Title>
         </Space>
 

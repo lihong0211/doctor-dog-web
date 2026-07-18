@@ -25,7 +25,7 @@ export const CATEGORIES = ['全部', '对话Agent', '知识处理', '数据分�
 
 // Category accent colors — left-stripe signature
 const CAT_COLOR: Record<string, string> = {
-  '对话Agent': '#3B82F6',
+  '对话Agent': 'var(--ai-primary)',
   '知识处理':  '#00E5C8',
   '数据分析':  '#A855F7',
   '多媒体处理': '#F97316',

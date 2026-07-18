@@ -54,7 +54,7 @@ export default function MixtureAgents() {
     <Layout style={{ height: '100%', background: '#f5f7fa' }}>
       <Content style={{ padding: 24, overflow: 'auto', height: '100%' }}>
         <Space align="center" style={{ marginBottom: 16 }}>
-          <TeamOutlined style={{ fontSize: 24, color: '#1677ff' }} />
+          <TeamOutlined style={{ fontSize: 24, color: 'var(--ai-primary)' }} />
           <Title level={4} style={{ margin: 0 }}>Mixture of Agents</Title>
         </Space>
 

@@ -182,7 +182,7 @@ function LangChain() {
   }, [runResult, graphData])
 
   const tabColors: Record<GraphName, { bg: string; border: string; selectedBg: string }> = {
-    router: { bg: 'rgba(59, 130, 246, 0.12)', border: '#3b82f6', selectedBg: '#3b82f6' },
+    router: { bg: 'rgba(59, 130, 246, 0.12)', border: 'var(--ai-primary)', selectedBg: 'var(--ai-primary)' },
     loop: { bg: 'rgba(34, 197, 94, 0.12)', border: '#22c55e', selectedBg: '#22c55e' },
     parallel: { bg: 'rgba(249, 115, 22, 0.12)', border: '#f97316', selectedBg: '#f97316' },
   }

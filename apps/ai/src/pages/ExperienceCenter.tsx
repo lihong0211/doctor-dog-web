@@ -14,7 +14,7 @@ interface ModelCard {
 const MODELS: ModelCard[] = [
   {
     id: '1', title: 'Qwen2.5-7B', description: '多语言理解与强推理能力，中文生态最佳',
-    provider: 'Alibaba / DashScope', status: 'Ready', color: '#3B82F6',
+    provider: 'Alibaba / DashScope', status: 'Ready', color: 'var(--ai-primary)',
     metrics: { speed: 92, context: 70, reasoning: 78 }, contextLabel: '128K',
   },
   {

@@ -262,7 +262,7 @@ export default function KnowledgeBase() {
               </div>
 
               {/* 中：原始文档预览 */}
-              <div style={{ flex: 1, minWidth: 0, minHeight: 0, alignSelf: 'stretch', border: '1px solid var(--ant-color-border)', borderRadius: 8, overflow: 'hidden', background: '#fafafa', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ flex: 1, minWidth: 0, minHeight: 0, alignSelf: 'stretch', border: '1px solid var(--ant-color-border)', borderRadius: 8, overflow: 'hidden', background: 'var(--ai-surface-2)', display: 'flex', flexDirection: 'column' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 8px', borderBottom: '1px solid var(--ant-color-border)', flexShrink: 0 }}>
                   <span style={{ fontSize: 12, color: 'var(--ant-color-text-secondary)' }}>原始文档预览</span>
                   {selectedDocId != null && (
@@ -302,7 +302,7 @@ export default function KnowledgeBase() {
               </div>
 
               {/* 右：分段预览 */}
-              <div style={{ flex: 1, minWidth: 0, minHeight: 0, alignSelf: 'stretch', border: '1px solid var(--ant-color-border)', borderRadius: 8, background: '#fff', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <div style={{ flex: 1, minWidth: 0, minHeight: 0, alignSelf: 'stretch', border: '1px solid var(--ant-color-border)', borderRadius: 8, background: 'var(--ai-surface-2)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                 <div style={{ fontSize: 12, color: 'var(--ant-color-text-secondary)', marginBottom: 8, padding: '12px 12px 0', flexShrink: 0 }}>分段预览</div>
                 <div style={{ flex: 1, minHeight: 0, overflow: 'auto', padding: '0 12px 12px' }}>
                   {loadingSegments ? (
@@ -338,7 +338,7 @@ export default function KnowledgeBase() {
                     position: 'fixed',
                     inset: 0,
                     zIndex: 1000,
-                    background: '#fff',
+                    background: 'var(--ai-surface-2)',
                     display: 'flex',
                     flexDirection: 'column',
                   }}
