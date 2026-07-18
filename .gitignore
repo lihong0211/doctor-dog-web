@@ -5,3 +5,7 @@ node_modules
 *.log
 tsconfig.tsbuildinfo
 .cursor/
+
+# 部署配置（含密码，见 deploy/.env.example）
+.env
+.env.local
