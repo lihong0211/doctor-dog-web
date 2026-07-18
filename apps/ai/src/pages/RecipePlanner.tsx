@@ -43,7 +43,7 @@ export default function RecipePlanner() {
   }
 
   return (
-    <Layout style={{ height: '100%', background: '#fff8f0' }}>
+    <Layout style={{ height: '100%', background: 'var(--ai-canvas)' }}>
       <Content style={{ padding: 24, overflow: 'auto', height: '100%' }}>
         <Space align="center" style={{ marginBottom: 20 }}>
           <ForkOutlined style={{ fontSize: 28, color: '#fa8c16' }} />

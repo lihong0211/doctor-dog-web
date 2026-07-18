@@ -45,7 +45,7 @@ export default function FinanceCoach() {
   const savingsRate = income > 0 ? ((monthlySavings / income) * 100).toFixed(1) : '0'
 
   return (
-    <Layout style={{ height: '100%', background: '#fffbe6' }}>
+    <Layout style={{ height: '100%', background: 'var(--ai-canvas)' }}>
       <Content style={{ padding: 24, overflow: 'auto', height: '100%' }}>
         <Space align="center" style={{ marginBottom: 20 }}>
           <DollarOutlined style={{ fontSize: 28, color: '#faad14' }} />

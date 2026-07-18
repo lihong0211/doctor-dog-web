@@ -70,7 +70,7 @@ export default function YouTubeChat() {
   }
 
   return (
-    <Layout style={{ height: '100%', background: '#f5f7fa' }}>
+    <Layout style={{ height: '100%', background: 'var(--ai-canvas)' }}>
       <Content style={{ padding: 24, overflow: 'auto', height: '100%' }}>
         <Space align="center" style={{ marginBottom: 20 }}>
           <VideoCameraOutlined style={{ fontSize: 24, color: 'var(--ai-primary)' }} />

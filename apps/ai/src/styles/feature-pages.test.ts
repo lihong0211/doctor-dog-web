@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import { readFileSync, readdirSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 
 describe('feature page style contract', () => {
@@ -14,5 +14,17 @@ describe('feature page style contract', () => {
     expect(css).toContain('var(--ai-surface-2)')
     expect(css).toContain(':focus-visible')
     expect(css).toContain('prefers-reduced-motion')
+  })
+
+  it('does not allow light hard-coded backgrounds on feature page root layouts', () => {
+    const pageFiles = readdirSync('src/pages')
+      .filter(file => file.endsWith('.tsx'))
+      .map(file => `src/pages/${file}`)
+    const offenders = pageFiles.filter(file => {
+      const source = readFileSync(file, 'utf8')
+      return /<Layout style=\{\{ height: '100%', background: '#f/i.test(source)
+    })
+
+    expect(offenders).toEqual([])
   })
 })
