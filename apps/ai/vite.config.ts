@@ -9,6 +9,11 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
     css: true,
+    server: {
+      deps: {
+        inline: ['@ant-design/colors', '@ant-design/icons', '@ant-design/icons-svg'],
+      },
+    },
   },
   server: {
     proxy: {

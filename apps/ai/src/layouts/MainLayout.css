@@ -1,0 +1,39 @@
+.ai-shell { height: 100vh; overflow: hidden; display: flex; flex-direction: column; background: var(--ai-canvas); color: var(--ai-text); }
+.ai-shell-header { height: 56px; flex: 0 0 56px; display: flex; align-items: center; gap: 32px; padding: 0 24px; background: var(--ai-surface-1); border-bottom: 1px solid var(--ai-border); }
+.ai-shell-brand { display: flex; align-items: center; gap: 10px; min-width: 160px; font-size: 15px; }
+.ai-shell-logo { width: 30px; height: 30px; display: grid; place-items: center; color: var(--ai-primary); background: var(--ai-primary-muted); border: 1px solid rgba(0,201,141,.3); border-radius: 8px; }
+.ai-shell-tabs { align-self: stretch; display: flex; align-items: stretch; gap: 8px; }
+.ai-shell-tabs button { position: relative; min-width: 88px; padding: 0 14px; border: 0; color: var(--ai-text-secondary); background: transparent; font: inherit; cursor: pointer; }
+.ai-shell-tabs button:hover { color: var(--ai-text); }
+.ai-shell-tabs button.is-active { color: var(--ai-primary); }
+.ai-shell-tabs button.is-active::after { content: ""; position: absolute; right: 12px; bottom: 0; left: 12px; height: 2px; border-radius: 2px 2px 0 0; background: var(--ai-primary); }
+.ai-shell-body { flex: 1; min-height: 0; display: flex; overflow: hidden; }
+.ai-shell-sidebar { width: 216px; flex: 0 0 216px; overflow-y: auto; background: var(--ai-surface-1); border-right: 1px solid var(--ai-border); }
+.ai-shell-nav { padding: 16px 8px; }
+.ai-shell-nav-label { padding: 0 10px 10px; color: var(--ai-text-tertiary); font: 500 11px/1.4 'JetBrains Mono', monospace; letter-spacing: .08em; text-transform: uppercase; }
+.ai-shell-menu { display: grid; gap: 4px; }
+.ai-shell-menu-item { position: relative; width: 100%; min-height: 40px; display: flex; align-items: center; gap: 11px; padding: 0 12px; border: 0; border-radius: 8px; color: var(--ai-text-secondary); background: transparent; text-align: left; cursor: pointer; }
+.ai-shell-menu-item:hover { color: var(--ai-text); background: var(--ai-surface-3); }
+.ai-shell-menu-item.is-current { color: var(--ai-primary); background: var(--ai-primary-muted); }
+.ai-shell-menu-item.is-current::before { content: ""; position: absolute; left: 0; width: 2px; height: 18px; border-radius: 2px; background: var(--ai-primary); }
+.ai-shell-content { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden; background: var(--ai-canvas); }
+.ai-shell-mobile-trigger { display: none; }
+.ai-portal { width: 100%; height: 100vh; overflow: hidden; }
+.ai-shell-drawer .ant-drawer-body { padding: 0; background: var(--ai-surface-1); }
+.ai-shell-drawer .ant-drawer-header { background: var(--ai-surface-1); border-bottom-color: var(--ai-border); }
+
+@media (max-width: 1099px) {
+  .ai-shell-sidebar { width: 200px; flex-basis: 200px; }
+}
+@media (max-width: 767px) {
+  .ai-shell-header { gap: 12px; padding: 0 12px; }
+  .ai-shell-brand { min-width: 0; }
+  .ai-shell-brand strong { display: none; }
+  .ai-shell-mobile-trigger { display: inline-flex; }
+  .ai-shell-sidebar { display: none; }
+  .ai-shell-tabs { margin-left: auto; }
+  .ai-shell-tabs button { min-width: 74px; padding: 0 8px; font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ai-shell *, .ai-shell *::before, .ai-shell *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
