@@ -8,16 +8,11 @@ import { ConfigProvider } from 'antd';
 import { RouterProvider } from 'react-router-dom';
 
 import router from './Router';
-
-ConfigProvider.config({
-  theme: {
-    primaryColor: '#d0021b',
-  },
-});
+import { enTheme } from './theme/antdTheme';
 
 function App() {
   return (
-    <ConfigProvider>
+    <ConfigProvider theme={enTheme}>
       <RouterProvider router={router} />
     </ConfigProvider>
   );
