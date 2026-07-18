@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { ProFormText, ProFormSelect, DrawerForm } from '@ant-design/pro-components';
+import { ProFormText, DrawerForm } from '@ant-design/pro-components';
 import request from '../../../request';
 import { requireAuth } from '../../EnDesktop/authGuard';
 
@@ -7,7 +7,6 @@ function AddEdit(props: {
   initialValues?: any;
   trigger?: JSX.Element;
   onSubmitted?(): void;
-  list: { label: string; value: string }[];
 }) {
   return (
     <DrawerForm
@@ -32,7 +31,6 @@ function AddEdit(props: {
     >
       <ProFormText label="词根" name="name" rules={[{ required: true }]} />
       <ProFormText label="释义" name="meaning" />
-      <ProFormSelect label="相似词根" mode="multiple" options={props.list} name="similar" />
     </DrawerForm>
   );
 }

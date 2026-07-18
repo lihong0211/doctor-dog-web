@@ -12,12 +12,10 @@ type ItemType = {
   id: number;
   name: string;
   meaning: string;
-  similar: string[];
   words: WordItem[];
 };
 
 export default function Root() {
-  const [list, setList] = useState<{ label: string; value: string }[]>([]);
   const [activeRoot, setActiveRoot] = useState<ItemType | null>(null);
 
   const handleDelete = (id: number, cb: any) => {
@@ -45,11 +43,6 @@ export default function Root() {
           },
           { dataIndex: 'meaning', title: '释义' },
           {
-            dataIndex: 'similar',
-            title: '相似词根',
-            render: (_dom, entity) => (entity.similar || []).map((item) => <Tag key={item}>{item}</Tag>),
-          },
-          {
             dataIndex: 'words',
             title: '例词',
             width: 300,
@@ -66,7 +59,7 @@ export default function Root() {
                   <Button type="link" onClick={() => setActiveRoot(entity)}>
                     管理例词
                   </Button>
-                  <AddEdit onSubmitted={action?.reload} initialValues={entity} trigger={<Button type="link">编辑</Button>} list={list} />
+                  <AddEdit onSubmitted={action?.reload} initialValues={entity} trigger={<Button type="link">编辑</Button>} />
                   <Popconfirm title="确定删除该词根吗" onConfirm={() => handleDelete(entity.id, action?.reload)}>
                     <Button type="link">删除</Button>
                   </Popconfirm>
@@ -76,11 +69,10 @@ export default function Root() {
           },
         ]}
         toolBarRender={(action) => [
-          <AddEdit trigger={<Button type="primary">新增</Button>} key="add" onSubmitted={action?.reload} list={list} />,
+          <AddEdit trigger={<Button type="primary">新增</Button>} key="add" onSubmitted={action?.reload} />,
         ]}
         request={async () => {
           const data: any = await request.get('/en-desktop/roots/list');
-          setList((data || []).map((item: ItemType) => ({ label: item.name, value: item.name })));
           return { success: true, data, total: data?.length };
         }}
       />
