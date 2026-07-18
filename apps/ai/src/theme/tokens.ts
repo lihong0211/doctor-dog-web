@@ -1,0 +1,26 @@
+export const aiTokens = {
+  canvas: '#07090D',
+  surface1: '#0D1117',
+  surface2: '#131922',
+  surface3: '#19212C',
+  surface4: '#202A36',
+  border: '#232D39',
+  borderStrong: '#344150',
+  text: '#F3F6F8',
+  textSecondary: '#AAB5C0',
+  textTertiary: '#6F7C89',
+  primary: '#00C98D',
+  primaryHover: '#18D9A1',
+  primaryMuted: 'rgba(0, 201, 141, 0.12)',
+  success: '#35D07F',
+  warning: '#E5B65C',
+  error: '#F06B72',
+  fontFamily: "'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  fontFamilyCode: "'JetBrains Mono', 'SFMono-Regular', Consolas, monospace",
+  radiusControl: 8,
+  radiusPanel: 12,
+  radiusFeature: 16,
+  controlHeight: 40,
+} as const
+
+export type AiTokenName = keyof typeof aiTokens

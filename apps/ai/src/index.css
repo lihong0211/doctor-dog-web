@@ -6,25 +6,46 @@
   box-sizing: border-box;
 }
 
-/* 参考 DeepSeek 聊天页：白底 + 中蓝强调 + 深灰正文 */
 :root {
-  --ds-primary: #3b82f6;
-  --ds-primary-hover: #2563eb;
-  --ds-cta: #3b82f6;
-  --ds-bg: #fafafa;
-  --ds-bg-chat: #ffffff;
-  --ds-text: #1f2937;
-  --ds-text-muted: #6b7280;
-  --ds-border: #e5e7eb;
-  --ds-card: #ffffff;
-  --ds-user-bubble: #eff6ff;
-  --ds-user-bubble-border: #bfdbfe;
+  --ai-canvas: #07090d;
+  --ai-surface-1: #0d1117;
+  --ai-surface-2: #131922;
+  --ai-surface-3: #19212c;
+  --ai-surface-4: #202a36;
+  --ai-border: #232d39;
+  --ai-border-strong: #344150;
+  --ai-text: #f3f6f8;
+  --ai-text-secondary: #aab5c0;
+  --ai-text-tertiary: #6f7c89;
+  --ai-primary: #00c98d;
+  --ai-primary-hover: #18d9a1;
+  --ai-primary-muted: rgba(0, 201, 141, 0.12);
+  --ai-success: #35d07f;
+  --ai-warning: #e5b65c;
+  --ai-error: #f06b72;
+  /* Legacy aliases keep existing feature pages readable during migration. */
+  --ds-primary: var(--ai-primary);
+  --ds-primary-hover: var(--ai-primary-hover);
+  --ds-cta: var(--ai-primary);
+  --ds-bg: var(--ai-canvas);
+  --ds-bg-chat: var(--ai-surface-1);
+  --ds-text: var(--ai-text);
+  --ds-text-muted: var(--ai-text-secondary);
+  --ds-border: var(--ai-border);
+  --ds-card: var(--ai-surface-2);
+  --ds-user-bubble: var(--ai-surface-3);
+  --ds-user-bubble-border: var(--ai-border-strong);
 }
 
 body {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: var(--ds-text);
-  background: var(--ds-bg);
+  background: var(--ai-canvas);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ai-primary);
+  outline-offset: 2px;
 }
 
 @keyframes stt-pulse {
