@@ -302,3 +302,173 @@ git log -5 --oneline
 ```
 
 确认没有纳入用户现有的 `.agents/` 未跟踪目录，所有改造提交范围正确。
+
+### 任务 5：建立全功能页共用样式层
+
+**文件：**
+
+- 新建：`apps/ai/src/styles/feature-pages.css`
+- 新建：`apps/ai/src/styles/feature-pages.test.ts`
+- 修改：`apps/ai/src/main.tsx`
+- 修改：`apps/ai/src/index.css`
+
+**接口：**
+
+- 产出页面类：`.ai-page`、`.ai-page-header`、`.ai-panel`、`.ai-chat-shell`、`.ai-chat-messages`、`.ai-chat-composer`、`.ai-result-panel`。
+- 产出覆盖范围：Ant Design Card、Table、Form、Input、Select、Tabs、Modal、Drawer、Upload、Empty 和 Alert。
+
+- [ ] **步骤 1：先写失败的共用样式契约测试**
+
+读取 `feature-pages.css`，断言其中包含全部共用页面类、`var(--ai-canvas)`、`var(--ai-surface-2)`、`:focus-visible` 和 `prefers-reduced-motion`。
+
+- [ ] **步骤 2：运行测试并确认文件不存在而失败**
+
+```bash
+pnpm --dir apps/ai test -- src/styles/feature-pages.test.ts
+```
+
+- [ ] **步骤 3：实现共用样式并在入口加载**
+
+样式必须只使用 `--ai-*` 令牌，不使用页面专属颜色，不通过全局 `!important` 强制覆盖业务状态。
+
+- [ ] **步骤 4：运行测试和构建并提交**
+
+```bash
+pnpm --dir apps/ai test -- src/styles/feature-pages.test.ts
+pnpm --dir apps/ai build
+git add apps/ai/src/styles apps/ai/src/main.tsx apps/ai/src/index.css
+git commit -m "feat(ai): add shared feature page styling"
+```
+
+### 任务 6：统一技能基础页
+
+**文件：**
+
+- 修改：`apps/ai/src/pages/VectorDb.tsx`
+- 修改：`apps/ai/src/pages/KnowledgeBase.tsx`
+- 修改：`apps/ai/src/pages/KnowledgeBaseNew.tsx`
+- 修改：`apps/ai/src/pages/RAG.tsx`
+- 修改：`apps/ai/src/pages/Text2SQL.tsx`
+- 修改：`apps/ai/src/pages/LangChain.tsx`
+- 修改：`apps/ai/src/pages/FunctionCall.tsx`
+- 修改：`apps/ai/src/pages/MCP/index.tsx`
+- 修改：`apps/ai/src/pages/A2A.tsx`
+- 修改：`apps/ai/src/pages/Agent.tsx`
+- 修改：`apps/ai/src/pages/FineTuning.tsx`
+
+- [ ] **步骤 1：记录本批页面的硬编码颜色基线**
+
+运行图搜索，确认白底、旧蓝色和浅灰色命中数，并保存文件清单。
+
+- [ ] **步骤 2：应用共用页面类和令牌**
+
+仅修改容器、标题、Card、Table、Form、Tabs、空状态和操作区样式；不改变请求、状态管理和路由。
+
+- [ ] **步骤 3：验证命中数下降、测试和构建通过**
+
+```bash
+pnpm --dir apps/ai test
+pnpm --dir apps/ai build
+```
+
+- [ ] **步骤 4：提交**
+
+```bash
+git add apps/ai/src/pages
+git commit -m "feat(ai): unify skill feature pages"
+```
+
+### 任务 7：统一聊天与 Agent 页面
+
+**文件：**
+
+- 修改：`apps/ai/src/pages/Chat.tsx`
+- 修改：`apps/ai/src/pages/GitHubChat.tsx`
+- 修改：`apps/ai/src/pages/YouTubeChat.tsx`
+- 修改：`apps/ai/src/pages/ArxivChat.tsx`
+- 修改：`apps/ai/src/pages/PDFChat.tsx`
+- 修改：`apps/ai/src/pages/MemoryChat.tsx`
+- 修改：`apps/ai/src/pages/DoctorAgent.tsx`
+- 修改：`apps/ai/src/pages/FinanceCoach.tsx`
+- 修改：`apps/ai/src/pages/TravelPlanner.tsx`
+- 修改：`apps/ai/src/pages/RecipePlanner.tsx`
+- 修改：`apps/ai/src/pages/MentalWellbeing.tsx`
+- 修改：`apps/ai/src/pages/ReasoningAgent.tsx`
+- 修改：`apps/ai/src/pages/MixtureAgents.tsx`
+
+- [ ] **步骤 1：应用聊天共用类**
+
+统一消息区、用户/助手气泡、输入区、发送按钮、工具结果、警告和加载状态；保留消息结构与流式逻辑。
+
+- [ ] **步骤 2：逐页清理白底和旧蓝色硬编码**
+
+医疗、财务和心理警告继续使用语义 warning/error 色，并保留文字说明。
+
+- [ ] **步骤 3：运行测试和构建并提交**
+
+```bash
+pnpm --dir apps/ai test
+pnpm --dir apps/ai build
+git add apps/ai/src/pages
+git commit -m "feat(ai): unify chat and agent pages"
+```
+
+### 任务 8：统一数据、知识与多媒体页面
+
+**文件：**
+
+- 修改：`apps/ai/src/pages/Data.tsx`、`DataAnalysis.tsx`、`DataVisualization.tsx`
+- 修改：`apps/ai/src/pages/ResumeMatcher.tsx`、`WebScraper.tsx`、`NewsAgent.tsx`、`StartupTrend.tsx`
+- 修改：`apps/ai/src/pages/ImageGenerate.tsx`、`OCR.tsx`、`STT.tsx`、`TTS.tsx`
+- 修改：`apps/ai/src/pages/SpeechTrainer.tsx`、`BlogPodcast.tsx`、`MusicGenerator.tsx`、`VideoUnderstand.tsx`
+- 修改：`apps/ai/src/pages/ChessGame.tsx`、`NegotiationSimulator.tsx`、`TarotReading.tsx`、`GmailAssistant.tsx`
+- 修改：`apps/ai/src/pages/MCP/*.tsx` 和相关 CSS
+
+- [ ] **步骤 1：统一数据与结果容器**
+
+表格、图表外围、上传区、结果面板和空状态使用共用令牌；图表、地图、棋盘和 3D 图谱内部语义色保持不变。
+
+- [ ] **步骤 2：清理剩余非语义硬编码颜色**
+
+每个保留的特殊颜色必须对应数据、警告、地图、棋盘或媒体内容语义。
+
+- [ ] **步骤 3：运行测试和构建并提交**
+
+```bash
+pnpm --dir apps/ai test
+pnpm --dir apps/ai build
+git add apps/ai/src/pages
+git commit -m "feat(ai): unify data and media pages"
+```
+
+### 任务 9：全路由视觉回归
+
+**文件：**
+
+- 仅在发现问题时修改任务 5–8 的文件。
+
+- [ ] **步骤 1：运行完整测试和构建**
+
+```bash
+pnpm --dir apps/ai test
+pnpm --dir apps/ai build
+```
+
+- [ ] **步骤 2：浏览所有路由并记录运行时错误**
+
+所有现有路由必须成功渲染；不得出现空白页、未捕获异常或横向溢出。
+
+- [ ] **步骤 3：按四批各检查一个代表页面**
+
+桌面和移动端分别检查 VectorDB、GitHubChat、DataAnalysis、SpeechTrainer，并补查应用广场。
+
+- [ ] **步骤 4：复查硬编码颜色**
+
+确认白底、旧蓝色和浅灰色命中已删除，或位于明确允许的专用画布/语义内容中。
+
+- [ ] **步骤 5：提交最终修正和构建产物**
+
+```bash
+git add apps/ai/src apps/ai/dist
+git commit -m "fix(ai): complete full UI visual regression"
+```
