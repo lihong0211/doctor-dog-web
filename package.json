@@ -2,6 +2,7 @@
   "name": "doctor-dog-web",
   "private": true,
   "version": "1.0.0",
+  "packageManager": "pnpm@10.8.1",
   "scripts": {
     "dev:home": "pnpm --filter home dev",
     "dev:blog": "pnpm --filter blog dev",
