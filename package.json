@@ -8,6 +8,6 @@
     "dev:blog": "pnpm --filter blog dev",
     "dev:en": "pnpm --filter en dev",
     "dev:ai": "pnpm --filter ai dev",
-    "build": "pnpm -r --if-present run build"
+    "build": "pnpm -r --if-present --filter '!blog-astro' run build"
   }
 }
