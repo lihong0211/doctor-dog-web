@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Empty } from 'antd'
 import { RightOutlined, SearchOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
-import { APPS, CATEGORIES, type AppCard } from './AppHub'
+import { APPS, CATEGORIES, type AppCard } from './appHubData'
 import './AppHub.css'
 
 const STATUS = {

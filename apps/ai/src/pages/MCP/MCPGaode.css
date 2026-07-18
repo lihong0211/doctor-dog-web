@@ -37,7 +37,7 @@
 }
 
 .mcp-gaode-sidebar-card {
-  background: #ffffff;
+  background: var(--ai-surface-2);
   border-radius: 14px;
   padding: 16px;
   border: 1px solid rgba(0, 0, 0, 0.06);
@@ -157,7 +157,7 @@
   font-size: 13px;
   line-height: 1.7;
   color: #334155;
-  background: #ffffff;
+  background: var(--ai-surface-2);
   border: 1.5px solid #e2e8f0;
   border-radius: 10px;
   cursor: pointer;
@@ -311,7 +311,7 @@
 }
 
 .mcp-gaode-bubble-assistant {
-  background: #ffffff;
+  background: var(--ai-surface-2);
   color: var(--ds-text);
   border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -592,7 +592,7 @@
   position: relative;
   border-radius: 12px;
   border: 2px solid #e2e8f0;
-  background: #ffffff;
+  background: var(--ai-surface-2);
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
@@ -718,7 +718,7 @@
 }
 
 .mcp-unified-developing-card {
-  background: #ffffff;
+  background: var(--ai-surface-2);
   border-radius: 16px;
   padding: 40px 48px;
   border: 1px solid rgba(0, 0, 0, 0.06);
@@ -764,7 +764,7 @@
 .mcp-unified-input-only-box {
   border-radius: 12px;
   border: 2px solid #e2e8f0;
-  background: #ffffff;
+  background: var(--ai-surface-2);
   padding: 8px 12px 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
