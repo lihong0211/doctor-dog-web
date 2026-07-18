@@ -1,6 +1,5 @@
 import Root from './pages/Root/index';
 import English from './pages/English/index';
-import BusinessData from './pages/BusinessData/index';
 import StoreLayout from './pages/Store/StoreLayout';
 import ProductList from './pages/Store/ProductList';
 import ProductDetail from './pages/Store/ProductDetail';
@@ -23,10 +22,6 @@ const router = createBrowserRouter([
       {
         path: '/english',
         element: <English />,
-      },
-      {
-        path: '/business-data',
-        element: <BusinessData />,
       },
       {
         path: '/store',

@@ -1,60 +1,38 @@
-import { Form, message } from 'antd';
-import { css } from '@emotion/react';
-import {
-  ProFormSelect,
-  ProFormText,
-  DrawerForm,
-} from '@ant-design/pro-components';
+import { message } from 'antd';
+import { ProFormText, ProFormSelect, DrawerForm } from '@ant-design/pro-components';
 import request from '../../../request';
-import AddWords from '@/components/AddWords';
+import { requireAuth } from '../../EnDesktop/authGuard';
 
 function AddEdit(props: {
   initialValues?: any;
   trigger?: JSX.Element;
   onSubmitted?(): void;
-  list: any[];
+  list: { label: string; value: string }[];
 }) {
-  const [form] = Form.useForm();
   return (
     <DrawerForm
       title={props.initialValues?.id ? '编辑词缀' : '新增词缀'}
       trigger={props.trigger}
       initialValues={props.initialValues}
-      drawerProps={{
-        destroyOnClose: true,
-      }}
+      drawerProps={{ destroyOnClose: true }}
       onFinish={async (data) => {
+        if (!requireAuth()) return false;
         const id = props.initialValues?.id;
-        const url = id ? '/english/affix/update' : '/english/affix/add';
         let close = false;
         await request
-          .post(url, { ...data, id })
+          .post('/en-desktop/affixes/' + (id ? 'update' : 'add'), data, id ? { params: { affix_id: id } } : undefined)
           .then(() => {
             message.success('操作成功');
             props.onSubmitted?.();
             close = true;
           })
-          .catch((e) => {
-            message.error(e.msg);
-          });
+          .catch((e) => message.error(typeof e === 'string' ? e : '操作失败'));
         return close;
       }}
-      css={css`
-        .ant-card-body {
-          padding: 10px;
-          padding-bottom: 0;
-        }
-      `}
     >
-      <ProFormText label="词缀" name="name" />
+      <ProFormText label="词缀" name="name" rules={[{ required: true }]} />
       <ProFormText label="释义" name="meaning" />
-      <ProFormSelect
-        label="相似词缀"
-        mode="multiple"
-        options={props.list}
-        name="similar"
-      />
-      <AddWords form={form} />
+      <ProFormSelect label="相似词缀" mode="multiple" options={props.list} name="similar" />
     </DrawerForm>
   );
 }

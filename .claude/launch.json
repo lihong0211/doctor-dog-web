@@ -6,6 +6,12 @@
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["--filter", "blog-astro", "dev"],
       "port": 4321
+    },
+    {
+      "name": "en",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "en", "dev"],
+      "port": 3389
     }
   ]
 }

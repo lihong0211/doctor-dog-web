@@ -18,6 +18,10 @@ export default defineConfig({
         target: 'http://localhost:3000/',
         changeOrigin: true,
       },
+      '/en-desktop': {
+        target: 'http://localhost:3000/',
+        changeOrigin: true,
+      },
       // Go 统一后端（商品、订单、用户、抢购）
       '/go-api': {
         target: 'http://localhost:8080',

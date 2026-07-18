@@ -1,57 +1,53 @@
 import { Tabs } from 'antd';
 
-import Words from './Words';
 import Root from './Root';
 import Affix from './Affix';
-import Dialogue from './Dialogue';
 import LivingSpeech from './LivingSpeech';
-import Test from './Test';
+import EnDesktopWords from '../EnDesktop/Words';
+import EnDesktopLibraries from '../EnDesktop/Libraries';
+import EnDesktopUsers from '../EnDesktop/Users';
 
 export default function English() {
   const items = [
     {
       label: '单词',
       key: '1',
-      children: <Words />,
+      children: <EnDesktopWords />,
+    },
+    {
+      label: '词库',
+      key: '2',
+      children: <EnDesktopLibraries />,
+    },
+    {
+      label: '用户',
+      key: '3',
+      children: <EnDesktopUsers />,
     },
     {
       label: '词根',
-      key: '2',
+      key: '4',
       children: <Root />,
     },
-
     {
       label: '词缀',
-      key: '3',
+      key: '5',
       children: <Affix />,
     },
     {
-      label: '电影对白',
-      key: '4',
-      children: <Dialogue />,
-    },
-    {
       label: '日常用语',
-      key: '5',
-      children: <LivingSpeech />,
-    },
-    {
-      label: '单词听写',
       key: '6',
-      children: <Test />,
+      children: <LivingSpeech />,
     },
   ];
 
   return (
-    <>
-      <Tabs
-        items={items}
-        defaultActiveKey={'1'}
-        // className="pt-[5px] px-[20px]"
-        style={{
-          height: 'calc(100vh - 180px)',
-        }}
-      />
-    </>
+    <Tabs
+      items={items}
+      defaultActiveKey={'1'}
+      style={{
+        height: 'calc(100vh - 180px)',
+      }}
+    />
   );
 }

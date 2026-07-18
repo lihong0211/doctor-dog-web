@@ -5,14 +5,14 @@ import AddEdit from './AddEdit';
 
 type ItemType = {
   id: number;
-  speech: string;
+  phrase: string;
   meaning: string;
 };
 
 export default function DialogueList() {
   const handleDelete = async (id: number, cb: any) => {
     request
-      .post(`/english/living-speech/delete`, { id })
+      .post(`/en-desktop/daily-expressions/delete`, null, { params: { expression_id: id } })
       .then(() => {
         message.success('删除成功');
         cb();
@@ -25,16 +25,16 @@ export default function DialogueList() {
     <ProTable<ItemType>
       rowKey="id"
       scroll={{  y: 450 }}
-      search={false}
+      search={{ defaultCollapsed: false, span: 4 }}
       columns={[
-       
         {
-          dataIndex: 'speech',
+          dataIndex: 'phrase',
           title: '用语',
         },
         {
           dataIndex: 'meaning',
           title: '释义',
+          hideInSearch: true,
         },
 
         {
@@ -49,7 +49,7 @@ export default function DialogueList() {
                   onSubmitted={action?.reload}
                   initialValues={{
                     id: entity.id,
-                    speech: entity.speech,
+                    phrase: entity.phrase,
                     meaning: entity.meaning,
                   }}
                   trigger={<Button type="link">编辑</Button>}
@@ -74,17 +74,14 @@ export default function DialogueList() {
           />,
         ];
       }}
-      request={async ({ current, pageSize, ...rest }) => {
-        const data = await request.post(`/english/living-speech/list`, {
-          page: current,
-          size: pageSize,
-          query: {
-            ...rest,
-          },
+      request={async ({ current, pageSize, phrase }) => {
+        const data: any = await request.get(`/en-desktop/daily-expressions/list`, {
+          params: { page: current, page_size: pageSize, search: phrase },
         });
         return {
           success: true,
-          ...data,
+          data: data.list,
+          total: data.total,
         };
       }}
     />

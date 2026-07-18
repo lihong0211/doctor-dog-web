@@ -8,14 +8,10 @@ export default {
         component: '../English',
       },
       {
-        path: '/business-data',
-        name: '业务数据',
-        component: '../BusinessData',
-      },
-      {
         path: '/store',
         name: '商品店铺',
         component: '../Store',
+        hideInMenu: true,
       },
     ],
   },

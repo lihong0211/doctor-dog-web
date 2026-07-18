@@ -5,6 +5,19 @@ const instance = axios.create({
   timeout: 30000, // 增加到30秒，避免复杂查询超时
 });
 
+const EN_DESKTOP_TOKEN_KEY = 'en_desktop_token';
+
+instance.interceptors.request.use((config) => {
+  if (config.url?.startsWith('/en-desktop')) {
+    const token = localStorage.getItem(EN_DESKTOP_TOKEN_KEY);
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+  return config;
+});
+
 instance.interceptors.response.use(
   (res) => {
     if (res?.data?.code === 200) {
