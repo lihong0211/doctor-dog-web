@@ -10,7 +10,7 @@ import {
   CustomerServiceOutlined, DatabaseOutlined,
 } from '@ant-design/icons'
 
-interface AppCard {
+export interface AppCard {
   id: number
   title: string
   description: string
@@ -21,7 +21,7 @@ interface AppCard {
   tags?: string[]
 }
 
-const CATEGORIES = ['全部', '对话Agent', '知识处理', '数据分析', '多媒体处理', '游戏娱乐', '娱乐体验', '推理模型']
+export const CATEGORIES = ['全部', '对话Agent', '知识处理', '数据分析', '多媒体处理', '游戏娱乐', '娱乐体验', '推理模型']
 
 // Category accent colors — left-stripe signature
 const CAT_COLOR: Record<string, string> = {
@@ -40,7 +40,7 @@ const STATUS_CFG = {
   planned:     { dot: '#3D5A80', text: '#3D5A80', label: 'SOON' },
 }
 
-const APPS: AppCard[] = [
+export const APPS: AppCard[] = [
   { id: 1,  title: 'AI 数据分析',    category: '数据分析',   description: '上传 CSV/Excel，用自然语言提问，AI 自动生成 SQL 并返回结果', path: '/apps/data-analysis',  icon: <BarChartOutlined />,      status: 'live',      tags: ['CSV', 'DuckDB', 'Text2SQL'] },
   { id: 2,  title: 'Chat with GitHub', category: '知识处理', description: '输入 GitHub 仓库 URL，AI 为代码建立向量索引，支持 RAG 问答',  path: '/apps/github-chat',   icon: <GithubOutlined />,        status: 'live',      tags: ['RAG', 'Qdrant', 'Embedding'] },
   { id: 3,  title: 'Chat with YouTube', category: '知识处理', description: '输入 YouTube 视频链接，AI 提取字幕并进行内容问答',           path: '/apps/youtube-chat',  icon: <VideoCameraOutlined />,   status: 'live',      tags: ['字幕', 'RAG', 'YouTube'] },
@@ -279,7 +279,7 @@ function AppCard3D({ app, onNavigate }: { app: AppCard; onNavigate: (p: string) 
 }
 
 // ─── Main page ─────────────────────────────────────────────────────────────────
-export default function AppHub() {
+export function LegacyAppHub() {
   const navigate = useNavigate()
   const [activeCategory, setActiveCategory] = useState('全部')
   const [searchText, setSearchText]         = useState('')
@@ -470,3 +470,5 @@ export default function AppHub() {
     </div>
   )
 }
+
+export { default, filterApps } from './AppHubModern'
