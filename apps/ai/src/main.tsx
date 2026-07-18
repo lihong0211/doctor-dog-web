@@ -4,6 +4,7 @@ import { ConfigProvider } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
 import App from './App'
 import './index.css'
+import './styles/feature-pages.css'
 import { aiTheme } from './theme/antdTheme'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
