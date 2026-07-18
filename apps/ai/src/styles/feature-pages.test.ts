@@ -27,4 +27,19 @@ describe('feature page style contract', () => {
 
     expect(offenders).toEqual([])
   })
+
+  it('keeps shared skill workspaces and composers on dark theme surfaces', () => {
+    const globalCss = readFileSync('src/index.css', 'utf8')
+    const askInputCss = readFileSync('src/components/AskInput/index.css', 'utf8')
+    const mcpCss = readFileSync('src/pages/MCP/MCPGaode.css', 'utf8')
+
+    expect(globalCss).toContain('--ds-bg-secondary: var(--ai-surface-1)')
+    expect(globalCss).toContain('--ds-text-secondary: var(--ai-text-secondary)')
+    expect(askInputCss).toContain('background: var(--ai-surface-1)')
+    expect(askInputCss).toContain('background: var(--ai-surface-2)')
+    expect(mcpCss).toMatch(/\.mcp-gaode\s*\{[^}]*background: var\(--ai-canvas\)/s)
+    expect(mcpCss).toMatch(/\.mcp-gaode-sidebar\s*\{[^}]*background: var\(--ai-surface-1\)/s)
+    expect(mcpCss).toMatch(/\.mcp-unified\s*\{[^}]*background: var\(--ai-canvas\)/s)
+    expect(mcpCss).not.toMatch(/background[^;]*(?:#f[0-9a-f]{5}|rgba\(255\s*,\s*255\s*,\s*255)/i)
+  })
 })

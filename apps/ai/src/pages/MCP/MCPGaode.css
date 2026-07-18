@@ -3,7 +3,7 @@
   display: flex;
   height: 100%;
   min-height: 0;
-  background: linear-gradient(to bottom, #f8fafc 0%, #ffffff 100%);
+  background: var(--ai-canvas);
 }
 
 .mcp-gaode-loading {
@@ -24,8 +24,8 @@
   overflow-x: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  background: linear-gradient(to bottom, #ffffff 0%, #f9fafb 100%);
-  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  background: var(--ai-surface-1);
+  border-right: 1px solid var(--ai-border);
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -103,8 +103,8 @@
 .mcp-gaode-plugin-tag {
   font-size: 11px;
   padding: 6px 10px;
-  background: linear-gradient(to bottom, #f1f5f9 0%, #e2e8f0 100%);
-  color: #475569;
+  background: var(--ai-surface-3);
+  color: var(--ai-text-secondary);
   border-radius: 8px;
   font-family: ui-monospace, 'SF Mono', Monaco, monospace;
   border: 1px solid rgba(0, 0, 0, 0.05);
@@ -120,14 +120,14 @@
 
 .mcp-gaode-plugin-tag-used {
   border: 2px solid #ef4444;
-  background: linear-gradient(to bottom, #fee2e2 0%, #fecaca 100%);
-  color: #991b1b;
+  background: rgba(240, 107, 114, 0.14);
+  color: var(--ai-error);
   font-weight: 600;
   box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2);
 }
 
 .mcp-gaode-plugin-tag-used:hover {
-  background: linear-gradient(to bottom, #fecaca 0%, #fca5a5 100%);
+  background: rgba(240, 107, 114, 0.22);
   box-shadow: 0 3px 8px rgba(239, 68, 68, 0.3);
 }
 
@@ -318,8 +318,8 @@
 }
 
 .mcp-gaode-bubble-tool {
-  background: linear-gradient(to bottom, #f8fafc 0%, #f1f5f9 100%);
-  border: 1.5px solid #e2e8f0;
+  background: var(--ai-surface-2);
+  border: 1px solid var(--ai-border-strong);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   width: 90%;
   cursor: pointer;
@@ -327,12 +327,12 @@
 
 .mcp-gaode-bubble-tool-start {
   border-left: 4px solid var(--ds-primary);
-  background: linear-gradient(to right, rgba(59, 130, 246, 0.05) 0%, #f8fafc 10%);
+  background: linear-gradient(to right, var(--ai-primary-muted) 0%, var(--ai-surface-2) 18%);
 }
 
 .mcp-gaode-bubble-tool-result {
   border-left: 4px solid #22c55e;
-  background: linear-gradient(to right, rgba(34, 197, 94, 0.05) 0%, #f8fafc 10%);
+  background: linear-gradient(to right, rgba(53, 208, 127, 0.12) 0%, var(--ai-surface-2) 18%);
 }
 
 .mcp-gaode-bubble-tool-header {
@@ -408,8 +408,8 @@
 .mcp-gaode-json-preview {
   margin: 0;
   padding: 12px 14px;
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: var(--ai-surface-1);
+  border: 1px solid var(--ai-border);
   border-radius: 8px;
   font-family: 'SF Mono', Monaco, 'Cascadia Code', ui-monospace, monospace;
   font-size: 12px;
@@ -482,7 +482,7 @@
   margin: 10px 0;
   border: 1.5px solid #e2e8f0;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.6);
+  background: var(--ai-surface-1);
   overflow: hidden;
   transition: all 0.2s ease;
 }
@@ -496,10 +496,10 @@
   padding: 10px 14px;
   cursor: pointer;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--ai-text);
   user-select: none;
   list-style: none;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%);
+  background: var(--ai-surface-2);
   transition: background 0.2s ease;
 }
 
@@ -527,7 +527,7 @@
 .mcp-gaode-bubble-text details pre {
   margin: 0;
   padding: 12px 14px;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--ai-surface-1);
   border-radius: 0 0 10px 10px;
   font-family: 'SF Mono', Monaco, 'Cascadia Code', ui-monospace, monospace;
   font-size: 12px;
@@ -583,9 +583,9 @@
 /* 输入区 */
 .mcp-gaode-input-wrap {
   padding: 16px 20px;
-  background: linear-gradient(to top, #ffffff 0%, rgba(255, 255, 255, 0.95) 100%);
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.04);
+  background: var(--ai-surface-1);
+  border-top: 1px solid var(--ai-border);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
 }
 
 .mcp-gaode-input-box {
@@ -696,7 +696,7 @@
   flex-direction: column;
   height: 100%;
   min-height: 0;
-  background: linear-gradient(to bottom, #f8fafc 0%, #ffffff 100%);
+  background: var(--ai-canvas);
 }
 
 .mcp-unified-body {
@@ -714,7 +714,7 @@
   height: 100%;
   min-height: 200px;
   padding: 24px;
-  background: linear-gradient(to bottom, #f8fafc 0%, #f1f5f9 100%);
+  background: var(--ai-canvas);
 }
 
 .mcp-unified-developing-card {
@@ -756,9 +756,9 @@
 .mcp-unified-input-only {
   flex-shrink: 0;
   padding: 16px 20px 20px;
-  background: linear-gradient(to top, #ffffff 0%, rgba(255, 255, 255, 0.95) 100%);
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.04);
+  background: var(--ai-surface-1);
+  border-top: 1px solid var(--ai-border);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
 }
 
 .mcp-unified-input-only-box {
@@ -767,4 +767,21 @@
   background: var(--ai-surface-2);
   padding: 8px 12px 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+/* Dark workspace typography shared by Function Call, MCP assistants and Fine Tuning. */
+.mcp-gaode-title,
+.mcp-gaode-empty-text,
+.mcp-gaode-tool-title,
+.mcp-gaode-bubble-tool-header {
+  color: var(--ai-text);
+}
+
+.mcp-gaode-desc,
+.mcp-gaode-sidebar-heading,
+.mcp-gaode-empty-hint,
+.mcp-gaode-bubble-tool-body,
+.mcp-gaode-typing,
+.mcp-gaode-typing-label {
+  color: var(--ai-text-secondary);
 }

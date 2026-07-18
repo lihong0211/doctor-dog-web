@@ -10,24 +10,24 @@
 
 .ask-input-wrap {
   padding: 16px 20px 20px;
-  background: linear-gradient(to top, #ffffff 0%, rgba(255, 255, 255, 0.95) 100%);
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.04);
+  background: var(--ai-surface-1);
+  border-top: 1px solid var(--ai-border);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
   flex-shrink: 0;
 }
 
 .ask-input-box {
   position: relative;
   border-radius: 12px;
-  border: 2px solid #e2e8f0;
-  background: #ffffff;
+  border: 1px solid var(--ai-border-strong);
+  background: var(--ai-surface-2);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
 .ask-input-box:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+  border-color: var(--ai-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
 }
 
 .ask-input-box:focus-within {
@@ -41,7 +41,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--ai-border);
 }
 
 .ask-input-textarea {
@@ -53,6 +53,8 @@
   font-size: 14px;
   line-height: 1.5;
   transition: all 0.2s ease;
+  background: transparent !important;
+  color: var(--ai-text) !important;
   background: transparent !important;
   box-shadow: none !important;
   color: var(--ds-text, #1e293b);

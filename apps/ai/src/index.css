@@ -29,8 +29,10 @@
   --ds-cta: var(--ai-primary);
   --ds-bg: var(--ai-canvas);
   --ds-bg-chat: var(--ai-surface-1);
+  --ds-bg-secondary: var(--ai-surface-1);
   --ds-text: var(--ai-text);
   --ds-text-muted: var(--ai-text-secondary);
+  --ds-text-secondary: var(--ai-text-secondary);
   --ds-border: var(--ai-border);
   --ds-card: var(--ai-surface-2);
   --ds-user-bubble: var(--ai-surface-3);
