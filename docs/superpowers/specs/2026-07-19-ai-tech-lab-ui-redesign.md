@@ -1,160 +1,160 @@
-# AI Tech Lab UI Redesign
+# AI Tech Lab UI 改造设计规格
 
-## Goal
+## 目标
 
-Unify the AI application under an original dark technical-workstation design language that combines Linear-like restraint and hierarchy with VoltAgent-like emerald AI energy, without copying either brand.
+使用原创的暗色技术工作台设计语言统一 AI 应用：借鉴 Linear 克制、清晰的层级，以及 VoltAgent 的翠绿色 AI 技术气质，但不复制任何一方的品牌。
 
-The redesign must make the application feel like one coherent product while preserving all current routes, features, Chinese copy, and interaction behavior.
+改造后，整个应用应呈现为一个连贯统一的产品，同时保留现有全部路由、功能、中文文案和交互行为。
 
-## Scope
+## 范围
 
-### Phase 1
+### 第一阶段
 
-- Define the project design contract in `apps/ai/DESIGN.md`.
-- Centralize design tokens and Ant Design theme configuration.
-- Redesign the shared application shell in `MainLayout`.
-- Redesign the application hub while preserving search, category filters, application status, and navigation.
-- Apply the shared shell and foundational tokens to existing feature pages without rewriting their business logic.
+- 在 `apps/ai/DESIGN.md` 中定义项目设计规范。
+- 集中管理设计令牌和 Ant Design 主题配置。
+- 改造 `MainLayout` 共用应用框架。
+- 改造应用广场，同时保留搜索、分类筛选、应用状态和导航功能。
+- 将共用框架和基础令牌应用到现有功能页，但不重写其业务逻辑。
 
-### Out of Scope
+### 不在范围内
 
-- Route or API changes.
-- Backend changes.
-- New product features.
-- Replacing existing icons with custom illustrations.
-- Copying Linear or VoltAgent logos, proprietary fonts, or distinctive branded assets.
-- A full rewrite of every feature page during the first implementation pass.
+- 修改路由或 API。
+- 修改后端。
+- 增加新产品功能。
+- 使用定制插画替换现有图标。
+- 复制 Linear 或 VoltAgent 的 Logo、专有字体或具有明显品牌识别度的素材。
+- 在第一阶段完整重写每一个功能页面。
 
-## Design Principles
+## 设计原则
 
-1. **Quiet frame, expressive content.** Navigation and shared chrome stay restrained so application content remains primary.
-2. **Hierarchy through surfaces.** Use stepped dark surfaces and hairline borders instead of glow, glassmorphism, or heavy shadows.
-3. **Emerald is scarce.** Emerald identifies the brand, selected navigation, primary actions, focus, and live status. It is not a decorative fill.
-4. **Dense but breathable.** The product should support information-heavy AI tools without feeling cramped.
-5. **One product language.** Hub, skills, chat, knowledge, and data pages use the same spacing, typography, radius, and interaction states.
-6. **Accessible by default.** Text contrast, visible focus, touch targets, reduced motion, and keyboard navigation are part of the visual system.
+1. **框架克制，内容突出。** 导航和共用框架保持安静，让应用内容成为视觉主体。
+2. **用表面层级建立主次。** 使用递进的暗色表面和细边框，不使用光晕、玻璃拟态或厚重阴影。
+3. **谨慎使用翠绿色。** 翠绿色只用于品牌、选中导航、主要操作、焦点和在线状态，不作为装饰性填充色。
+4. **信息紧凑但留有呼吸。** 支持信息密集的 AI 工具，同时避免拥挤。
+5. **保持一种产品语言。** 应用广场、技能、聊天、知识库和数据页面共用间距、字体、圆角和交互状态。
+6. **默认具备可访问性。** 文字对比度、可见焦点、触控区域、减少动态效果和键盘导航均属于视觉系统的一部分。
 
-## Visual System
+## 视觉系统
 
-### Color Tokens
+### 颜色令牌
 
-| Token | Value | Role |
+| 令牌 | 数值 | 用途 |
 | --- | --- | --- |
-| `--ai-canvas` | `#07090D` | Root application background |
-| `--ai-surface-1` | `#0D1117` | Sidebar, header, primary panels |
-| `--ai-surface-2` | `#131922` | Cards and controls |
-| `--ai-surface-3` | `#19212C` | Hovered and nested surfaces |
-| `--ai-surface-4` | `#202A36` | Strong lifted state |
-| `--ai-border` | `#232D39` | Default hairline border |
-| `--ai-border-strong` | `#344150` | Hover and focused border |
-| `--ai-text` | `#F3F6F8` | Primary text |
-| `--ai-text-secondary` | `#AAB5C0` | Descriptions and metadata |
-| `--ai-text-tertiary` | `#6F7C89` | Disabled and low-priority labels |
-| `--ai-primary` | `#00C98D` | Brand, selected, primary action, focus |
-| `--ai-primary-hover` | `#18D9A1` | Primary hover |
-| `--ai-primary-muted` | `rgba(0, 201, 141, 0.12)` | Selected and subtle emphasis |
-| `--ai-success` | `#35D07F` | Successful/live status |
-| `--ai-warning` | `#E5B65C` | Warning status |
-| `--ai-error` | `#F06B72` | Error and destructive state |
+| `--ai-canvas` | `#07090D` | 应用根背景 |
+| `--ai-surface-1` | `#0D1117` | 侧边栏、顶栏和主要面板 |
+| `--ai-surface-2` | `#131922` | 卡片和控件 |
+| `--ai-surface-3` | `#19212C` | 悬停和嵌套表面 |
+| `--ai-surface-4` | `#202A36` | 强调的浮起状态 |
+| `--ai-border` | `#232D39` | 默认细边框 |
+| `--ai-border-strong` | `#344150` | 悬停和焦点边框 |
+| `--ai-text` | `#F3F6F8` | 主要文字 |
+| `--ai-text-secondary` | `#AAB5C0` | 描述和元数据 |
+| `--ai-text-tertiary` | `#6F7C89` | 禁用和低优先级标签 |
+| `--ai-primary` | `#00C98D` | 品牌、选中、主要操作和焦点 |
+| `--ai-primary-hover` | `#18D9A1` | 主要操作悬停状态 |
+| `--ai-primary-muted` | `rgba(0, 201, 141, 0.12)` | 选中和轻度强调 |
+| `--ai-success` | `#35D07F` | 成功和在线状态 |
+| `--ai-warning` | `#E5B65C` | 警告状态 |
+| `--ai-error` | `#F06B72` | 错误和破坏性操作 |
 
-No atmospheric gradients are used in application chrome. Category colors may remain inside small semantic tags and data visualizations, but must not compete with the primary emerald.
+应用框架不使用氛围渐变。分类颜色可以保留在小型语义标签和数据可视化中，但不能与主要翠绿色争夺视觉注意力。
 
-### Typography
+### 字体
 
-- UI family: `Inter`, `Plus Jakarta Sans`, `-apple-system`, `BlinkMacSystemFont`, `"Segoe UI"`, sans-serif.
-- Technical family: `"JetBrains Mono"`, `"SFMono-Regular"`, Consolas, monospace.
-- Page title: 24px, 650 weight, 1.25 line height, `-0.02em` tracking.
-- Section title: 18px, 600 weight, 1.35 line height.
-- Card title: 15px, 600 weight, 1.4 line height.
-- Body: 14px, 400 weight, 1.55 line height.
-- Secondary and navigation: 13px, 450–500 weight.
-- Technical eyebrow and status: 11px, 500 weight, `0.08em` tracking.
+- 界面字体：`Inter`、`Plus Jakarta Sans`、`-apple-system`、`BlinkMacSystemFont`、`"Segoe UI"`、sans-serif。
+- 技术字体：`"JetBrains Mono"`、`"SFMono-Regular"`、Consolas、monospace。
+- 页面标题：24px、字重 650、行高 1.25、字间距 `-0.02em`。
+- 区块标题：18px、字重 600、行高 1.35。
+- 卡片标题：15px、字重 600、行高 1.4。
+- 正文：14px、字重 400、行高 1.55。
+- 次要文字和导航：13px、字重 450–500。
+- 技术眉题和状态：11px、字重 500、字间距 `0.08em`。
 
-Chinese text must remain readable at every level. Monospace is reserved for model names, provider names, statuses, IDs, and technical metadata.
+各层级的中文文字必须保持清晰易读。等宽字体仅用于模型名称、服务商名称、状态、ID 和技术元数据。
 
-### Spacing and Shape
+### 间距和形状
 
-- Base spacing unit: 4px.
-- Standard scale: 4, 8, 12, 16, 20, 24, 32, 40, 48px.
-- Control radius: 8px.
-- Card and panel radius: 12px.
-- Large feature panel radius: 16px.
-- Pills are limited to filters, tags, and status indicators.
-- Shared control height: 40px desktop, at least 44px on touch layouts.
+- 基础间距单位：4px。
+- 标准间距：4、8、12、16、20、24、32、40、48px。
+- 控件圆角：8px。
+- 卡片和面板圆角：12px。
+- 大型功能面板圆角：16px。
+- 胶囊形状仅用于筛选项、标签和状态标识。
+- 共用控件高度：桌面端 40px，触控布局至少 44px。
 
-### Depth and Motion
+### 层级和动效
 
-- Default surfaces use a 1px border and no shadow.
-- Floating overlays may use `0 16px 48px rgba(0, 0, 0, 0.36)`.
-- Hover transitions last 150ms; panel and route transitions last no more than 220ms.
-- Motion changes opacity and small translations only. Cards do not tilt in 3D.
-- Under `prefers-reduced-motion: reduce`, nonessential animation is disabled.
+- 默认表面使用 1px 边框，不使用阴影。
+- 浮层可使用 `0 16px 48px rgba(0, 0, 0, 0.36)`。
+- 悬停过渡时长为 150ms；面板和路由过渡不超过 220ms。
+- 动效只改变透明度和小幅位移，卡片不再进行 3D 倾斜。
+- 在 `prefers-reduced-motion: reduce` 下关闭非必要动效。
 
-## Application Shell
+## 应用框架
 
-### Header
+### 顶栏
 
-- Fixed height: 56px.
-- Background: `--ai-surface-1`.
-- Bottom border: `--ai-border`.
-- Brand block remains on the left with the text `AI Tech Lab`.
-- The logo becomes a simple emerald-accented product mark using the existing icon library.
-- `技能中心` and `体验中心` remain the primary tabs.
-- Active tab uses primary text and a 2px emerald bottom indicator.
-- Header chrome contains no gradient.
+- 固定高度：56px。
+- 背景：`--ai-surface-1`。
+- 底部边框：`--ai-border`。
+- 左侧保留品牌文字 `AI Tech Lab`。
+- 使用现有图标库制作简洁的翠绿色产品标识。
+- 保留 `技能中心` 和 `体验中心` 两个主要标签页。
+- 当前标签使用主要文字颜色和 2px 翠绿色底部指示条。
+- 顶栏不使用渐变。
 
-### Sidebar
+### 侧边栏
 
-- Width: 216px desktop.
-- Background: `--ai-surface-1`.
-- Right border: `--ai-border`.
-- Group labels use technical eyebrow styling.
-- Menu rows are 40px high with 8px radius and 8px horizontal inset.
-- Selected menu uses `--ai-primary-muted`, primary text, and a narrow emerald indicator.
-- Hover uses `--ai-surface-3`.
-- At widths below 768px, the sidebar becomes an accessible drawer opened from the header.
+- 桌面端宽度：216px。
+- 背景：`--ai-surface-1`。
+- 右侧边框：`--ai-border`。
+- 分组标题使用技术眉题样式。
+- 菜单行高 40px，圆角 8px，左右内缩 8px。
+- 选中菜单使用 `--ai-primary-muted`、主要文字颜色和窄翠绿色指示条。
+- 悬停使用 `--ai-surface-3`。
+- 宽度低于 768px 时，侧边栏变为由顶栏按钮打开的无障碍抽屉。
 
-### Content
+### 内容区域
 
-- Background: `--ai-canvas`.
-- Standard desktop padding: 28px.
-- Maximum reading width is applied on form- and text-heavy pages; data and visualization pages may use full width.
-- Existing page-managed scroll behavior remains intact.
+- 背景：`--ai-canvas`。
+- 桌面端标准内边距：28px。
+- 表单和长文本页面限制最大阅读宽度；数据和可视化页面可使用完整宽度。
+- 保留现有页面自行管理滚动的行为。
 
-## Application Hub
+## 应用广场
 
-### Header Block
+### 标题区域
 
-- Keep `AI TECH LAB / APPS`, `大模型应用体验中心`, the provider description, and live/total counts.
-- Remove the particle canvas and decorative 3D depth.
-- Use a restrained two-column header: title and description on the left, compact status summary on the right.
+- 保留 `AI TECH LAB / APPS`、`大模型应用体验中心`、服务商描述以及在线/总数统计。
+- 移除粒子画布和装饰性 3D 深度。
+- 使用克制的双栏标题结构：左侧为标题和描述，右侧为紧凑状态统计。
 
-### Search and Filters
+### 搜索与筛选
 
-- Search uses a 40px surface-2 input with a search icon, visible focus ring, and responsive full-width behavior.
-- Category filters remain compact pills.
-- The active category uses primary-muted background, emerald text, and an emerald-tinted border.
-- Filter buttons expose pressed state through `aria-pressed`.
+- 搜索框高度 40px，使用 surface-2 背景、搜索图标、清晰焦点环，并在窄屏下占满宽度。
+- 分类筛选继续使用紧凑胶囊按钮。
+- 当前分类使用 primary-muted 背景、翠绿色文字和翠绿色半透明边框。
+- 筛选按钮通过 `aria-pressed` 暴露按下状态。
 
-### Application Cards
+### 应用卡片
 
-- Desktop: 3 columns.
-- Tablet: 2 columns below 1100px.
-- Mobile: 1 column below 700px.
-- Cards use surface-2, a hairline border, 12px radius, and 20px padding.
-- Card hover raises the border to border-strong and translates no more than 2px upward.
-- Card hierarchy:
-  1. icon and live/beta status;
-  2. application title;
-  3. concise Chinese description;
-  4. technical tags;
-  5. subtle launch affordance.
-- Cards remain clickable and preserve their existing route destinations.
-- Empty search results use a proper Ant Design empty state or existing icon component, never a decorative text symbol.
+- 桌面端：3 列。
+- 低于 1100px 的平板布局：2 列。
+- 低于 700px 的移动端布局：1 列。
+- 卡片使用 surface-2、细边框、12px 圆角和 20px 内边距。
+- 卡片悬停时使用 border-strong，向上移动不超过 2px。
+- 卡片信息层级：
+  1. 图标和在线/测试状态；
+  2. 应用标题；
+  3. 简洁中文描述；
+  4. 技术标签；
+  5. 弱化的启动提示。
+- 卡片保持可点击，并保留现有路由目标。
+- 搜索无结果时使用规范的 Ant Design 空状态或现有图标组件，不使用装饰性文字符号。
 
-## Ant Design Integration
+## Ant Design 集成
 
-`ConfigProvider` is the single theme boundary. Its theme maps the project tokens to Ant Design aliases and component tokens:
+`ConfigProvider` 是唯一主题边界。它将项目令牌映射到 Ant Design 别名令牌和组件令牌：
 
 - `colorPrimary`
 - `colorBgBase`
@@ -166,76 +166,76 @@ Chinese text must remain readable at every level. Monospace is reserved for mode
 - `colorTextSecondary`
 - `borderRadius`
 - `controlHeight`
-- component overrides for `Layout`, `Menu`, `Tabs`, `Button`, `Input`, `Card`, `Tag`, `Modal`, `Table`, and `Tooltip`.
+- `Layout`、`Menu`、`Tabs`、`Button`、`Input`、`Card`、`Tag`、`Modal`、`Table` 和 `Tooltip` 的组件覆盖配置。
 
-Page-specific CSS consumes project tokens instead of introducing new hard-coded theme colors.
+页面专用 CSS 应使用项目令牌，不再引入新的硬编码主题颜色。
 
-## Component Boundaries
+## 组件边界
 
-- `src/theme/tokens.ts`: typed primitive and semantic token values.
-- `src/theme/antdTheme.ts`: Ant Design `ThemeConfig` derived from project tokens.
-- `src/main.tsx`: applies the shared theme through `ConfigProvider`.
-- `src/layouts/MainLayout.tsx`: shell structure and navigation behavior only.
-- `src/layouts/MainLayout.css`: responsive shell styling.
-- `src/pages/AppHub.tsx`: hub data filtering and rendering behavior.
-- `src/pages/AppHub.css`: hub layout, states, and responsive styling.
-- `DESIGN.md`: human- and agent-readable design contract.
+- `src/theme/tokens.ts`：带类型的基础令牌和语义令牌值。
+- `src/theme/antdTheme.ts`：由项目令牌生成的 Ant Design `ThemeConfig`。
+- `src/main.tsx`：通过 `ConfigProvider` 应用共用主题。
+- `src/layouts/MainLayout.tsx`：只负责应用框架结构和导航行为。
+- `src/layouts/MainLayout.css`：应用框架和响应式样式。
+- `src/pages/AppHub.tsx`：应用广场数据筛选和渲染行为。
+- `src/pages/AppHub.css`：应用广场布局、状态和响应式样式。
+- `DESIGN.md`：供人和 Agent 阅读的设计规范。
 
-Business services, API calls, route configuration, and application data stay unchanged.
+业务服务、API 调用、路由配置和应用数据保持不变。
 
-## Responsive Behavior
+## 响应式行为
 
-- `>= 1100px`: 216px sidebar and three-column hub grid.
-- `768–1099px`: 200px sidebar and two-column hub grid.
-- `< 768px`: sidebar drawer, compact header, content padding 16px.
-- `< 700px`: one-column hub cards and full-width search.
-- All interactive targets are at least 40px on desktop and 44px on touch layouts.
-- No horizontal scrolling is introduced at 390px viewport width.
+- `>= 1100px`：216px 侧边栏和三列应用广场。
+- `768–1099px`：200px 侧边栏和两列应用广场。
+- `< 768px`：侧边栏抽屉、紧凑顶栏和 16px 内容内边距。
+- `< 700px`：单列应用卡片和全宽搜索框。
+- 所有交互目标在桌面端至少 40px，在触控布局至少 44px。
+- 390px 视口宽度下不得出现横向滚动。
 
-## Accessibility Requirements
+## 可访问性要求
 
-- Primary and secondary text meet WCAG AA contrast against their intended surfaces.
-- Keyboard focus is always visible with a 2px emerald outline and 2px offset.
-- Icon-only controls include accessible names.
-- Selected tabs and filters expose semantic state.
-- The mobile drawer traps focus and returns focus to its trigger when closed.
-- Reduced-motion preferences disable particle, tilt, and decorative entrance effects.
-- Color is never the only indicator of live, selected, warning, or error state.
+- 主要和次要文字在对应表面上满足 WCAG AA 对比度。
+- 键盘焦点始终可见，使用 2px 翠绿色轮廓和 2px 外偏移。
+- 仅图标控件包含可访问名称。
+- 选中标签和筛选项暴露对应语义状态。
+- 移动端抽屉限制焦点范围，关闭后将焦点返回触发按钮。
+- 减少动态效果偏好会关闭粒子、倾斜和装饰性入场效果。
+- 在线、选中、警告或错误状态不能只依靠颜色表达。
 
-## Verification
+## 验证
 
-### Automated
+### 自动验证
 
-- Existing TypeScript build succeeds.
-- Theme token tests verify the required semantic tokens and Ant Design mappings.
-- Hub behavior tests verify category filtering, search filtering, empty state, and route activation.
-- Layout tests verify active section and responsive navigation state where practical.
+- 现有 TypeScript 构建成功。
+- 主题令牌测试验证必需的语义令牌和 Ant Design 映射。
+- 应用广场行为测试验证分类筛选、搜索筛选、空状态和路由跳转。
+- 在适合自动化的范围内，布局测试验证当前分区和响应式导航状态。
 
-### Visual
+### 视觉验证
 
-Verify these viewports:
+验证以下视口：
 
-- Desktop: 1440 × 1024.
-- Tablet: 1024 × 768.
-- Mobile: 390 × 844.
+- 桌面端：1440 × 1024。
+- 平板端：1024 × 768。
+- 移动端：390 × 844。
 
-At each viewport check:
+每个视口检查：
 
-- no overflow or clipped content;
-- readable Chinese typography;
-- correct active navigation;
-- visible focus states;
-- consistent surface and border hierarchy;
-- hub cards use the expected column count;
-- reduced-motion mode contains no particle or 3D card motion.
+- 不存在溢出或内容裁切；
+- 中文字体清晰易读；
+- 当前导航状态正确；
+- 焦点状态清晰可见；
+- 表面和边框层级一致；
+- 应用卡片列数符合预期；
+- 减少动态效果模式下不存在粒子或 3D 卡片动效。
 
-## Acceptance Criteria
+## 验收标准
 
-- Shared shell and application hub visibly belong to the same design system.
-- The global DeepSeek-blue theme and the hub's isolated teal/3D theme are replaced by the new token system.
-- Existing routes, filters, search, and card navigation still work.
-- No Linear or VoltAgent trademarked visual assets are included.
-- No new runtime dependency is required solely for styling.
-- `npm run build` passes.
-- Automated UI tests pass.
-- Desktop, tablet, and mobile visual checks pass with no critical accessibility issue.
+- 共用应用框架和应用广场明显属于同一设计系统。
+- 全局 DeepSeek 蓝色主题和应用广场独立的青绿色/3D 主题被新的令牌系统替换。
+- 现有路由、筛选、搜索和卡片导航保持正常。
+- 不包含 Linear 或 VoltAgent 的商标视觉素材。
+- 不为了样式单独增加新的运行时依赖。
+- `npm run build` 通过。
+- 自动化 UI 测试通过。
+- 桌面端、平板端和移动端视觉检查通过，且不存在严重可访问性问题。
