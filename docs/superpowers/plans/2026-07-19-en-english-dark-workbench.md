@@ -4,7 +4,7 @@
 
 **Goal:** 将 `apps/en` 的 `/english` 改造为与 `apps/ai` 同系的暗色翠绿学习工作台，同时保持六个模块的现有业务行为。
 
-**Architecture:** 在 `apps/en/src/theme/` 建立独立主题令牌和 Ant Design 5 主题入口；保留现有 `ProLayout` 和六个业务模块，由 `English` 组件提供专属工作台壳层。全局主题负责 Ant Design/Pro Components，`.en-workbench` 负责 `/english` 的布局隔离，商城和其他路由不接入该类名。
+**Architecture:** 在 `apps/en/src/theme/` 建立独立主题令牌和 Ant Design 5 主题入口；保留现有 `ProLayout` 和六个业务模块，由 `English` 组件提供左侧导航和专属工作台壳层。全局主题负责 Ant Design/Pro Components，`.en-workbench` 负责 `/english` 的布局隔离，商城和其他路由不接入该类名。
 
 **Tech Stack:** React 18、TypeScript 5、Vite 4、Ant Design 5.17、Ant Design Pro Components 2.6、Emotion、React Router 6、Vitest、Testing Library。
 
@@ -14,7 +14,7 @@
 - 保留现有接口、权限、表格字段、编辑弹窗和默认模块行为。
 - 主强调色固定为 `#00C98D`，主画布固定为 `#07090D`。
 - 不增加运行时视觉依赖，不升级现有框架版本。
-- 390px 宽度下整页不得横向溢出；Tabs 和宽表格可在自身容器滚动。
+- 390px 宽度下整页不得横向溢出；侧栏使用 Drawer，宽表格可在自身容器滚动。
 - 必须支持 `:focus-visible` 和 `prefers-reduced-motion`。
 
 ---
@@ -152,7 +152,8 @@ git commit -m "feat(en): add dark workbench theme"
 **Interfaces:**
 
 - Keeps: default export `English()`.
-- Keeps: six existing Tab children and `defaultActiveKey="1"`.
+- Keeps: six existing module children.
+- Produces: default module `用户` and order `用户、单词、词库、词根、词缀、日常用语`.
 - Produces: `.en-workbench` isolated root class.
 
 - [ ] **Step 1: Write the failing page structure test**
@@ -162,10 +163,10 @@ Mock the six heavy child modules and render `English`:
 ```tsx
 expect(screen.getByText('英语学习中心')).toBeVisible()
 expect(screen.getByText('ENGLISH WORKBENCH')).toBeVisible()
-for (const label of ['单词', '词库', '用户', '词根', '词缀', '日常用语']) {
-  expect(screen.getByRole('tab', { name: label })).toBeVisible()
+for (const label of ['用户', '单词', '词库', '词根', '词缀', '日常用语']) {
+  expect(screen.getByRole('button', { name: label })).toBeVisible()
 }
-expect(screen.getByRole('tab', { name: '单词' })).toHaveAttribute('aria-selected', 'true')
+expect(screen.getByRole('button', { name: '用户' })).toHaveAttribute('aria-current', 'page')
 ```
 
 - [ ] **Step 2: Verify RED**
@@ -176,11 +177,11 @@ Run:
 pnpm --dir apps/en test -- src/pages/English/English.test.tsx
 ```
 
-Expected: FAIL because the workbench header and root class do not exist.
+Expected: FAIL because the workbench header and sidebar navigation do not exist.
 
 - [ ] **Step 3: Implement the workbench structure**
 
-Wrap existing Tabs with:
+Replace the Tabs shell with local active-module state and semantic navigation:
 
 ```tsx
 <section className="en-workbench">
@@ -192,11 +193,22 @@ Wrap existing Tabs with:
     </div>
     <span className="en-workbench-status">CONTENT LAB</span>
   </header>
-  <div className="en-workbench-panel">
-    <Tabs className="en-workbench-tabs" items={items} defaultActiveKey="1" />
+  <div className="en-workbench-body">
+    <aside className="en-workbench-sidebar" aria-label="英语学习模块">
+      {items.map(item => (
+        <button aria-current={activeKey === item.key ? 'page' : undefined}>
+          {item.label}
+        </button>
+      ))}
+    </aside>
+    <main className="en-workbench-panel">
+      {items.find(item => item.key === activeKey)?.children}
+    </main>
   </div>
 </section>
 ```
+
+Set the item order to `用户、单词、词库、词根、词缀、日常用语` and initialize `activeKey` with the user item. Add an Ant Design `Drawer` containing the same navigation for screens below 768px.
 
 - [ ] **Step 4: Implement scoped responsive CSS**
 
@@ -204,10 +216,10 @@ CSS must include:
 
 ```css
 .en-workbench { background: var(--en-canvas); }
+.en-workbench-sidebar { background: var(--en-surface-1); }
 .en-workbench-panel { background: var(--en-surface-2); }
-.en-workbench-tabs .ant-tabs-nav { overflow-x: auto; }
 .en-workbench :focus-visible { outline: 2px solid var(--en-primary); }
-@media (max-width: 768px) { /* compact header and panel */ }
+@media (max-width: 768px) { /* hide fixed sidebar and show Drawer trigger */ }
 @media (max-width: 480px) { /* 390px safe padding */ }
 @media (prefers-reduced-motion: reduce) { /* disable transitions */ }
 ```
