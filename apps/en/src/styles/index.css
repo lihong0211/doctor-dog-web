@@ -11,8 +11,10 @@
   --en-border: #232d39;
   --en-border-strong: #344150;
   --en-text: #f3f6f8;
+  --en-text-primary: #f3f6f8;
   --en-text-secondary: #aab5c0;
   --en-text-tertiary: #6f7c89;
+  --en-text-muted: #6f7c89;
   --en-primary: #00c98d;
   --en-primary-hover: #18d9a1;
   --en-primary-muted: rgba(0, 201, 141, 0.12);
@@ -35,8 +37,6 @@ body {
   @apply fixed;
   @apply inset-0;
   overflow: hidden;
-  color: var(--en-text);
-  background: var(--en-canvas);
 }
 
 #root {
@@ -46,21 +46,6 @@ body {
 button {
   outline: none;
   border: 0;
-}
-
-:focus-visible {
-  outline: 2px solid var(--en-primary);
-  outline-offset: 2px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
 }
 
 * {

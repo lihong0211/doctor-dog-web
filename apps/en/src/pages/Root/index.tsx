@@ -25,7 +25,7 @@ export default function Root() {
   return (
     <ProLayout
       {...layoutProps}
-      className="h-full"
+      className="h-full en-app-shell"
       layout="mix"
       theme="dark"
       location={{ pathname }}
