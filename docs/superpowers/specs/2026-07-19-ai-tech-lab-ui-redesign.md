@@ -14,7 +14,8 @@
 - 集中管理设计令牌和 Ant Design 主题配置。
 - 改造 `MainLayout` 共用应用框架。
 - 改造应用广场，同时保留搜索、分类筛选、应用状态和导航功能。
-- 将共用框架和基础令牌应用到现有功能页，但不重写其业务逻辑。
+- 将共用框架和基础令牌应用到全部现有功能页。
+- 清理功能页中覆盖主题的白底、旧蓝色、浅灰色和其他硬编码视觉值，但不重写其业务逻辑。
 
 ### 不在范围内
 
@@ -23,7 +24,7 @@
 - 增加新产品功能。
 - 使用定制插画替换现有图标。
 - 复制 Linear 或 VoltAgent 的 Logo、专有字体或具有明显品牌识别度的素材。
-- 在第一阶段完整重写每一个功能页面。
+- 为了统一视觉而完整重写功能页面的业务组件。
 
 ## 设计原则
 
@@ -183,6 +184,40 @@
 
 业务服务、API 调用、路由配置和应用数据保持不变。
 
+## 全功能页统一策略
+
+采用“共用模式优先、逐页清理兜底”的分层方式，不使用全局 `!important` 强制换肤，也不对几十个页面进行业务重写。
+
+### 共用页面基础
+
+新增或完善可复用的页面级样式模式：
+
+- 页面画布、滚动容器、标题区和操作区；
+- 聊天消息区、用户与助手气泡、输入区、工具调用结果；
+- Card、Table、Form、Input、Select、Tabs、Modal 和 Drawer；
+- 上传区、空状态、加载状态、错误提示和结果面板；
+- Markdown、代码块、数据表格和滚动条；
+- 标签、状态、主要按钮和次要按钮。
+
+页面优先通过 Ant Design 令牌和共用 CSS 类获得视觉样式。仅当页面具有独立布局需求时才保留页面专用 CSS。
+
+### 清理批次
+
+1. **技能基础页：** VectorDB、Knowledge Base、RAG、Text2SQL、LangChain、Function Call、MCP、A2A、Agent、Fine-tuning。
+2. **聊天与 Agent 页：** Chat、GitHubChat、YouTubeChat、ArxivChat、PDFChat、MemoryChat、DoctorAgent、FinanceCoach、TravelPlanner、RecipePlanner、MentalWellbeing、ReasoningAgent、MixtureAgents。
+3. **数据和知识处理页：** Data、DataAnalysis、DataVisualization、KnowledgeBaseNew、ResumeMatcher、WebScraper、NewsAgent、StartupTrend。
+4. **多媒体与特殊体验页：** ImageGenerate、OCR、STT、TTS、SpeechTrainer、BlogPodcast、MusicGenerator、VideoUnderstand、ChessGame、NegotiationSimulator、TarotReading、GmailAssistant 和 MCP 子页面。
+
+每一批完成后运行构建并抽查代表页面；不得等到全部页面修改完成后才验证。
+
+### 页面级限制
+
+- 保留页面当前信息架构、字段、按钮文案、路由和 API 调用。
+- 不删除功能状态、错误提示或加载状态。
+- 数据可视化可以保留多色语义色，但其容器、文字和控件必须使用统一令牌。
+- 棋盘、地图、3D 图谱等专用画布可以保留自身视觉语言，但外围页面框架必须统一。
+- 医疗、财务和心理类页面的警告信息继续使用明确的语义色与文字，不因暗色主题降低可辨识度。
+
 ## 响应式行为
 
 - `>= 1100px`：216px 侧边栏和三列应用广场。
@@ -233,9 +268,12 @@
 
 - 共用应用框架和应用广场明显属于同一设计系统。
 - 全局 DeepSeek 蓝色主题和应用广场独立的青绿色/3D 主题被新的令牌系统替换。
+- 所有可访问路由的页面画布、标题、主要控件和内容容器均使用统一暗色系统。
+- 扫描发现的白底、旧蓝色和浅灰色硬编码值已删除或有明确的页面语义保留理由。
 - 现有路由、筛选、搜索和卡片导航保持正常。
 - 不包含 Linear 或 VoltAgent 的商标视觉素材。
 - 不为了样式单独增加新的运行时依赖。
 - `npm run build` 通过。
 - 自动化 UI 测试通过。
 - 桌面端、平板端和移动端视觉检查通过，且不存在严重可访问性问题。
+- 四个清理批次各至少完成一个代表页面的桌面和移动端浏览器检查。
