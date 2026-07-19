@@ -1,4 +1,5 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
 import English from './index';
 
@@ -11,24 +12,18 @@ vi.mock('../EnDesktop/Users', () => ({ default: () => <div>用户内容</div> })
 
 describe('English workbench', () => {
   it('shows the approved sidebar order and defaults to users', () => {
-    render(<English />);
+    render(
+      <MemoryRouter initialEntries={['/english']}>
+        <English />
+      </MemoryRouter>,
+    );
 
     expect(screen.getByText('ENGLISH WORKBENCH')).toBeVisible();
     expect(screen.getByRole('heading', { name: '英语学习中心' })).toBeVisible();
 
-    const navigation = screen.getByRole('navigation', { name: '英语学习模块' });
-    const labels = ['用户', '单词', '词库', '词根', '词缀', '日常用语'];
-    const buttons = labels.map((label) =>
-      screen.getByRole('button', { name: label }),
-    );
-
-    expect(navigation).toContainElement(buttons[0]);
     expect(
-      within(navigation)
-        .getAllByRole('button')
-        .map((button) => button.getAttribute('aria-label')),
-    ).toEqual(labels);
-    expect(buttons[0]).toHaveAttribute('aria-current', 'page');
+      screen.queryByRole('navigation', { name: '英语学习模块' }),
+    ).not.toBeInTheDocument();
     expect(screen.getByText('用户内容')).toBeVisible();
   });
 });
