@@ -18,7 +18,7 @@ export default function EnDesktopUsers() {
   return (
     <ProTable<ItemType>
       rowKey="id"
-      scroll={{ y: 'calc(100dvh - 245px)' }}
+      scroll={{ y: 'calc(100dvh - 215px)' }}
       search={false}
       columns={[
         { dataIndex: 'id', title: 'ID', width: 70 },

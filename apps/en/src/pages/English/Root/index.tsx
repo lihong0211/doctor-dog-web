@@ -33,7 +33,7 @@ export default function Root() {
     <>
       <ProTable<ItemType>
         rowKey="id"
-        scroll={{ y: 'calc(100dvh - 245px)' }}
+        scroll={{ y: 'calc(100dvh - 215px)' }}
         search={false}
         columns={[
           {

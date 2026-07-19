@@ -8,7 +8,7 @@
 
 .en-workbench-panel {
   min-width: 0;
-  min-height: 100dvh;
+  min-height: calc(100dvh - 56px);
   padding: 0 28px;
   background: var(--en-surface-2);
 }
@@ -27,7 +27,30 @@
 
 .en-workbench-module {
   min-width: 0;
-  height: calc(100dvh - 64px);
+  height: calc(100dvh - 120px);
+}
+
+.en-workbench-module > .ant-pro-table {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.en-workbench-module > .ant-pro-table > .ant-pro-card:last-child {
+  min-height: 0;
+  flex: 1;
+}
+
+.en-workbench-module > .ant-pro-table > .ant-pro-card:last-child > .ant-pro-card-body,
+.en-workbench-module > .ant-pro-table .ant-table-wrapper,
+.en-workbench-module > .ant-pro-table .ant-spin-nested-loading,
+.en-workbench-module > .ant-pro-table .ant-spin-container {
+  height: 100%;
+}
+
+.en-workbench-module > .ant-pro-table .ant-spin-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .en-workbench-module .ant-pro-card,
@@ -59,8 +82,8 @@
 }
 
 .en-workbench-module .ant-table-pagination {
-  margin-top: 14px !important;
-  margin-bottom: 12px !important;
+  margin-top: 12px !important;
+  margin-bottom: 15px !important;
 }
 
 .en-workbench,
@@ -95,7 +118,7 @@
 
 @media (max-width: 768px) {
   .en-workbench-panel {
-    min-height: 100dvh;
+    min-height: calc(100dvh - 56px);
     padding: 0 16px;
   }
 
@@ -104,7 +127,7 @@
   }
 
   .en-workbench-module {
-    height: calc(100dvh - 56px);
+    height: calc(100dvh - 112px);
   }
 }
 

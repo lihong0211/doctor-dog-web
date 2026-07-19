@@ -1,30 +1,48 @@
 import { useState } from 'react';
-import { Button, Space, Tag } from 'antd';
+import { Avatar, Button, Dropdown, Tooltip } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 import Login from './Login';
 import { useEnDesktopAuth, isAuthorizedUser } from './store';
 
 export default function EnDesktopAuthStatus() {
   const [loginOpen, setLoginOpen] = useState(false);
   const { user, logout } = useEnDesktopAuth();
+  const accountLabel = user?.nickname || user?.username || '用户账户';
+  const avatar = (
+    <Button
+      type="text"
+      shape="circle"
+      className="en-header-account"
+      aria-label="用户账户"
+      onClick={user ? undefined : () => setLoginOpen(true)}
+    >
+      <Avatar size={30} icon={<UserOutlined />} />
+    </Button>
+  );
 
   return (
-    <Space style={{ marginRight: 8 }}>
+    <>
       {user ? (
-        <>
-          <Tag color={isAuthorizedUser(user) ? 'blue' : 'red'}>
-            {user.nickname || user.username}
-            {isAuthorizedUser(user) ? '' : '（无权限）'}
-          </Tag>
-          <Button size="small" onClick={logout}>
-            退出登录
-          </Button>
-        </>
+        <Dropdown
+          trigger={['click']}
+          menu={{
+            items: [
+              {
+                key: 'account',
+                label: `${accountLabel}${isAuthorizedUser(user) ? '' : '（无权限）'}`,
+                disabled: true,
+              },
+              { type: 'divider' },
+              { key: 'logout', label: '退出登录', onClick: logout },
+            ],
+          }}
+        >
+          <Tooltip title={accountLabel}>{avatar}</Tooltip>
+        </Dropdown>
       ) : (
-        <Button size="small" type="primary" onClick={() => setLoginOpen(true)}>
-          登录
-        </Button>
+        <Tooltip title="用户账户">{avatar}</Tooltip>
       )}
       <Login open={loginOpen} onClose={() => setLoginOpen(false)} />
-    </Space>
+    </>
   );
 }

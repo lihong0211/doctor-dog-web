@@ -24,7 +24,7 @@ export default function DialogueList() {
   return (
     <ProTable<ItemType>
       rowKey="id"
-      scroll={{ y: 'calc(100dvh - 360px)' }}
+      scroll={{ y: 'calc(100dvh - 311px)' }}
       search={{ defaultCollapsed: false, span: 4 }}
       columns={[
         {

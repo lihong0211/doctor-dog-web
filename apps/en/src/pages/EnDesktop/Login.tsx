@@ -21,7 +21,16 @@ export default function EnDesktopLogin(props: { open: boolean; onClose(): void }
   };
 
   return (
-    <Modal title="管理员登录" open={props.open} onCancel={props.onClose} footer={null}>
+    <Modal
+      title="管理员登录"
+      open={props.open}
+      onCancel={props.onClose}
+      footer={null}
+      width={480}
+      centered
+      rootClassName="en-login-modal"
+      destroyOnClose
+    >
       <Form onFinish={onFinish} layout="vertical">
         <Form.Item name="username" label="用户名" rules={[{ required: true }]}>
           <Input />

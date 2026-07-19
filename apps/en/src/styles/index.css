@@ -57,3 +57,49 @@ button {
 button, [type='button'], [type='reset'], [type='submit'] {
   /* background-color: #1677ff; */
 }
+/* English workspace login portal */
+.en-login-modal .ant-modal-mask {
+  background: rgb(0 0 0 / 72%);
+  backdrop-filter: blur(4px);
+}
+
+.en-login-modal .ant-modal-content {
+  border: 1px solid var(--en-border-strong);
+  border-radius: 12px;
+  background: var(--en-surface-1);
+  box-shadow: 0 24px 80px rgb(0 0 0 / 55%);
+}
+
+.en-login-modal .ant-modal-title {
+  color: var(--en-text-primary);
+}
+
+.en-login-modal .ant-modal-close {
+  color: var(--en-text-secondary);
+}
+
+.en-login-modal .ant-modal-close:hover {
+  color: var(--en-primary);
+  background: var(--en-primary-muted);
+}
+
+.en-login-modal .ant-form-item-label > label {
+  color: var(--en-text-secondary);
+}
+
+.en-login-modal .ant-input,
+.en-login-modal .ant-input-affix-wrapper {
+  border-color: var(--en-border-strong);
+  background: var(--en-surface-2);
+}
+
+.en-login-modal .ant-input:focus,
+.en-login-modal .ant-input-affix-wrapper-focused {
+  border-color: var(--en-primary);
+  box-shadow: 0 0 0 2px var(--en-primary-muted);
+}
+
+.en-login-modal .ant-btn-primary {
+  color: #04110d;
+  font-weight: 700;
+}

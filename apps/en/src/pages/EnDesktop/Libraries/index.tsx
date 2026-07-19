@@ -21,7 +21,7 @@ export default function EnDesktopLibraries() {
     <>
       <ProTable<ItemType>
         rowKey="id"
-        scroll={{ y: 'calc(100dvh - 245px)' }}
+        scroll={{ y: 'calc(100dvh - 215px)' }}
         search={false}
         columns={[
           { dataIndex: 'name', title: '词库名称' },

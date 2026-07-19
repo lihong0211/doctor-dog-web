@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 import { ProLayout, PageContainer } from '@ant-design/pro-components';
+import { ConfigProvider } from 'antd';
 import { css } from '@emotion/react';
 import { Outlet, useLocation, NavLink } from 'react-router-dom';
 import layoutProps from './props';
 import EnDesktopAuthStatus from '../EnDesktop/AuthStatus';
+import { enTheme } from '../../theme/antdTheme';
 
 const FIXED_TITLE = '二仙桥大爷 | 学英语';
 
@@ -40,6 +42,25 @@ export default function Root() {
     &.en-app-shell--english .ant-pro-global-header,
     &.en-app-shell--english .ant-pro-sider {
       border-color: #232d39;
+    }
+
+    &.en-app-shell--english .ant-pro-global-header {
+      border-bottom: 1px solid #232d39;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02);
+    }
+
+    &.en-app-shell--english .en-header-account {
+      display: inline-flex;
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    &.en-app-shell--english .en-header-account .ant-avatar {
+      color: #07110e;
+      background: #00c98d;
     }
 
     &.en-app-shell--english .ant-menu-item {
@@ -90,13 +111,14 @@ export default function Root() {
     }
   `;
   return (
-    <ProLayout
+    <ConfigProvider theme={isEnglish ? enTheme : undefined}>
+      <ProLayout
       {...layoutProps}
       className={`h-full en-app-shell${isEnglish ? ' en-app-shell--english' : ''}`}
       layout="mix"
       theme="dark"
-      headerRender={isEnglish ? false : undefined}
-      title={isEnglish ? 'ENGLISH' : undefined}
+      logo={isEnglish ? false : undefined}
+      title={isEnglish ? '英语工作台' : undefined}
       location={{ pathname: isEnglish ? englishLocation : pathname }}
       token={
         isEnglish
@@ -130,10 +152,14 @@ export default function Root() {
       actionsRender={() => [<EnDesktopAuthStatus key="en-desktop-auth" />]}
       css={style}
     >
-      <PageContainer title={isEnglish ? false : undefined}>
+      <PageContainer
+        title={isEnglish ? false : undefined}
+        pageHeaderRender={isEnglish ? false : undefined}
+      >
         <Outlet />
       </PageContainer>
       {/* <Footer></Footer> */}
-    </ProLayout>
+      </ProLayout>
+    </ConfigProvider>
   );
 }
