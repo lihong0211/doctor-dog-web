@@ -24,7 +24,7 @@ export default function DialogueList() {
   return (
     <ProTable<ItemType>
       rowKey="id"
-      scroll={{  y: 450 }}
+      scroll={{ y: 'calc(100dvh - 360px)' }}
       search={{ defaultCollapsed: false, span: 4 }}
       columns={[
         {
@@ -65,15 +65,7 @@ export default function DialogueList() {
           },
         },
       ]}
-      toolBarRender={(action) => {
-        return [
-          <AddEdit
-            trigger={<Button type="primary">新增</Button>}
-            key="add"
-            onSubmitted={action?.reload}
-          />,
-        ];
-      }}
+      toolBarRender={false}
       request={async ({ current, pageSize, phrase }) => {
         const data: any = await request.get(`/en-desktop/daily-expressions/list`, {
           params: { page: current, page_size: pageSize, search: phrase },

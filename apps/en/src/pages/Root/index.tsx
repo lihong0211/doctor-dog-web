@@ -63,6 +63,31 @@ export default function Root() {
       color: #f3f6f8 !important;
       font-weight: 700;
     }
+
+    &.en-app-shell--english,
+    &.en-app-shell--english * {
+      scrollbar-width: thin;
+      scrollbar-color: #287a67 #0d1117;
+    }
+
+    &.en-app-shell--english *::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    &.en-app-shell--english *::-webkit-scrollbar-track {
+      background: #0d1117;
+    }
+
+    &.en-app-shell--english *::-webkit-scrollbar-thumb {
+      border: 2px solid #0d1117;
+      border-radius: 999px;
+      background: #287a67;
+    }
+
+    &.en-app-shell--english *::-webkit-scrollbar-thumb:hover {
+      background: #00c98d;
+    }
   `;
   return (
     <ProLayout
@@ -70,6 +95,7 @@ export default function Root() {
       className={`h-full en-app-shell${isEnglish ? ' en-app-shell--english' : ''}`}
       layout="mix"
       theme="dark"
+      headerRender={isEnglish ? false : undefined}
       title={isEnglish ? 'ENGLISH' : undefined}
       location={{ pathname: isEnglish ? englishLocation : pathname }}
       token={

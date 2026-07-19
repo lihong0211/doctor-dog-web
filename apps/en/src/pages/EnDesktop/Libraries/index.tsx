@@ -21,6 +21,7 @@ export default function EnDesktopLibraries() {
     <>
       <ProTable<ItemType>
         rowKey="id"
+        scroll={{ y: 'calc(100dvh - 245px)' }}
         search={false}
         columns={[
           { dataIndex: 'name', title: '词库名称' },
@@ -66,9 +67,7 @@ export default function EnDesktopLibraries() {
             },
           },
         ]}
-        toolBarRender={(action) => [
-          <AddEdit trigger={<Button type="primary">新建词库</Button>} key="add" onSubmitted={action?.reload} />,
-        ]}
+        toolBarRender={false}
         request={async () => {
           const data: any = await request.get('/en-desktop/libraries/list');
           return { success: true, data, total: data?.length };

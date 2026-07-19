@@ -23,6 +23,7 @@ describe('English workbench', () => {
       screen.queryByRole('heading', { name: '英语学习中心' }),
     ).not.toBeInTheDocument();
     expect(screen.getByRole('heading', { name: '用户' })).toBeVisible();
+    expect(screen.queryByText('MEMBERS')).not.toBeInTheDocument();
 
     expect(
       screen.queryByRole('navigation', { name: '英语学习模块' }),

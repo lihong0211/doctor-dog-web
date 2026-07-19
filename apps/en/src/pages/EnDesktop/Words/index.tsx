@@ -1,4 +1,5 @@
-import { ProTable } from '@ant-design/pro-components';
+import { useRef } from 'react';
+import { ProTable, type ActionType } from '@ant-design/pro-components';
 import { Button, Popconfirm, message, Tag } from 'antd';
 import request from '../../../request';
 import AddEdit from './AddEdit';
@@ -15,11 +16,25 @@ type ItemType = {
 };
 
 export default function EnDesktopWords() {
+  const actionRef = useRef<ActionType>();
+
   return (
     <ProTable<ItemType>
+      actionRef={actionRef}
       rowKey="id"
-      scroll={{ y: 450 }}
-      search={{ defaultCollapsed: false, span: 4 }}
+      scroll={{ y: 'calc(100dvh - 360px)' }}
+      search={{
+        defaultCollapsed: false,
+        span: 4,
+        optionRender: (_searchConfig, _formProps, dom) => [
+          ...dom,
+          <AddEdit
+            trigger={<Button type="primary">新增</Button>}
+            key="add"
+            onSubmitted={() => actionRef.current?.reload()}
+          />,
+        ],
+      }}
       columns={[
         { dataIndex: 'word', title: '单词' },
         { dataIndex: 'en_pronunciation', title: '英式音标', hideInSearch: true },
@@ -66,9 +81,7 @@ export default function EnDesktopWords() {
           },
         },
       ]}
-      toolBarRender={(action) => [
-        <AddEdit trigger={<Button type="primary">新增</Button>} key="add" onSubmitted={action?.reload} />,
-      ]}
+      toolBarRender={false}
       request={async ({ current, pageSize, word }) => {
         const data: any = await request.get('/en-desktop/words/list', {
           params: { page: current, page_size: pageSize, search: word },

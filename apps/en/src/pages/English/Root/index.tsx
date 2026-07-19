@@ -33,7 +33,7 @@ export default function Root() {
     <>
       <ProTable<ItemType>
         rowKey="id"
-        scroll={{ y: 450 }}
+        scroll={{ y: 'calc(100dvh - 245px)' }}
         search={false}
         columns={[
           {
@@ -68,9 +68,7 @@ export default function Root() {
             },
           },
         ]}
-        toolBarRender={(action) => [
-          <AddEdit trigger={<Button type="primary">新增</Button>} key="add" onSubmitted={action?.reload} />,
-        ]}
+        toolBarRender={false}
         request={async () => {
           const data: any = await request.get('/en-desktop/roots/list');
           return { success: true, data, total: data?.length };

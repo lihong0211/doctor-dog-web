@@ -18,7 +18,7 @@ export default function EnDesktopUsers() {
   return (
     <ProTable<ItemType>
       rowKey="id"
-      scroll={{ y: 450 }}
+      scroll={{ y: 'calc(100dvh - 245px)' }}
       search={false}
       columns={[
         { dataIndex: 'id', title: 'ID', width: 70 },
@@ -79,9 +79,7 @@ export default function EnDesktopUsers() {
           },
         },
       ]}
-      toolBarRender={(action) => [
-        <AddEdit trigger={<Button type="primary">新增</Button>} key="add" onSubmitted={action?.reload} />,
-      ]}
+      toolBarRender={false}
       request={async ({ current, pageSize }) => {
         const data: any = await request.get('/en-desktop/users/list', {
           params: { page: current, page_size: pageSize },

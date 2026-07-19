@@ -10,18 +10,16 @@ import './English.css';
 import { enTheme } from '../../theme/antdTheme';
 
 const modules = {
-  users: { label: '用户', eyebrow: 'MEMBERS', content: <EnDesktopUsers /> },
-  words: { label: '单词', eyebrow: 'VOCABULARY', content: <EnDesktopWords /> },
+  users: { label: '用户', content: <EnDesktopUsers /> },
+  words: { label: '单词', content: <EnDesktopWords /> },
   libraries: {
     label: '词库',
-    eyebrow: 'COLLECTIONS',
     content: <EnDesktopLibraries />,
   },
-  roots: { label: '词根', eyebrow: 'WORD ROOTS', content: <Root /> },
-  affixes: { label: '词缀', eyebrow: 'AFFIXES', content: <Affix /> },
+  roots: { label: '词根', content: <Root /> },
+  affixes: { label: '词缀', content: <Affix /> },
   speech: {
     label: '日常用语',
-    eyebrow: 'DAILY SPEECH',
     content: <LivingSpeech />,
   },
 } as const;
@@ -42,7 +40,6 @@ export default function English() {
       <section className="en-workbench">
         <main className="en-workbench-panel">
           <div className="en-workbench-panel-heading">
-            <span>{activeModule.eyebrow}</span>
             <h2>{activeModule.label}</h2>
           </div>
           <div className="en-workbench-module">{activeModule.content}</div>
