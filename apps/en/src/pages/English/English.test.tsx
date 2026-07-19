@@ -18,8 +18,11 @@ describe('English workbench', () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByText('ENGLISH WORKBENCH')).toBeVisible();
-    expect(screen.getByRole('heading', { name: '英语学习中心' })).toBeVisible();
+    expect(screen.queryByText('ENGLISH WORKBENCH')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: '英语学习中心' }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '用户' })).toBeVisible();
 
     expect(
       screen.queryByRole('navigation', { name: '英语学习模块' }),

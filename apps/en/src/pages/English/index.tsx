@@ -40,15 +40,6 @@ export default function English() {
   return (
     <ConfigProvider theme={enTheme}>
       <section className="en-workbench">
-        <header className="en-workbench-header">
-          <div>
-            <div className="en-workbench-eyebrow">ENGLISH WORKBENCH</div>
-            <h1>英语学习中心</h1>
-            <p>管理单词、词库、词根词缀和生活口语内容</p>
-          </div>
-          <span className="en-workbench-status">CONTENT LAB</span>
-        </header>
-
         <main className="en-workbench-panel">
           <div className="en-workbench-panel-heading">
             <span>{activeModule.eyebrow}</span>

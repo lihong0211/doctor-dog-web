@@ -41,6 +41,28 @@ export default function Root() {
     &.en-app-shell--english .ant-pro-sider {
       border-color: #232d39;
     }
+
+    &.en-app-shell--english .ant-menu-item {
+      border-left: 3px solid transparent;
+      color: #aab5c0;
+    }
+
+    &.en-app-shell--english .ant-menu-item:hover {
+      color: #f3f6f8 !important;
+      background: rgba(0, 201, 141, 0.08) !important;
+    }
+
+    &.en-app-shell--english .ant-menu-item-selected {
+      color: #f3f6f8 !important;
+      border-left-color: #00c98d;
+      background: #123f35 !important;
+      box-shadow: inset 0 0 0 1px rgba(0, 201, 141, 0.24);
+    }
+
+    &.en-app-shell--english .ant-menu-item-selected a {
+      color: #f3f6f8 !important;
+      font-weight: 700;
+    }
   `;
   return (
     <ProLayout
@@ -66,7 +88,7 @@ export default function Root() {
                 colorTextCollapsedButton: '#aab5c0',
                 colorTextMenu: '#aab5c0',
                 colorTextMenuSelected: '#f3f6f8',
-                colorBgMenuItemSelected: 'rgba(0, 201, 141, 0.14)',
+                colorBgMenuItemSelected: '#123f35',
                 colorTextMenuActive: '#00c98d',
               },
               pageContainer: {
