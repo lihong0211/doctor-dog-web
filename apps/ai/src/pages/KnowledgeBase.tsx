@@ -18,7 +18,7 @@ import {
 import PdfPreview from '../components/PdfPreview'
 import ImagePreview from '../components/ImagePreview'
 import TxtPreview from '../components/TxtPreview'
-import { usePdfPreview, isImageFileName, isTxtFileName } from '../utils/preview'
+import { usePdfPreview, isImageFileName, isTxtFileName, stripTimestampPrefix } from '../utils/preview'
 
 const { Content } = Layout
 const { Title, Text } = Typography
@@ -97,7 +97,7 @@ export default function KnowledgeBase() {
   const handleDeleteDoc = (doc: KnowledgeBaseDocumentItem) => {
     Modal.confirm({
       title: '确认删除',
-      content: `确定要删除文档「${doc.file_name}」吗？将同时删除该文档的所有分段。`,
+      content: `确定要删除文档「${stripTimestampPrefix(doc.file_name)}」吗？将同时删除该文档的所有分段。`,
       okText: '删除',
       okType: 'danger',
       cancelText: '取消',
@@ -241,8 +241,8 @@ export default function KnowledgeBase() {
                           overflow: 'hidden',
                         }}
                       >
-                        <Tooltip title={doc.file_name} placement="topLeft">
-                        <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{doc.file_name}</span>
+                        <Tooltip title={stripTimestampPrefix(doc.file_name)} placement="topLeft">
+                        <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{stripTimestampPrefix(doc.file_name)}</span>
                       </Tooltip>
                         <Button
                           type="text"
@@ -391,8 +391,9 @@ export default function KnowledgeBase() {
           <Table<KbItem>
             dataSource={list}
             rowKey="id"
+            scroll={{ x: 1080 }}
             columns={[
-              { title: '库名', dataIndex: 'name', key: 'name', width: 200 },
+              { title: '库名', dataIndex: 'name', key: 'name', width: 200, fixed: 'left', ellipsis: true },
               { title: '描述', dataIndex: 'description', key: 'description', ellipsis: true, width: 200 },
               {
                 title: '分段数',
@@ -405,7 +406,7 @@ export default function KnowledgeBase() {
                 title: '向量库',
                 dataIndex: 'vector_db_name',
                 key: 'vector_db_name',
-                width: 80,
+                width: 160,
                 ellipsis: true,
                 render: (v: string | undefined) => v ?? '-',
               },

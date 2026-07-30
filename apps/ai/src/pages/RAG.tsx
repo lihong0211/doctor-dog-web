@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { Typography, Select, Button, Card, Spin, message, Tag, Space } from 'antd'
+import { Typography, Select, Button, Card, Spin, message, Tag, Space, Slider, Tooltip } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import { listKnowledgeBases, type KbItem } from '../service/knowledge-base'
 import { ragSearch, ragAsk, type RagSearchResponse, type RagAskResponse } from '../service/rag'
@@ -28,11 +28,11 @@ const KB_EXAMPLES: Record<string, string[]> = {
   ],
   west_china: [
     '华西医院怎么预约挂号？',
-    '出入院需要办理哪些手续？',
-    '医保在华西怎么报销？',
-    '华西有哪些特色专科？',
-    '各院区怎么乘车前往？',
-    '怎么到华西各院区？',
+    '住院和出院分别要办哪些手续，需要带什么证件？',
+    '华西门诊特殊疾病（门特）怎么申请，能报销多少？',
+    '华西有哪些特色医疗技术？',
+    '华西医院有哪些院区，各在什么位置？',
+    '就诊卡丢了或者信息填错了怎么办？',
   ],
 }
 
@@ -88,6 +88,8 @@ export default function RAG() {
   const [selectedKb, setSelectedKb] = useState<KbItem | null>(null)
   const [query, setQuery] = useState('')
   const [topK, setTopK] = useState(5)
+  /** 最大距离阈值（0~1）：超过此距离（即相关度不够）的结果会被过滤 */
+  const [maxDistance, setMaxDistance] = useState(0.25)
   const [model, setModel] = useState('qwen-turbo')
   const enableQueryRewrite = true
   const enableRerank = false
@@ -100,6 +102,9 @@ export default function RAG() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [qaPairs])
+
+  // 距离 = 1 - 相似度；后端接的是相似度阈值 score_threshold，这里做单位换算，保持和结果卡片显示的"距离"一致
+  const scoreThreshold = Math.max(0, 1 - maxDistance)
 
   const loadKbList = useCallback(async () => {
     setLoadingKb(true)
@@ -139,6 +144,7 @@ export default function RAG() {
         kb_id: selectedKb.id,
         query: q,
         top_k: topK,
+        score_threshold: scoreThreshold,
         enable_query_rewrite: enableQueryRewrite,
         enable_rerank: enableRerank,
       })
@@ -171,6 +177,7 @@ export default function RAG() {
         kb_id: selectedKb.id,
         question: q,
         top_k: topK,
+        score_threshold: scoreThreshold,
         model,
         enable_query_rewrite: enableQueryRewrite,
         enable_rerank: enableRerank,
@@ -208,6 +215,20 @@ export default function RAG() {
       <div>
         <Text type="secondary" style={{ fontSize: 11, display: 'block', marginBottom: 3 }}>检索数量</Text>
         <Select value={topK} onChange={setTopK} style={{ width: 100 }} options={TOP_K_OPTIONS} />
+      </div>
+      <div style={{ width: 160 }}>
+        <Text type="secondary" style={{ fontSize: 11, display: 'block', marginBottom: 3 }}>
+          <Tooltip title="超过此距离（即相关度不够）的结果会被过滤掉，不再凑数到检索数量。即使设置了阈值，也至少会保留最相关的 1 条，避免结果直接变空">
+            最大距离 {maxDistance.toFixed(2)}
+          </Tooltip>
+        </Text>
+        <Slider
+          value={maxDistance}
+          onChange={(v) => setMaxDistance(v as number)}
+          min={0}
+          max={1}
+          step={0.01}
+        />
       </div>
       <div>
         <Text type="secondary" style={{ fontSize: 11, display: 'block', marginBottom: 3 }}>生成模型</Text>

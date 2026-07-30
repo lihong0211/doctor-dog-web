@@ -14,6 +14,10 @@ import {
   message,
   Spin,
   Tooltip,
+  Radio,
+  Switch,
+  Alert,
+  Tag,
 } from 'antd'
 import { InboxOutlined, ArrowLeftOutlined, DeleteOutlined, FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons'
 import type { UploadFile } from 'antd'
@@ -28,12 +32,13 @@ import {
   deleteKnowledgeBaseDocument,
   type KnowledgeBaseDocumentItem,
   type KnowledgeBaseSegmentItem,
+  type ChunkingStrategy,
 } from '../service/knowledge-base'
 import ReactMarkdown from 'react-markdown'
 import PdfPreview from '../components/PdfPreview'
 import ImagePreview from '../components/ImagePreview'
 import TxtPreview from '../components/TxtPreview'
-import { usePdfPreview, isImageFileName, isTxtFileName } from '../utils/preview'
+import { usePdfPreview, isImageFileName, isTxtFileName, stripTimestampPrefix } from '../utils/preview'
 
 const { Content } = Layout
 const { Text } = Typography
@@ -76,6 +81,7 @@ export default function KnowledgeBaseNew() {
 
   const [form] = Form.useForm()
   const [fileList, setFileList] = useState<UploadFile[]>([])
+  const watchedChunkingStrategy = Form.useWatch('chunking_strategy', form) as ChunkingStrategy | undefined
 
   const notifyDuplicatedFiles = (res?: {
     duplicated_files?: string[]
@@ -180,6 +186,11 @@ export default function KnowledgeBaseNew() {
     const { chunk_size, chunk_overlap } = await form.validateFields(['chunk_size', 'chunk_overlap']).catch(() => null)
     if (chunk_size == null || chunk_overlap == null) return
     if (createKbId == null) return
+    const { chunking_strategy, hierarchy_level, retain_hierarchy } = form.getFieldsValue([
+      'chunking_strategy',
+      'hierarchy_level',
+      'retain_hierarchy',
+    ])
     setStepLoading(true)
     try {
       const documentIds = isAddFilesMode
@@ -193,6 +204,9 @@ export default function KnowledgeBaseNew() {
         document_ids: documentIds,
         chunk_size: Number(chunk_size),
         chunk_overlap: Number(chunk_overlap),
+        chunking_strategy: (chunking_strategy as ChunkingStrategy) ?? 'fixed',
+        hierarchy_level: hierarchy_level != null ? Number(hierarchy_level) : undefined,
+        retain_hierarchy: typeof retain_hierarchy === 'boolean' ? retain_hierarchy : undefined,
       })
       if (isAddFilesMode && segRes?.results?.length) {
         setAddedFilesDocuments((prev) =>
@@ -239,7 +253,7 @@ export default function KnowledgeBaseNew() {
     if (createKbId == null) return
     Modal.confirm({
       title: '确认删除',
-      content: `确定要删除文档「${doc.file_name}」吗？将同时删除该文档的所有分段。`,
+      content: `确定要删除文档「${stripTimestampPrefix(doc.file_name)}」吗？将同时删除该文档的所有分段。`,
       okText: '删除',
       okType: 'danger',
       cancelText: '取消',
@@ -359,13 +373,57 @@ export default function KnowledgeBaseNew() {
         {/* Step 2: 创建设置 */}
         {currentStep === STEP_SETTINGS && (
           <>
-            <Form form={form} layout="vertical" initialValues={{ chunk_size: 10, chunk_overlap: 200 }}>
+            <Form
+              form={form}
+              layout="vertical"
+              initialValues={{ chunk_size: 10, chunk_overlap: 200, chunking_strategy: 'fixed', hierarchy_level: 3, retain_hierarchy: true }}
+            >
               <Form.Item name="chunk_size" label="分段长度" rules={[{ required: true, message: '请输入分段长度' }]}>
                 <InputNumber min={100} max={5000} style={{ width: '100%' }} placeholder="250" />
               </Form.Item>
               <Form.Item name="chunk_overlap" label="分段重叠" rules={[{ required: true, message: '请输入分段重叠' }]}>
                 <InputNumber min={0} max={1000} style={{ width: '100%' }} placeholder="250" />
               </Form.Item>
+              <Form.Item name="chunking_strategy" label="分段策略">
+                <Radio.Group>
+                  <Radio.Button value="fixed">固定长度</Radio.Button>
+                  <Radio.Button value="structure">结构感知</Radio.Button>
+                  <Radio.Button value="hierarchy">父子分段</Radio.Button>
+                  <Radio.Button value="semantic">语义分段</Radio.Button>
+                </Radio.Group>
+              </Form.Item>
+              {watchedChunkingStrategy === 'structure' && (
+                <Alert
+                  type="info"
+                  showIcon
+                  style={{ marginBottom: 16 }}
+                  message="按标题层级（DOCX Heading 样式 / Markdown # 层级）切分，每段带标题路径；PDF/PPTX/Excel/图片无标题结构，会退化为固定长度分段"
+                />
+              )}
+              {watchedChunkingStrategy === 'hierarchy' && (
+                <>
+                  <Alert
+                    type="info"
+                    showIcon
+                    style={{ marginBottom: 16 }}
+                    message="按标题生成父块，父块内再切子块用于检索；PDF/PPTX/Excel/图片无标题结构，会退化为固定长度分段"
+                  />
+                  <Form.Item name="hierarchy_level" label="父块层级深度（Heading 1~N 视为父块边界）">
+                    <InputNumber min={1} max={6} style={{ width: '100%' }} />
+                  </Form.Item>
+                  <Form.Item name="retain_hierarchy" label="子块保留标题层级信息" valuePropName="checked">
+                    <Switch />
+                  </Form.Item>
+                </>
+              )}
+              {watchedChunkingStrategy === 'semantic' && (
+                <Alert
+                  type="warning"
+                  showIcon
+                  style={{ marginBottom: 16 }}
+                  message="按语义相似度切分，需逐句调用 embedding，文档较大时耗时更长（超长文档会自动回退固定长度分段）"
+                />
+              )}
             </Form>
             <Card size="small" style={{ marginBottom: 16 }}>
               <Text type="secondary">已上传的文档将按以上参数执行分段。点击下一步开始分段并进入预览。</Text>
@@ -411,8 +469,8 @@ export default function KnowledgeBaseNew() {
                           overflow: 'hidden',
                         }}
                       >
-                        <Tooltip title={doc.file_name} placement="topLeft">
-                          <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{doc.file_name}</span>
+                        <Tooltip title={stripTimestampPrefix(doc.file_name)} placement="topLeft">
+                          <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{stripTimestampPrefix(doc.file_name)}</span>
                         </Tooltip>
                         <Button
                           type="text"
@@ -483,17 +541,44 @@ export default function KnowledgeBaseNew() {
                     <Text type="secondary">选择左侧文档后显示分段列表</Text>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingTop: 12 }}>
-                      {segmentList.map((seg, i) => (
-                        <Card key={seg.id ?? i} size="small" style={{ background: 'var(--ant-color-fill-quaternary)' }}>
-                          <div style={{ fontSize: 11, color: 'var(--ant-color-text-secondary)', marginBottom: 4 }}>
-                            第 {seg.index != null ? seg.index + 1 : i + 1} 段
-                            {seg.id != null && ` · id ${seg.id}`}
-                          </div>
-                          <div className="markdown-body kb-segment-markdown" style={{ wordBreak: 'break-word', fontSize: 13 }}>
-                            <ReactMarkdown>{seg.text ?? ''}</ReactMarkdown>
-                          </div>
-                        </Card>
-                      ))}
+                      {segmentList.map((seg, i) => {
+                        const meta = (seg.metadata && typeof seg.metadata === 'object' ? seg.metadata : {}) as {
+                          heading_path?: string[]
+                          is_parent?: boolean
+                        }
+                        const isParent = meta.is_parent === true
+                        const isChild = seg.parent_id != null
+                        return (
+                          <Card
+                            key={seg.id ?? i}
+                            size="small"
+                            style={{
+                              background: 'var(--ant-color-fill-quaternary)',
+                              marginLeft: isChild ? 16 : 0,
+                              borderLeft: isParent
+                                ? '3px solid var(--ant-color-primary)'
+                                : isChild
+                                  ? '2px solid var(--ant-color-border)'
+                                  : undefined,
+                            }}
+                          >
+                            <div style={{ fontSize: 11, color: 'var(--ant-color-text-secondary)', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                              <span>第 {seg.index != null ? seg.index + 1 : i + 1} 段</span>
+                              {seg.id != null && <span>· id {seg.id}</span>}
+                              {isParent && <Tag color="blue" style={{ marginInlineEnd: 0 }}>父块</Tag>}
+                              {isChild && <Tag style={{ marginInlineEnd: 0 }}>子块</Tag>}
+                            </div>
+                            {Array.isArray(meta.heading_path) && meta.heading_path.length > 0 && (
+                              <div style={{ fontSize: 11, color: 'var(--ant-color-text-secondary)', opacity: 0.8, marginBottom: 6 }}>
+                                {meta.heading_path.join(' › ')}
+                              </div>
+                            )}
+                            <div className="markdown-body kb-segment-markdown" style={{ wordBreak: 'break-word', fontSize: 13 }}>
+                              <ReactMarkdown>{seg.text ?? ''}</ReactMarkdown>
+                            </div>
+                          </Card>
+                        )
+                      })}
                     </div>
                   )}
                 </div>

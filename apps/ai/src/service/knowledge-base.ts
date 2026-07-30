@@ -295,6 +295,9 @@ export async function deleteKnowledgeBase(params: { id?: number; name?: string }
 /** 执行分段（用法一）：对已入库文档列表按分段参数重新分段并落库。POST /ai/knowledge-base/segments/execute */
 const EXECUTE_SEGMENTS_TIMEOUT_MS = 5 * 60 * 1000 // 5 分钟，分段可能较耗时
 
+/** 分段策略：fixed 固定长度 / structure 结构感知（标题层级）/ hierarchy 父子切片 / semantic 语义切片 */
+export type ChunkingStrategy = 'fixed' | 'structure' | 'hierarchy' | 'semantic'
+
 export interface ExecuteSegmentsResultItem {
   document_id: number
   segment_count: number
@@ -309,6 +312,9 @@ export async function executeSegments(params: {
   document_ids: number[]
   chunk_size?: number
   chunk_overlap?: number
+  chunking_strategy?: ChunkingStrategy
+  hierarchy_level?: number
+  retain_hierarchy?: boolean
 }): Promise<ExecuteSegmentsResponse> {
   const data = unwrapApiResponse(
     (await post(BASE + '/segments/execute', params, { timeout: EXECUTE_SEGMENTS_TIMEOUT_MS })) as unknown as ApiResponse<ExecuteSegmentsResponse>

@@ -28,3 +28,10 @@ export function isTxtFileName(fileName: string): boolean {
   const lower = fileName.toLowerCase()
   return TEXT_EXT.some((ext) => lower.endsWith(ext))
 }
+
+/** 上传时为防覆盖会在文件名前加 yyyyMMdd_HHmmss_ 时间戳（重复上传同名文件可能叠加多层），仅用于展示时去掉，不影响真实文件名 */
+const TIMESTAMP_PREFIX_RE = /^(\d{8}_\d{6}_)+/
+
+export function stripTimestampPrefix(fileName: string): string {
+  return fileName.replace(TIMESTAMP_PREFIX_RE, '')
+}

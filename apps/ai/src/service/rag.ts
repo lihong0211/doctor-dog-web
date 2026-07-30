@@ -51,6 +51,8 @@ type RagKbIdentifier =
 export async function ragSearch(params: RagKbIdentifier & {
   query: string
   top_k?: number
+  /** 最低相关度阈值（相似度，0~1，越大越严格）：低于此值的结果会被过滤，不传则不过滤 */
+  score_threshold?: number
   enable_query_rewrite?: boolean
   enable_rerank?: boolean
 }): Promise<RagSearchResponse> {
@@ -64,6 +66,8 @@ export async function ragAsk(params: RagKbIdentifier & {
   question?: string
   query?: string
   top_k?: number
+  /** 最低相关度阈值（相似度，0~1，越大越严格）：低于此值的结果会被过滤，不传则不过滤 */
+  score_threshold?: number
   model?: string
   enable_query_rewrite?: boolean
   enable_rerank?: boolean
