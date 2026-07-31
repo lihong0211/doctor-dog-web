@@ -141,7 +141,7 @@ for t in data['tasks']:
 
 注意：
 - 不要修改 service-home 的代码文件（只能改 task.json）
-- 后端 API 已实现，可以 curl 验证：curl http://localhost:3000/ai/...
+- 后端 API 已实现，可以 curl 验证：curl http://localhost:3001/ai/...
 - 测试夹具文件路径：test-fixtures/sample_data.csv 和 test-fixtures/sample_resume.pdf
 - 遇到阻塞立即停止，不要将 passes 改为 true，不要提交
 PROMPT_EOF

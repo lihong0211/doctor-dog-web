@@ -12,7 +12,7 @@ export async function getBlogScript(url: string): Promise<BlogScript> {
 }
 
 export async function getBlogAudio(url: string, voice: string): Promise<string> {
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001'
   const res = await fetch(`${BASE_URL}/ai/blog-podcast/audio`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

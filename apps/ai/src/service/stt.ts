@@ -9,7 +9,7 @@ const API_BASE = import.meta.env.DEV ? '' : 'https://home.doctor-dog.com'
 export function getSttWsUrl(): string {
   if (typeof window === 'undefined') return ''
   const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-  const host = import.meta.env.DEV ? 'localhost:3000' : 'home.doctor-dog.com'
+  const host = import.meta.env.DEV ? 'localhost:3001' : 'home.doctor-dog.com'
   return `${protocol}//${host}/ai/stt/live`
 }
 

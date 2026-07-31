@@ -18,7 +18,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/ai': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:3001',
         changeOrigin: true,
         bypass(req) {
           const url = req.url || ''
