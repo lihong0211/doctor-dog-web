@@ -230,12 +230,12 @@ function LangChain() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              background: 'rgba(30, 22, 18, 0.85)',
+              background: 'rgba(7, 18, 24, 0.9)',
               backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(200, 150, 100, 0.4)',
+              border: '1px solid rgba(0, 201, 141, 0.22)',
               borderRadius: '12px 12px 0 0',
               padding: '10px 14px',
-              color: '#d4a574',
+              color: '#00c98d',
               fontSize: 13,
               fontWeight: 600,
             }}>
@@ -245,9 +245,9 @@ function LangChain() {
                 onClick={() => setConversations([])}
                 style={{
                   background: 'none',
-                  border: '1px solid rgba(200, 150, 100, 0.4)',
+                  border: '1px solid rgba(0, 201, 141, 0.28)',
                   borderRadius: 4,
-                  color: 'rgba(255,235,200,0.7)',
+                  color: 'rgba(190, 220, 212, 0.82)',
                   fontSize: 11,
                   padding: '2px 8px',
                   cursor: 'pointer',
@@ -261,9 +261,9 @@ function LangChain() {
             <div style={{
               flex: 1,
               overflowY: 'auto',
-              background: 'rgba(20, 14, 10, 0.75)',
+              background: 'rgba(5, 13, 19, 0.82)',
               backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(200, 150, 100, 0.4)',
+              border: '1px solid rgba(0, 201, 141, 0.22)',
               borderTop: 'none',
               borderRadius: '0 0 12px 12px',
               padding: '10px 12px',
@@ -278,9 +278,9 @@ function LangChain() {
                   <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <span style={{
                       fontSize: 10,
-                      color: 'rgba(200,150,100,0.6)',
-                      background: 'rgba(200,150,100,0.1)',
-                      border: '1px solid rgba(200,150,100,0.2)',
+                      color: 'rgba(0, 201, 141, 0.78)',
+                      background: 'rgba(0, 201, 141, 0.08)',
+                      border: '1px solid rgba(0, 201, 141, 0.18)',
                       borderRadius: 4,
                       padding: '1px 6px',
                     }}>{conv.graphName}</span>
@@ -288,12 +288,12 @@ function LangChain() {
                   {/* user query */}
                   <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <div style={{
-                      background: 'rgba(96, 165, 250, 0.18)',
-                      border: '1px solid rgba(96, 165, 250, 0.35)',
+                      background: 'rgba(37, 99, 235, 0.2)',
+                      border: '1px solid rgba(96, 165, 250, 0.32)',
                       borderRadius: '12px 12px 2px 12px',
                       padding: '7px 11px',
                       fontSize: 13,
-                      color: '#93c5fd',
+                      color: '#bfdbfe',
                       maxWidth: '85%',
                       lineHeight: 1.5,
                       wordBreak: 'break-all',
@@ -303,12 +303,12 @@ function LangChain() {
                   {(conv.loading || conv.response) && (
                     <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
                       <div style={{
-                        background: 'rgba(30, 22, 18, 0.85)',
-                        border: '1px solid rgba(200, 150, 100, 0.35)',
+                        background: 'rgba(17, 29, 35, 0.92)',
+                        border: '1px solid rgba(148, 163, 184, 0.18)',
                         borderRadius: '12px 12px 12px 2px',
                         padding: '7px 11px',
                         fontSize: 13,
-                        color: conv.loading ? 'rgba(200,150,100,0.6)' : 'rgba(255, 245, 235, 0.9)',
+                        color: conv.loading ? 'rgba(0, 201, 141, 0.72)' : 'rgba(232, 242, 240, 0.92)',
                         maxWidth: '90%',
                         lineHeight: 1.6,
                         wordBreak: 'break-all',

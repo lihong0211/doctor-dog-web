@@ -27,7 +27,7 @@ export default function GmailAssistant() {
             <ol style={{ lineHeight: 2.2 }}>
               <li>前往 <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud Console</a> → APIs & Services → Credentials</li>
               <li>创建 OAuth 2.0 客户端 ID（类型：Web 应用）</li>
-              <li>添加授权回调 URI：<Text code>http://localhost:3000/ai/gmail/callback</Text></li>
+              <li>添加授权回调 URI：<Text code>http://localhost:3001/ai/gmail/callback</Text></li>
               <li>前往 <a href="https://console.cloud.google.com/apis/library/gmail.googleapis.com" target="_blank" rel="noopener noreferrer">Gmail API 页面</a> 启用 Gmail API</li>
               <li>将以下变量写入 <Text code>service-home/.env</Text> 文件：</li>
             </ol>
@@ -35,7 +35,7 @@ export default function GmailAssistant() {
           <pre style={{ background: '#1e1e1e', color: '#d4d4d4', padding: 16, borderRadius: 8, fontSize: 13 }}>
 {`GOOGLE_CLIENT_ID=your_client_id_here
 GOOGLE_CLIENT_SECRET=your_client_secret_here
-GOOGLE_REDIRECT_URI=http://localhost:3000/ai/gmail/callback`}
+GOOGLE_REDIRECT_URI=http://localhost:3001/ai/gmail/callback`}
           </pre>
           <Paragraph style={{ marginTop: 12 }}>
             配置完成后，需要安装依赖：
