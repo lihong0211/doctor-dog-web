@@ -258,9 +258,9 @@ export default function FineTuning() {
                     disabled={loading}
                     style={isSelected ? {
                       borderColor: 'var(--ds-primary)',
-                      background: 'linear-gradient(to right, rgba(59,130,246,0.08) 0%, rgba(59,130,246,0.02) 100%)',
+                      background: 'linear-gradient(to right, rgba(0,201,141,0.14) 0%, rgba(0,201,141,0.04) 100%)',
                       fontWeight: 600,
-                      color: '#1e293b',
+                      color: 'var(--ai-text)',
                     } : undefined}
                   >
                     <span style={{ marginRight: 6 }}>{lora.icon}</span>

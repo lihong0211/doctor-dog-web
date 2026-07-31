@@ -23,11 +23,14 @@ describe('MainLayout', () => {
     expect(screen.getByRole('tab', { name: '技能中心' })).toHaveAttribute('aria-selected', 'true')
     expect(screen.getByRole('navigation', { name: '技能导航' })).toBeVisible()
     expect(screen.getByRole('menuitem', { name: /VectorDB/ })).toHaveAttribute('aria-current', 'page')
+    expect(screen.queryByText('核心技术')).not.toBeInTheDocument()
   })
 
-  it('marks the experience section and hub item as current', () => {
+  it('uses the full content width in the experience center without navigation', () => {
     renderLayout('/hub')
     expect(screen.getByRole('tab', { name: '体验中心' })).toHaveAttribute('aria-selected', 'true')
-    expect(screen.getByRole('menuitem', { name: /应用广场/ })).toHaveAttribute('aria-current', 'page')
+    expect(screen.queryByRole('navigation')).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: '打开技能导航' })).not.toBeInTheDocument()
+    expect(screen.getByText('Hub content')).toBeVisible()
   })
 })

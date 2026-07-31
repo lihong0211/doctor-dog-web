@@ -22,9 +22,6 @@ const EXAMPLE_QUERIES = [
   '找出所有理赔金额大于10000元的理赔记录，并列出相关客户的姓名和联系电话',
 ]
 
-/** 表头 + 分页栏约占高度，用于计算表体 scroll.y；需足够大否则分页会被 overflow 裁掉 */
-const TABLE_HEADER_FOOTER_HEIGHT = 80
-
 function DataTab() {
   const [form] = Form.useForm<{ table: string }>()
   const table = Form.useWatch('table', form) ?? TABLE_NAMES[0]
@@ -33,22 +30,6 @@ function DataTab() {
   const [loading, setLoading] = useState(false)
   const [list, setList] = useState<Record<string, unknown>[]>([])
   const [total, setTotal] = useState(0)
-  const tableWrapRef = useRef<HTMLDivElement>(null)
-  const [scrollY, setScrollY] = useState<number | undefined>(undefined)
-
-  useEffect(() => {
-    const el = tableWrapRef.current
-    if (!el) return
-    const update = () => {
-      const h = el.clientHeight
-      setScrollY(h > TABLE_HEADER_FOOTER_HEIGHT ? h - TABLE_HEADER_FOOTER_HEIGHT : 300)
-    }
-    update()
-    const ro = new ResizeObserver(update)
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [loading, list.length])
-
   useEffect(() => {
     if (!table) return
     setLoading(true)
@@ -110,7 +91,7 @@ function DataTab() {
           />
         </Form.Item>
       </Form>
-      <div ref={tableWrapRef} style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
+      <div className="text2sql-data-table" style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
         {loading ? (
           <div style={{ textAlign: 'center', padding: 48 }}>
             <Spin tip="加载中…" />
@@ -136,7 +117,7 @@ function DataTab() {
                 setPageSize(size ?? pageSize)
               },
             }}
-            scroll={{ x: 'max-content', y: scrollY }}
+            scroll={{ x: 'max-content', y: 'max(160px, calc(100vh - 360px))' }}
           />
         )}
       </div>
@@ -193,7 +174,7 @@ function Text2SQLTab() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0, overflow: 'hidden' }}>
       {/* 中间滚动内容区 */}
-      <div style={{ flex: 1, minHeight: 0, overflow: 'auto', padding: '16px 0 8px' }}>
+      <div className="text2sql-results-scroll" style={{ flex: 1, minHeight: 0, overflow: 'auto', padding: '16px 0 8px' }}>
         {!result && !loading && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 24px', color: '#94a3b8', textAlign: 'center' }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>🗄️</div>

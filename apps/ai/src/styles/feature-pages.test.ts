@@ -42,4 +42,31 @@ describe('feature page style contract', () => {
     expect(mcpCss).toMatch(/\.mcp-unified\s*\{[^}]*background: var\(--ai-canvas\)/s)
     expect(mcpCss).not.toMatch(/background[^;]*(?:#f[0-9a-f]{5}|rgba\(255\s*,\s*255\s*,\s*255)/i)
   })
+
+  it('keeps Fine-tuning model choices readable on dark cards', () => {
+    const fineTuningSource = readFileSync('src/pages/FineTuning.tsx', 'utf8')
+    const mcpCss = readFileSync('src/pages/MCP/MCPGaode.css', 'utf8')
+
+    expect(fineTuningSource).not.toContain("color: '#1e293b'")
+    expect(mcpCss).toMatch(/\.mcp-gaode-recommended-btn\s*\{[^}]*color:\s*var\(--ai-text\)/s)
+    expect(mcpCss).toMatch(/\.mcp-gaode-recommended-btn\s*\{[^}]*border:[^;]*var\(--ai-border\)/s)
+  })
+
+  it('keeps Text2SQL tab content scrollable and Data pagination visible', () => {
+    const globalCss = readFileSync('src/index.css', 'utf8')
+    const text2SqlSource = readFileSync('src/pages/Text2SQL.tsx', 'utf8')
+
+    expect(globalCss).toMatch(/\.text2sql-tabs-fill \.ant-tabs-body-holder\s*\{[^}]*flex:\s*1[^}]*min-height:\s*0/s)
+    expect(globalCss).toMatch(/\.text2sql-tabs-fill \.ant-tabs-body\s*\{[^}]*height:\s*100%/s)
+    expect(globalCss).toMatch(/\.text2sql-tabs-fill \.ant-tabs-content:not\(\.ant-tabs-content-hidden\)\s*\{[^}]*display:\s*flex[^}]*min-height:\s*0/s)
+    expect(globalCss).toMatch(/\.text2sql-tabs-fill \.ant-tabs-content-hidden\s*\{[^}]*display:\s*none/s)
+    expect(globalCss).not.toContain('.text2sql-tabs-fill .ant-tabs-content-holder')
+    expect(globalCss).not.toContain('.text2sql-tabs-fill .ant-tabs-tabpane')
+    expect(globalCss).toMatch(/\.text2sql-data-table\s*\{[^}]*height:\s*100%[^}]*display:\s*flex/s)
+    expect(globalCss).toMatch(/\.text2sql-data-table \.ant-pagination\s*\{[^}]*flex-shrink:\s*0/s)
+    expect(text2SqlSource).toContain('className="text2sql-data-table"')
+    expect(text2SqlSource).toContain('className="text2sql-results-scroll"')
+    expect(text2SqlSource).not.toContain('ResizeObserver')
+    expect(text2SqlSource).toContain("y: 'max(160px, calc(100vh - 360px))'")
+  })
 })

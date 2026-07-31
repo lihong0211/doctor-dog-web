@@ -3,16 +3,12 @@ import { Button, Drawer } from 'antd'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
   ApiOutlined, BookOutlined, CloudOutlined, CodeOutlined, DatabaseOutlined,
-  ExperimentOutlined, HomeOutlined, LinkOutlined, MenuOutlined, RobotOutlined,
+  ExperimentOutlined, LinkOutlined, MenuOutlined, RobotOutlined,
   SwapOutlined, ToolOutlined,
 } from '@ant-design/icons'
 import './MainLayout.css'
 
 type NavItem = { key: string; label: string; icon: ReactNode }
-
-const hubItems: NavItem[] = [
-  { key: '/hub', icon: <HomeOutlined />, label: '应用广场' },
-]
 
 const skillItems: NavItem[] = [
   { key: '/skills/vector-db', icon: <ApiOutlined />, label: 'VectorDB' },
@@ -37,8 +33,7 @@ export default function MainLayout() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const isPortal = location.pathname === '/portal'
   const section = getSection(location.pathname)
-  const items = section === 'skills' ? skillItems : hubItems
-  const navLabel = section === 'skills' ? '技能导航' : '体验导航'
+  const showSkillNavigation = section === 'skills'
 
   const go = (path: string) => {
     navigate(path)
@@ -46,10 +41,9 @@ export default function MainLayout() {
   }
 
   const navigation = (
-    <nav className="ai-shell-nav" aria-label={navLabel}>
-      <div className="ai-shell-nav-label">{section === 'skills' ? '核心技术' : '应用中心'}</div>
+    <nav className="ai-shell-nav" aria-label="技能导航">
       <div role="menu" className="ai-shell-menu">
-        {items.map(item => {
+        {skillItems.map(item => {
           const current = location.pathname === item.key ||
             (item.key !== '/hub' && location.pathname.startsWith(item.key))
           return (
@@ -74,13 +68,15 @@ export default function MainLayout() {
   return (
     <div className="ai-shell">
       <header className="ai-shell-header">
-        <Button
-          className="ai-shell-mobile-trigger"
-          type="text"
-          icon={<MenuOutlined />}
-          aria-label="打开技能导航"
-          onClick={() => setDrawerOpen(true)}
-        />
+        {showSkillNavigation && (
+          <Button
+            className="ai-shell-mobile-trigger"
+            type="text"
+            icon={<MenuOutlined />}
+            aria-label="打开技能导航"
+            onClick={() => setDrawerOpen(true)}
+          />
+        )}
         <div className="ai-shell-brand">
           <span className="ai-shell-logo"><RobotOutlined /></span>
           <strong>AI Tech Lab</strong>
@@ -101,19 +97,21 @@ export default function MainLayout() {
         </div>
       </header>
       <div className="ai-shell-body">
-        <aside className="ai-shell-sidebar">{navigation}</aside>
+        {showSkillNavigation && <aside className="ai-shell-sidebar">{navigation}</aside>}
         <main className="ai-shell-content"><Outlet /></main>
       </div>
-      <Drawer
-        className="ai-shell-drawer"
-        placement="left"
-        size={280}
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        title="AI Tech Lab"
-      >
-        {navigation}
-      </Drawer>
+      {showSkillNavigation && (
+        <Drawer
+          className="ai-shell-drawer"
+          placement="left"
+          size={280}
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+          title="AI Tech Lab"
+        >
+          {navigation}
+        </Drawer>
+      )}
     </div>
   )
 }

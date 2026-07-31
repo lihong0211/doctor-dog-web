@@ -10,7 +10,7 @@ function App() {
     <BrowserRouter basename="/ai">
       <Routes>
         <Route path="/" element={<MainLayout />}>
-          <Route index element={<Navigate to="/hub" replace />} />
+          <Route index element={<Navigate to="/skills/vector-db" replace />} />
           <Route path="hub" element={<AppHub />} />
           <Route path="models" element={<ExperienceCenter />} />
           <Route path="experience">

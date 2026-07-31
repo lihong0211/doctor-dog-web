@@ -239,14 +239,48 @@ a,
   display: flex;
   flex-direction: column;
 }
-.text2sql-tabs-fill .ant-tabs-content-holder {
+.text2sql-tabs-fill .ant-tabs-body-holder {
   flex: 1;
   min-height: 0;
   overflow: hidden;
 }
-.text2sql-tabs-fill .ant-tabs-content {
+.text2sql-tabs-fill .ant-tabs-body {
   height: 100%;
+  min-height: 0;
 }
-.text2sql-tabs-fill .ant-tabs-tabpane {
+.text2sql-tabs-fill .ant-tabs-content:not(.ant-tabs-content-hidden) {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.text2sql-tabs-fill .ant-tabs-content-hidden {
+  display: none;
+}
+.text2sql-results-scroll {
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ai-border-strong) transparent;
+}
+.text2sql-data-table {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.text2sql-data-table .ant-table-wrapper,
+.text2sql-data-table .ant-spin-nested-loading,
+.text2sql-data-table .ant-spin-container {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.text2sql-data-table .ant-table {
+  flex: 1;
+  min-height: 0;
+}
+.text2sql-data-table .ant-pagination {
+  flex-shrink: 0;
+  margin: 12px 0 0;
 }
