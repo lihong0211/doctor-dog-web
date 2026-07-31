@@ -417,8 +417,6 @@ function SceneEnvironment() {
   return (
     <Environment
       files={HDR_URL}
-      background
-      backgroundBlurriness={0.08}
       environmentIntensity={1.5}
     />
   )
