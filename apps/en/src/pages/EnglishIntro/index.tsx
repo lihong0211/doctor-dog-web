@@ -31,7 +31,7 @@ export default function EnglishIntro() {
         <div className="en-intro">
           <header className="en-intro-nav">
             <span className="en-intro-nav-title">学英语</span>
-            <Button type="primary" href="/english/console">
+            <Button type="primary" href="/en/english/console">
               进入控制台
             </Button>
           </header>

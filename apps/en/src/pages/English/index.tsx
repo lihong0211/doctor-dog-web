@@ -41,7 +41,7 @@ export default function English() {
         <main className="en-workbench-panel">
           <div className="en-workbench-panel-heading">
             <h2>{activeModule.label}</h2>
-            <Button href="/english">返回介绍页</Button>
+            <Button href="/en/english">返回介绍页</Button>
           </div>
           <div className="en-workbench-module">{activeModule.content}</div>
         </main>

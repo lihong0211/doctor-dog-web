@@ -32,7 +32,7 @@ describe('English workbench', () => {
 
     expect(screen.getByRole('link', { name: '返回介绍页' })).toHaveAttribute(
       'href',
-      '/english',
+      '/en/english',
     );
   });
 });

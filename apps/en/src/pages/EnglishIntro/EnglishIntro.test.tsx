@@ -17,7 +17,7 @@ describe('English intro page', () => {
 
     expect(screen.getByRole('link', { name: '进入控制台' })).toHaveAttribute(
       'href',
-      '/english/console',
+      '/en/english/console',
     );
 
     expect(
