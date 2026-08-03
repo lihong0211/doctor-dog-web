@@ -1,5 +1,6 @@
 import Root from './pages/Root/index';
 import English from './pages/English/index';
+import EnglishIntro from './pages/EnglishIntro/index';
 import StoreLayout from './pages/Store/StoreLayout';
 import ProductList from './pages/Store/ProductList';
 import ProductDetail from './pages/Store/ProductDetail';
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
         element: <Navigate to="/english" replace />,
       },
       {
-        path: '/english',
+        path: '/english/console',
         element: <English />,
       },
       {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
         element: <Test />,
       },
     ],
+  },
+  {
+    path: '/english',
+    element: <EnglishIntro />,
   },
 ],{
   basename: '/en'

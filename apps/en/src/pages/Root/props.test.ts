@@ -16,12 +16,12 @@ describe('English outer navigation', () => {
       '日常用语',
     ]);
     expect(routes.map(({ path }) => path)).toEqual([
-      '/english?module=users',
-      '/english?module=words',
-      '/english?module=libraries',
-      '/english?module=roots',
-      '/english?module=affixes',
-      '/english?module=speech',
+      '/english/console?module=users',
+      '/english/console?module=words',
+      '/english/console?module=libraries',
+      '/english/console?module=roots',
+      '/english/console?module=affixes',
+      '/english/console?module=speech',
     ]);
     expect(routes.map(({ key }) => key)).toEqual(routes.map(({ path }) => path));
   });

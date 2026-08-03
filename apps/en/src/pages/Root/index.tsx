@@ -11,9 +11,9 @@ const FIXED_TITLE = '二仙桥大爷 | 学英语';
 
 export default function Root() {
   const { pathname, search } = useLocation();
-  const isEnglish = pathname === '/english';
+  const isEnglish = pathname === '/english/console';
   const englishLocation =
-    search && search.includes('module=') ? `${pathname}${search}` : '/english?module=users';
+    search && search.includes('module=') ? `${pathname}${search}` : '/english/console?module=users';
 
   useEffect(() => {
     document.title = FIXED_TITLE;
