@@ -9,6 +9,7 @@ import EnDesktopUsers from '../EnDesktop/Users';
 import EnDesktopInterview from '../EnDesktop/Interview';
 import './English.css';
 import { enTheme } from '../../theme/antdTheme';
+import { useEnDesktopAuth, isAuthorizedUser } from '../EnDesktop/store';
 
 const modules = {
   users: { label: '用户', content: <EnDesktopUsers /> },
@@ -33,9 +34,13 @@ type ModuleKey = keyof typeof modules;
 
 export default function English() {
   const [searchParams] = useSearchParams();
+  const { user } = useEnDesktopAuth();
+  const authorized = isAuthorizedUser(user);
   const requestedModule = searchParams.get('module');
   const activeKey: ModuleKey =
-    requestedModule && requestedModule in modules
+    requestedModule &&
+    requestedModule in modules &&
+    (requestedModule !== 'interview' || authorized)
       ? (requestedModule as ModuleKey)
       : 'users';
   const activeModule = modules[activeKey];

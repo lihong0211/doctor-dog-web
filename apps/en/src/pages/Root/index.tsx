@@ -6,11 +6,22 @@ import { Outlet, useLocation, NavLink } from 'react-router-dom';
 import layoutProps from './props';
 import EnDesktopAuthStatus from '../EnDesktop/AuthStatus';
 import { enTheme } from '../../theme/antdTheme';
+import { useEnDesktopAuth, isAuthorizedUser } from '../EnDesktop/store';
 
 const FIXED_TITLE = '二仙桥大爷 | 学英语';
+// 面试题是 lihong 自己的复习功能，只在授权账号登录时才出现在导航里
+const RESTRICTED_ROUTE_PATH = '/english/console?module=interview';
 
 export default function Root() {
   const { pathname, search } = useLocation();
+  const { user } = useEnDesktopAuth();
+  const authorized = isAuthorizedUser(user);
+  const route = {
+    ...layoutProps.route,
+    routes: authorized
+      ? layoutProps.route.routes
+      : layoutProps.route.routes.filter((r) => r.path !== RESTRICTED_ROUTE_PATH),
+  };
   const isEnglish = pathname === '/english/console';
   const englishLocation =
     search && search.includes('module=') ? `${pathname}${search}` : '/english/console?module=users';
@@ -114,6 +125,7 @@ export default function Root() {
     <ConfigProvider theme={isEnglish ? enTheme : undefined}>
       <ProLayout
       {...layoutProps}
+      route={route}
       className={`h-full en-app-shell${isEnglish ? ' en-app-shell--english' : ''}`}
       layout="mix"
       theme="dark"
