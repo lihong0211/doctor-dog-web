@@ -14,6 +14,7 @@ describe('English outer navigation', () => {
       '词根',
       '词缀',
       '日常用语',
+      '面试题',
     ]);
     expect(routes.map(({ path }) => path)).toEqual([
       '/english/console?module=users',
@@ -22,6 +23,7 @@ describe('English outer navigation', () => {
       '/english/console?module=roots',
       '/english/console?module=affixes',
       '/english/console?module=speech',
+      '/english/console?module=interview',
     ]);
     expect(routes.map(({ key }) => key)).toEqual(routes.map(({ path }) => path));
   });

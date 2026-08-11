@@ -39,6 +39,12 @@ export default {
         component: '../English',
       },
       {
+        path: '/english/console?module=interview',
+        key: '/english/console?module=interview',
+        name: '面试题',
+        component: '../English',
+      },
+      {
         path: '/store',
         name: '商品店铺',
         component: '../Store',

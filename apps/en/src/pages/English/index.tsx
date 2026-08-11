@@ -6,6 +6,7 @@ import LivingSpeech from './LivingSpeech';
 import EnDesktopWords from '../EnDesktop/Words';
 import EnDesktopLibraries from '../EnDesktop/Libraries';
 import EnDesktopUsers from '../EnDesktop/Users';
+import EnDesktopInterview from '../EnDesktop/Interview';
 import './English.css';
 import { enTheme } from '../../theme/antdTheme';
 
@@ -21,6 +22,10 @@ const modules = {
   speech: {
     label: '日常用语',
     content: <LivingSpeech />,
+  },
+  interview: {
+    label: '面试题',
+    content: <EnDesktopInterview />,
   },
 } as const;
 
