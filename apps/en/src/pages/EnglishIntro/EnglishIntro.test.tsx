@@ -24,15 +24,15 @@ describe('English intro page', () => {
       screen.getByRole('link', { name: 'Mac (Apple Silicon)' }),
     ).toHaveAttribute(
       'href',
-      'https://github.com/lihong0211/en-app/releases/download/v2.1.0/learn-english-2.1.0-arm.dmg',
+      'https://github.com/lihong0211/en-app/releases/download/v2.1.1/learn-english-2.1.1-arm.dmg',
     );
     expect(screen.getByRole('link', { name: 'Mac (Intel)' })).toHaveAttribute(
       'href',
-      'https://github.com/lihong0211/en-app/releases/download/v2.1.0/learn-english-2.1.0-intel.dmg',
+      'https://github.com/lihong0211/en-app/releases/download/v2.1.1/learn-english-2.1.1-intel.dmg',
     );
     expect(screen.getByRole('link', { name: 'Windows' })).toHaveAttribute(
       'href',
-      'https://github.com/lihong0211/en-app/releases/download/v2.1.0/learn-english-2.1.0.exe',
+      'https://github.com/lihong0211/en-app/releases/download/v2.1.1/learn-english-2.1.1.exe',
     );
 
     expect(screen.getByAltText('学英语小程序二维码')).toBeVisible();

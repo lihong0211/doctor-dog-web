@@ -17,15 +17,15 @@ export default defineConfig({
     // host: '0.0.0.0',
     proxy: {
       '/english': {
-        target: 'http://localhost:3000/',
+        target: 'http://localhost:3300/',
         changeOrigin: true,
       },
       '/peach': {
-        target: 'http://localhost:3000/',
+        target: 'http://localhost:3300/',
         changeOrigin: true,
       },
       '/en-desktop': {
-        target: 'http://localhost:3000/',
+        target: 'http://localhost:3300/',
         changeOrigin: true,
       },
       // Go 统一后端（商品、订单、用户、抢购）

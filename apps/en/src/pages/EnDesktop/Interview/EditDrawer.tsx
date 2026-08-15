@@ -9,7 +9,7 @@ function EditDrawer(props: { initialValues: QuestionItem; trigger: JSX.Element; 
     <DrawerForm
       title="编辑面试题"
       trigger={props.trigger}
-      width={560}
+      width="50%"
       initialValues={props.initialValues}
       drawerProps={{ destroyOnClose: true }}
       onFinish={async (data) => {
@@ -32,8 +32,8 @@ function EditDrawer(props: { initialValues: QuestionItem; trigger: JSX.Element; 
         label="关键记忆点"
         name="key_points"
         rules={[{ required: true }]}
-        fieldProps={{ autoSize: { minRows: 2, maxRows: 4 } }}
-        extra="逗号分隔的短语，格式：名词短语——关键词"
+        fieldProps={{ autoSize: { minRows: 3, maxRows: 8 } }}
+        extra="每行一条，格式：名词短语——内容。（每条结尾带句号）"
       />
       <ProFormTextArea
         label="口语回答"

@@ -8,15 +8,15 @@ import './EnglishIntro.css';
 const DESKTOP_DOWNLOADS = [
   {
     label: 'Mac (Apple Silicon)',
-    href: 'https://github.com/lihong0211/en-app/releases/download/v2.1.0/learn-english-2.1.0-arm.dmg',
+    href: 'https://github.com/lihong0211/en-app/releases/download/v2.1.1/learn-english-2.1.1-arm.dmg',
   },
   {
     label: 'Mac (Intel)',
-    href: 'https://github.com/lihong0211/en-app/releases/download/v2.1.0/learn-english-2.1.0-intel.dmg',
+    href: 'https://github.com/lihong0211/en-app/releases/download/v2.1.1/learn-english-2.1.1-intel.dmg',
   },
   {
     label: 'Windows',
-    href: 'https://github.com/lihong0211/en-app/releases/download/v2.1.0/learn-english-2.1.0.exe',
+    href: 'https://github.com/lihong0211/en-app/releases/download/v2.1.1/learn-english-2.1.1.exe',
   },
 ] as const;
 

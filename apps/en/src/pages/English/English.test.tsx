@@ -29,10 +29,5 @@ describe('English workbench', () => {
       screen.queryByRole('navigation', { name: '英语学习模块' }),
     ).not.toBeInTheDocument();
     expect(screen.getByText('用户内容')).toBeVisible();
-
-    expect(screen.getByRole('link', { name: '返回介绍页' })).toHaveAttribute(
-      'href',
-      '/en/english',
-    );
   });
 });

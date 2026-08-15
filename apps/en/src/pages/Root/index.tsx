@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { ProLayout, PageContainer } from '@ant-design/pro-components';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, Button } from 'antd';
 import { css } from '@emotion/react';
 import { Outlet, useLocation, NavLink } from 'react-router-dom';
 import layoutProps from './props';
@@ -161,7 +161,10 @@ export default function Root() {
       menuItemRender={(item: any, dom: any) => (
         <NavLink to={item.key!}>{dom}</NavLink>
       )}
-      actionsRender={() => [<EnDesktopAuthStatus key="en-desktop-auth" />]}
+      actionsRender={() => [
+        ...(isEnglish ? [<Button key="back-to-intro" href="/en/english">返回介绍页</Button>] : []),
+        <EnDesktopAuthStatus key="en-desktop-auth" />,
+      ]}
       css={style}
     >
       <PageContainer

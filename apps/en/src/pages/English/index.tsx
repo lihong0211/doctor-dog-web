@@ -1,4 +1,4 @@
-import { ConfigProvider, Button } from 'antd';
+import { ConfigProvider } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 import Root from './Root';
 import Affix from './Affix';
@@ -51,7 +51,6 @@ export default function English() {
         <main className="en-workbench-panel">
           <div className="en-workbench-panel-heading">
             <h2>{activeModule.label}</h2>
-            <Button href="/en/english">返回介绍页</Button>
           </div>
           <div className="en-workbench-module">{activeModule.content}</div>
         </main>

@@ -30,3 +30,8 @@ export const MASTERY_COLORS: Record<string, string> = {
   基本掌握: 'blue',
   已掌握: 'green',
 };
+
+// 分类存的是"大类/子标签"，筛选只按大类分组
+export function mainCategory(category: string | null): string {
+  return category?.split('/')[0] || '';
+}

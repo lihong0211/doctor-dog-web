@@ -1,36 +1,67 @@
-import { useRef, useState } from 'react';
-import { ProTable, type ActionType } from '@ant-design/pro-components';
-import { Button, Tag, message } from 'antd';
-import { SoundOutlined, LoadingOutlined } from '@ant-design/icons';
+import { useEffect, useMemo, useState } from 'react';
+import { ProTable } from '@ant-design/pro-components';
+import { Button, Select, Tag, message } from 'antd';
 import request from '../../../request';
-import { requireAuth } from '../authGuard';
 import EditDrawer from './EditDrawer';
-import { MASTERY_COLORS, type QuestionItem } from './types';
+import { MASTERY_COLORS, MASTERY_LEVELS, mainCategory, type QuestionItem } from './types';
 
 export default function InterviewList() {
-  const actionRef = useRef<ActionType>();
-  const [generatingId, setGeneratingId] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [questions, setQuestions] = useState<QuestionItem[]>([]);
+  const [category, setCategory] = useState<string | undefined>();
+  const [mastery, setMastery] = useState<string | undefined>();
 
-  const generateTts = async (question: QuestionItem) => {
-    if (!requireAuth()) return;
-    setGeneratingId(question.id);
-    await request
-      .post('/english/interview/tts/generate', { question_id: question.id })
-      .then(() => {
-        message.success('语音生成成功');
-        actionRef.current?.reload();
-      })
-      .catch((e) => message.error(typeof e === 'string' ? e : '语音生成失败'))
-      .finally(() => setGeneratingId(null));
+  const load = () => {
+    setLoading(true);
+    request
+      .post('/english/interview/list')
+      .then((data: any) => setQuestions(data as QuestionItem[]))
+      .catch((e) => message.error(typeof e === 'string' ? e : '加载失败'))
+      .finally(() => setLoading(false));
   };
+
+  useEffect(load, []);
+
+  const categoryOptions = useMemo(
+    () => Array.from(new Set(questions.map((q) => mainCategory(q.category)).filter(Boolean))),
+    [questions],
+  );
+
+  const filtered = useMemo(
+    () =>
+      questions.filter(
+        (q) => (!category || mainCategory(q.category) === category) && (!mastery || q.mastery === mastery),
+      ),
+    [questions, category, mastery],
+  );
 
   return (
     <ProTable<QuestionItem>
-      actionRef={actionRef}
       rowKey="id"
+      loading={loading}
+      dataSource={filtered}
       scroll={{ y: 'calc(100dvh - 311px)' }}
       search={false}
-      toolBarRender={false}
+      toolBarRender={() => [
+        <Select
+          key="category"
+          allowClear
+          placeholder="按分类筛选"
+          style={{ width: 180 }}
+          value={category}
+          onChange={setCategory}
+          options={categoryOptions.map((c) => ({ label: c, value: c }))}
+        />,
+        <Select
+          key="mastery"
+          allowClear
+          placeholder="按掌握程度筛选"
+          style={{ width: 160 }}
+          value={mastery}
+          onChange={setMastery}
+          options={MASTERY_LEVELS.map((m) => ({ label: m, value: m }))}
+        />,
+      ]}
       pagination={{ pageSize: 20 }}
       columns={[
         { dataIndex: 'question', title: '题目', ellipsis: true },
@@ -51,47 +82,26 @@ export default function InterviewList() {
           title: '关键记忆点',
           ellipsis: true,
           render: (_dom, entity) =>
-            entity.key_points.split(',').map((point, i) => (
+            entity.key_points.split('\n').map((point, i) => (
               <Tag key={i} style={{ marginBottom: 4 }}>
                 {point.trim()}
               </Tag>
             )),
         },
         {
-          title: 'TTS 音频',
-          width: 220,
-          render: (_dom, entity) => (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              {entity.tts_audio && <audio controls src={entity.tts_audio.url} style={{ height: 28, width: 140 }} />}
-              <Button
-                size="small"
-                icon={generatingId === entity.id ? <LoadingOutlined /> : <SoundOutlined />}
-                disabled={generatingId === entity.id}
-                onClick={() => generateTts(entity)}
-              >
-                {entity.tts_audio ? '重新生成' : '生成'}
-              </Button>
-            </div>
-          ),
-        },
-        {
           title: '操作',
           valueType: 'option',
           fixed: 'right',
           width: 80,
-          render: (_dom, entity, _index, action) => (
+          render: (_dom, entity) => (
             <EditDrawer
               initialValues={entity}
               trigger={<Button type="link">编辑</Button>}
-              onSubmitted={() => action?.reload()}
+              onSubmitted={load}
             />
           ),
         },
       ]}
-      request={async () => {
-        const data: any = await request.post('/english/interview/list');
-        return { success: true, data: data as QuestionItem[] };
-      }}
     />
   );
 }

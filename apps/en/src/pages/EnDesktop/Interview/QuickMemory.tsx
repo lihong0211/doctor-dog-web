@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Button, Select, Tag, Spin, Empty, message } from 'antd';
-import { LeftOutlined, RightOutlined, SoundOutlined, LoadingOutlined } from '@ant-design/icons';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import request from '../../../request';
 import { requireAuth } from '../authGuard';
-import { MASTERY_COLORS, MASTERY_LEVELS, type QuestionItem } from './types';
+import { MASTERY_COLORS, MASTERY_LEVELS, mainCategory, type QuestionItem } from './types';
 
 export default function QuickMemory() {
   const [loading, setLoading] = useState(true);
@@ -13,7 +13,6 @@ export default function QuickMemory() {
   const [index, setIndex] = useState(0);
   const [showPoints, setShowPoints] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [generating, setGenerating] = useState(false);
 
   const load = () => {
     setLoading(true);
@@ -27,14 +26,14 @@ export default function QuickMemory() {
   useEffect(load, []);
 
   const categoryOptions = useMemo(
-    () => Array.from(new Set(questions.map((q) => q.category).filter(Boolean))) as string[],
+    () => Array.from(new Set(questions.map((q) => mainCategory(q.category)).filter(Boolean))),
     [questions],
   );
 
   const filtered = useMemo(
     () =>
       questions.filter(
-        (q) => (!category || q.category === category) && (!mastery || q.mastery === mastery),
+        (q) => (!category || mainCategory(q.category) === category) && (!mastery || q.mastery === mastery),
       ),
     [questions, category, mastery],
   );
@@ -62,19 +61,6 @@ export default function QuickMemory() {
         setQuestions((prev) => prev.map((q) => (q.id === current.id ? { ...q, mastery: level } : q)));
       })
       .catch((e) => message.error(typeof e === 'string' ? e : '更新失败'));
-  };
-
-  const generateTts = async () => {
-    if (!current || !requireAuth()) return;
-    setGenerating(true);
-    await request
-      .post('/english/interview/tts/generate', { question_id: current.id })
-      .then((data: any) => {
-        setQuestions((prev) => prev.map((q) => (q.id === current.id ? { ...q, tts_audio: data } : q)));
-        message.success('语音生成成功');
-      })
-      .catch((e) => message.error(typeof e === 'string' ? e : '语音生成失败'))
-      .finally(() => setGenerating(false));
   };
 
   if (loading) {
@@ -135,7 +121,7 @@ export default function QuickMemory() {
             </Button>
           ) : (
             <div style={{ marginBottom: 16 }}>
-              {current.key_points.split(',').map((point, i) => (
+              {current.key_points.split('\n').map((point, i) => (
                 <Tag key={i} style={{ marginBottom: 6 }}>
                   {point.trim()}
                 </Tag>
@@ -159,20 +145,6 @@ export default function QuickMemory() {
               }}
             >
               {current.spoken_desc}
-
-              <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-                {current.tts_audio && (
-                  <audio controls src={current.tts_audio.url} style={{ height: 32, width: 220 }} />
-                )}
-                <Button
-                  size="small"
-                  icon={generating ? <LoadingOutlined /> : <SoundOutlined />}
-                  disabled={generating}
-                  onClick={generateTts}
-                >
-                  {current.tts_audio ? '重新生成语音' : '生成语音'}
-                </Button>
-              </div>
             </div>
           )}
 
