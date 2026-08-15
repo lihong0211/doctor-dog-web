@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { ConfigProvider, Button, Card } from 'antd';
-import qrCodeImg from '../../assets/mini-program-qrcode.png';
+import qrCodeImg from '../../assets/qrcode.jpg';
 import Footer from '../../components/Footer';
 import { enTheme } from '../../theme/antdTheme';
 import './EnglishIntro.css';
