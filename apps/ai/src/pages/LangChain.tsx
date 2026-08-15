@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { message, Tag } from 'antd'
+import { LikeOutlined, LikeFilled, DislikeOutlined, DislikeFilled } from '@ant-design/icons'
 import LangGraph3DVisualizer, {
   type GraphData,
   type GraphNodeData,
@@ -8,9 +9,11 @@ import LangGraph3DVisualizer, {
 import {
   getGraph,
   runGraph,
+  submitTraceFeedback,
   type GraphName,
   type RunResult,
   type HistoryMessage,
+  type TraceRating,
 } from '../service/langgraph'
 import AskInput from '../components/AskInput'
 
@@ -54,6 +57,10 @@ interface ConvEntry {
   query: string
   response: string | null
   loading?: boolean
+  /** 落库的 agent_trace 行 id，供反馈按钮调用；router 图之外的图也会有（只是没有 threadId 上下文持久化） */
+  traceId?: number | null
+  /** 用户对这条回答的反馈，null=未反馈；提交中用 'pending' 防止重复点击 */
+  feedback?: TraceRating | 'pending' | null
 }
 
 function LangChain() {
@@ -65,8 +72,13 @@ function LangChain() {
   const [runResult, setRunResult] = useState<RunResult | null>(null)
   const [runKey, setRunKey] = useState(0)
   const [conversations, setConversations] = useState<ConvEntry[]>([])
+  // router 图的会话标识：有它，服务端就用 checkpointer 记住上下文，不需要再传 history；
+  // 「清空」时会换一个新的，代表开始一段新会话，不会读到旧会话的历史。
+  const [threadId, setThreadId] = useState(() => crypto.randomUUID())
   const convBottomRef = useRef<HTMLDivElement>(null)
-  const pendingAnswerByRunKeyRef = useRef<Map<number, { entryId: number; response: string | null }>>(new Map())
+  const pendingAnswerByRunKeyRef = useRef<
+    Map<number, { entryId: number; response: string | null; traceId?: number | null }>
+  >(new Map())
 
   const loadGraph = useCallback(async (name: GraphName) => {
     setLoading(true)
@@ -100,22 +112,31 @@ function LangChain() {
         { id: entryId, graphName, query: inputQuery, response: null, loading: true },
       ])
 
-      const history: HistoryMessage[] = conversations.flatMap((c) => {
-        const msgs: HistoryMessage[] = [{ role: 'user', content: c.query }]
-        if (c.response) msgs.push({ role: 'assistant', content: c.response })
-        return msgs
-      })
+      // router 图走 threadId：服务端 checkpointer 记住上下文，不用再传 history。
+      // loop/parallel 没接 checkpointer，仍然客户端拼 history 兜底（旧行为）。
+      const isRouter = graphName === 'router'
+      const history: HistoryMessage[] = isRouter
+        ? []
+        : conversations.flatMap((c) => {
+            const msgs: HistoryMessage[] = [{ role: 'user', content: c.query }]
+            if (c.response) msgs.push({ role: 'assistant', content: c.response })
+            return msgs
+          })
 
       try {
-        const data = await runGraph(graphName, {
-          query: inputQuery || undefined,
-          intent: '',
-          response: '',
-          history: history.length > 0 ? history : undefined,
-        })
+        const data = await runGraph(
+          graphName,
+          {
+            query: inputQuery || undefined,
+            intent: '',
+            response: '',
+            history: history.length > 0 ? history : undefined,
+          },
+          isRouter ? threadId : undefined
+        )
         setRunResult(data)
         const responseText = (data.finalState as Record<string, unknown> | undefined)?.response as string | null ?? null
-        pendingAnswerByRunKeyRef.current.set(thisRunKey, { entryId, response: responseText })
+        pendingAnswerByRunKeyRef.current.set(thisRunKey, { entryId, response: responseText, traceId: data.traceId })
         setQuery('')
       } catch (err) {
         message.error((err as Error).message || '执行失败')
@@ -125,7 +146,7 @@ function LangChain() {
         setRunLoading(false)
       }
     },
-    [graphName, graphData, conversations]
+    [graphName, graphData, conversations, threadId]
   )
 
   const handleAnimationComplete = useCallback((completedRunKey: number) => {
@@ -133,13 +154,29 @@ function LangChain() {
     if (!pending) return
     pendingAnswerByRunKeyRef.current.delete(completedRunKey)
     setConversations((prev) =>
-      prev.map((c) => (c.id === pending.entryId ? { ...c, loading: false, response: pending.response } : c))
+      prev.map((c) =>
+        c.id === pending.entryId
+          ? { ...c, loading: false, response: pending.response, traceId: pending.traceId, feedback: null }
+          : c
+      )
     )
   }, [])
 
   useEffect(() => {
     convBottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [conversations])
+
+  // 【回流机制】给一条回答打好评/差评，对应后端 /ai/langgraph/trace/feedback
+  const handleFeedback = useCallback(async (convId: number, traceId: number, rating: TraceRating) => {
+    setConversations((prev) => prev.map((c) => (c.id === convId ? { ...c, feedback: 'pending' } : c)))
+    try {
+      await submitTraceFeedback(traceId, rating)
+      setConversations((prev) => prev.map((c) => (c.id === convId ? { ...c, feedback: rating } : c)))
+    } catch (e) {
+      message.error((e as Error).message || '反馈提交失败')
+      setConversations((prev) => prev.map((c) => (c.id === convId ? { ...c, feedback: null } : c)))
+    }
+  }, [])
 
   const handleRun = () => runWithInput(query || '')
 
@@ -242,7 +279,10 @@ function LangChain() {
               <span>💬 对话记录</span>
               <button
                 type="button"
-                onClick={() => setConversations([])}
+                onClick={() => {
+                  setConversations([])
+                  setThreadId(crypto.randomUUID())
+                }}
                 style={{
                   background: 'none',
                   border: '1px solid rgba(0, 201, 141, 0.28)',
@@ -321,6 +361,45 @@ function LangChain() {
                           </span>
                         ) : conv.response}
                       </div>
+                    </div>
+                  )}
+                  {/* 【回流机制】反馈按钮：只在这条已经落了 trace（有 traceId）时才能反馈 */}
+                  {!conv.loading && conv.response && conv.traceId != null && (
+                    <div style={{ display: 'flex', justifyContent: 'flex-start', gap: 4, paddingLeft: 2 }}>
+                      <button
+                        type="button"
+                        disabled={conv.feedback === 'pending'}
+                        onClick={() => handleFeedback(conv.id, conv.traceId!, 'good')}
+                        title="回答不错"
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          cursor: conv.feedback === 'pending' ? 'default' : 'pointer',
+                          color: conv.feedback === 'good' ? '#00c98d' : 'rgba(190, 220, 212, 0.55)',
+                          fontSize: 13,
+                          padding: 2,
+                          lineHeight: 1,
+                        }}
+                      >
+                        {conv.feedback === 'good' ? <LikeFilled /> : <LikeOutlined />}
+                      </button>
+                      <button
+                        type="button"
+                        disabled={conv.feedback === 'pending'}
+                        onClick={() => handleFeedback(conv.id, conv.traceId!, 'bad')}
+                        title="回答有问题"
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          cursor: conv.feedback === 'pending' ? 'default' : 'pointer',
+                          color: conv.feedback === 'bad' ? '#ff7875' : 'rgba(190, 220, 212, 0.55)',
+                          fontSize: 13,
+                          padding: 2,
+                          lineHeight: 1,
+                        }}
+                      >
+                        {conv.feedback === 'bad' ? <DislikeFilled /> : <DislikeOutlined />}
+                      </button>
                     </div>
                   )}
                 </div>

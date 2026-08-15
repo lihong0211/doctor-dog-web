@@ -14,6 +14,9 @@ import A2A from '../pages/A2A'
 import RAG from '../pages/RAG'
 import Text2SQL from '../pages/Text2SQL'
 import LangChain from '../pages/LangChain'
+import AgentHitl from '../pages/AgentHitl'
+import AgentBadCases from '../pages/AgentBadCases'
+import AgentSagaDemo from '../pages/AgentSagaDemo'
 import MCP from '../pages/MCP'
 import Agent from '../pages/Agent'
 import FineTuning from '../pages/FineTuning'
@@ -70,6 +73,9 @@ export const skillsRoutes: RouteItem[] = [
   { path: 'rag', component: RAG, label: 'RAG' },
   { path: 'text2sql', component: Text2SQL, label: 'Text2SQL' },
   { path: 'langchain', component: LangChain, label: 'LangChain' },
+  { path: 'agent-hitl', component: AgentHitl, label: 'Agent 人工审核' },
+  { path: 'agent-bad-cases', component: AgentBadCases, label: 'Bad Case 复核' },
+  { path: 'agent-saga-demo', component: AgentSagaDemo, label: '副作用回滚演示' },
   { path: 'function-call', component: FunctionCall, label: 'Function Call' },
   { path: 'mcp', component: MCP, label: 'MCP 助手' },
   { path: 'a2a', component: A2A, label: 'A2A' },

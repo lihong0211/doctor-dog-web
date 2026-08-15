@@ -2,8 +2,8 @@ import { useState, type ReactNode } from 'react'
 import { Button, Drawer } from 'antd'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
-  ApiOutlined, BookOutlined, CloudOutlined, CodeOutlined, DatabaseOutlined,
-  ExperimentOutlined, LinkOutlined, MenuOutlined, RobotOutlined,
+  ApiOutlined, AuditOutlined, BookOutlined, BugOutlined, CloudOutlined, CodeOutlined, DatabaseOutlined,
+  ExperimentOutlined, LinkOutlined, MenuOutlined, RobotOutlined, RollbackOutlined,
   SwapOutlined, ToolOutlined,
 } from '@ant-design/icons'
 import './MainLayout.css'
@@ -16,6 +16,9 @@ const skillItems: NavItem[] = [
   { key: '/skills/rag', icon: <DatabaseOutlined />, label: 'RAG' },
   { key: '/skills/text2sql', icon: <CodeOutlined />, label: 'Text2SQL' },
   { key: '/skills/langchain', icon: <LinkOutlined />, label: 'LangChain' },
+  { key: '/skills/agent-hitl', icon: <AuditOutlined />, label: '人工审核' },
+  { key: '/skills/agent-bad-cases', icon: <BugOutlined />, label: 'Bad Case' },
+  { key: '/skills/agent-saga-demo', icon: <RollbackOutlined />, label: '副作用回滚' },
   { key: '/skills/function-call', icon: <ToolOutlined />, label: 'Function Call' },
   { key: '/skills/mcp', icon: <CloudOutlined />, label: 'MCP' },
   { key: '/skills/a2a', icon: <SwapOutlined />, label: 'A2A' },
