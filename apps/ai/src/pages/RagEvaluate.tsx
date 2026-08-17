@@ -1,8 +1,20 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Layout, Typography, Select, Button, Card, Input, message, Tag, Space, Progress, Collapse } from 'antd'
-import { PlayCircleOutlined } from '@ant-design/icons'
+import { useSearchParams } from 'react-router-dom'
+import {
+  Layout, Typography, Select, Button, Card, Input, InputNumber, message, Tag, Space,
+  Progress, Collapse, Table,
+} from 'antd'
+import { PlayCircleOutlined, ThunderboltOutlined, ReloadOutlined } from '@ant-design/icons'
 import { listKnowledgeBases, type KbItem } from '../service/knowledge-base'
-import { ragEvaluate, type RagEvaluateResponse } from '../service/rag'
+import {
+  ragEvaluate,
+  generateTestset,
+  listTestset,
+  batchEvaluateTestset,
+  type RagEvaluateResponse,
+  type RagTestsetItem,
+  type BatchEvalResponse,
+} from '../service/rag'
 
 const { Content } = Layout
 const { Title, Text, Paragraph } = Typography
@@ -25,13 +37,25 @@ function scoreColor(v: number): string {
 }
 
 export default function RagEvaluate() {
+  const [searchParams] = useSearchParams()
   const [kbList, setKbList] = useState<KbItem[]>([])
   const [loadingKb, setLoadingKb] = useState(true)
   const [selectedKbId, setSelectedKbId] = useState<number | null>(null)
+
+  const [testsetItems, setTestsetItems] = useState<RagTestsetItem[]>([])
+  const [loadingTestset, setLoadingTestset] = useState(false)
+  const [genSize, setGenSize] = useState(10)
+  const [generating, setGenerating] = useState(false)
+
+  const [batchRunning, setBatchRunning] = useState(false)
+  const [batchResult, setBatchResult] = useState<BatchEvalResponse | null>(null)
+
   const [question, setQuestion] = useState('')
   const [groundTruth, setGroundTruth] = useState('')
   const [running, setRunning] = useState(false)
   const [result, setResult] = useState<RagEvaluateResponse | null>(null)
+
+  const [urlParamsApplied, setUrlParamsApplied] = useState(false)
 
   const loadKbList = useCallback(async () => {
     setLoadingKb(true)
@@ -55,6 +79,86 @@ export default function RagEvaluate() {
   useEffect(() => {
     loadKbList()
   }, [loadKbList])
+
+  // 从 RAG 问答页「去测评」跳转过来时，URL 带 kb_id + question，只在首次挂载应用一次
+  useEffect(() => {
+    if (urlParamsApplied) return
+    const kbIdParam = searchParams.get('kb_id')
+    const questionParam = searchParams.get('question')
+    if (kbIdParam) setSelectedKbId(Number(kbIdParam))
+    if (questionParam) setQuestion(questionParam)
+    setUrlParamsApplied(true)
+  }, [searchParams, urlParamsApplied])
+
+  const loadTestset = useCallback(async () => {
+    if (!selectedKbId) {
+      setTestsetItems([])
+      return
+    }
+    setLoadingTestset(true)
+    try {
+      const { items } = await listTestset(selectedKbId)
+      setTestsetItems(items)
+    } catch (e) {
+      message.error(e instanceof Error ? e.message : '加载测试集失败')
+    } finally {
+      setLoadingTestset(false)
+    }
+  }, [selectedKbId])
+
+  useEffect(() => {
+    loadTestset()
+    setBatchResult(null)
+  }, [loadTestset])
+
+  // URL 带来的 question 如果正好命中测试集里的某条，自动带出标准答案（只在还没手动填过时才自动填）
+  useEffect(() => {
+    if (!question || groundTruth || testsetItems.length === 0) return
+    const matched = testsetItems.find((it) => it.question.trim() === question.trim())
+    if (matched) setGroundTruth(matched.ground_truth)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [question, testsetItems])
+
+  const generate = async () => {
+    if (!selectedKbId) {
+      message.warning('请先选择知识库')
+      return
+    }
+    setGenerating(true)
+    try {
+      const { total } = await generateTestset(selectedKbId, genSize)
+      message.success(`生成了 ${total} 条测试数据（可能耗时 1~2 分钟，已完成）`)
+      await loadTestset()
+    } catch (e) {
+      message.error(e instanceof Error ? e.message : '生成失败')
+    } finally {
+      setGenerating(false)
+    }
+  }
+
+  const runBatch = async () => {
+    if (!selectedKbId || testsetItems.length === 0) {
+      message.warning('该知识库还没有测试集，先生成')
+      return
+    }
+    setBatchRunning(true)
+    setBatchResult(null)
+    try {
+      const data = await batchEvaluateTestset(selectedKbId)
+      setBatchResult(data)
+    } catch (e) {
+      message.error(e instanceof Error ? e.message : '批量评测失败')
+    } finally {
+      setBatchRunning(false)
+    }
+  }
+
+  const pickTestsetItem = (item: RagTestsetItem) => {
+    setQuestion(item.question)
+    setGroundTruth(item.ground_truth)
+    setResult(null)
+    message.success('已带入下方单条评测表单')
+  }
 
   const run = async () => {
     if (!selectedKbId) {
@@ -82,37 +186,116 @@ export default function RagEvaluate() {
     }
   }
 
+  const renderMetricRow = (title: string, scores: RagEvaluateResponse['scores']) => (
+    <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
+      <Text style={{ width: 48, flexShrink: 0 }}>{title}</Text>
+      {METRIC_ORDER.map((key) => {
+        const v = scores[key as keyof typeof scores] as number | null | undefined
+        return (
+          <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <Text type="secondary" style={{ fontSize: 12 }}>{METRIC_LABELS[key].label}</Text>
+            {typeof v === 'number' ? (
+              <Tag color={scoreColor(v)} style={{ margin: 0 }}>{Math.round(v * 100)}%</Tag>
+            ) : (
+              <Tag style={{ margin: 0 }}>-</Tag>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+
   return (
     <Layout style={{ height: '100%', minHeight: 400, background: 'transparent', overflow: 'hidden' }}>
-      <Content style={{ overflow: 'auto', padding: 24, background: 'transparent', width: '100%', maxWidth: 860 }}>
+      <Content style={{ overflow: 'auto', padding: 24, background: 'transparent', width: '100%', maxWidth: 960 }}>
         <Title level={5} style={{ margin: 0, marginBottom: 8, color: 'var(--ds-text)', fontWeight: 600 }}>
           RAG 效果评测（RAGAS）
         </Title>
-        <Paragraph type="secondary" style={{ marginBottom: 24 }}>
-          跑一次真实 RAG 问答，用 RAGAS 给这次回答客观打分——不用人工一条条看。忠实性/答案相关性不需要标准答案就能算；
-          上下文精准度/召回率/答案正确性需要填标准答案才会算。
+        <Paragraph type="secondary" style={{ marginBottom: 16 }}>
+          用 RAGAS 客观打分替代人工一条条看。测试集由 RAGAS 自动生成（喂知识库分段，产出「问题-标准答案」），
+          落库供反复回归评测——改了 prompt/模型/检索参数后，拿同一批题重新跑一遍看有没有退步。
         </Paragraph>
 
-        <Card size="small" title="发起一次评测" style={{ marginBottom: 16 }}>
+        <Card size="small" title="知识库" style={{ marginBottom: 16 }}>
+          <Select
+            style={{ width: '100%' }}
+            loading={loadingKb}
+            value={selectedKbId}
+            onChange={setSelectedKbId}
+            placeholder="选择知识库"
+            options={kbList.map((k) => ({ label: k.name, value: k.id }))}
+          />
+        </Card>
+
+        <Card
+          size="small"
+          title={`测试集（${testsetItems.length} 条）`}
+          style={{ marginBottom: 16 }}
+          extra={
+            <Space>
+              <InputNumber min={1} max={20} value={genSize} onChange={(v) => setGenSize(v ?? 10)} style={{ width: 64 }} />
+              <Button icon={<ThunderboltOutlined />} loading={generating} onClick={generate}>
+                生成测试集
+              </Button>
+              <Button
+                type="primary"
+                loading={batchRunning}
+                disabled={testsetItems.length === 0}
+                onClick={runBatch}
+              >
+                批量评测这 {testsetItems.length} 条
+              </Button>
+              <Button icon={<ReloadOutlined />} onClick={loadTestset} loading={loadingTestset} />
+            </Space>
+          }
+        >
+          {batchResult && (
+            <Card size="small" type="inner" title="批量评测汇总" style={{ marginBottom: 12 }}>
+              <Space direction="vertical" size={8} style={{ width: '100%' }}>
+                {renderMetricRow('平均', batchResult.summary)}
+                {renderMetricRow('最低', batchResult.summaryMin)}
+                {batchResult.results.some((r) => r.error) && (
+                  <Text type="danger" style={{ fontSize: 12 }}>
+                    {batchResult.results.filter((r) => r.error).length} 条评测失败，详情见下方 error 字段
+                  </Text>
+                )}
+              </Space>
+            </Card>
+          )}
+          <Table<RagTestsetItem>
+            dataSource={testsetItems}
+            rowKey="id"
+            loading={loadingTestset}
+            size="small"
+            scroll={{ x: 'max-content' }}
+            pagination={{ pageSize: 10 }}
+            columns={[
+              { title: '问题', dataIndex: 'question', key: 'question', ellipsis: true },
+              { title: '标准答案', dataIndex: 'ground_truth', key: 'ground_truth', ellipsis: true },
+              { title: '生成方式', dataIndex: 'synthesizer', key: 'synthesizer', width: 220, ellipsis: true },
+              {
+                title: '操作',
+                key: 'action',
+                width: 90,
+                render: (_, record) => (
+                  <Button type="link" size="small" onClick={() => pickTestsetItem(record)}>
+                    选用
+                  </Button>
+                ),
+              },
+            ]}
+          />
+        </Card>
+
+        <Card size="small" title="单条评测" style={{ marginBottom: 16 }}>
           <Space direction="vertical" style={{ width: '100%' }} size={16}>
-            <div>
-              <Text style={{ display: 'block', marginBottom: 4 }}>知识库</Text>
-              <Select
-                style={{ width: '100%' }}
-                loading={loadingKb}
-                value={selectedKbId}
-                onChange={setSelectedKbId}
-                placeholder="选择知识库"
-                options={kbList.map((k) => ({ label: k.name, value: k.id }))}
-              />
-            </div>
             <div>
               <Text style={{ display: 'block', marginBottom: 4 }}>问题</Text>
               <TextArea
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 autoSize={{ minRows: 2, maxRows: 4 }}
-                placeholder="例如：华西医院的挂号时间是什么时候？"
+                placeholder="例如：华西医院的挂号时间是什么时候？（可以点上面测试集表格的「选用」自动带入）"
               />
             </div>
             <div>

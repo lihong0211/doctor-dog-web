@@ -3,7 +3,7 @@
  * 基于知识库的检索与问答，支持 Query 改写（CASEA）与 Rerank（DashScope）
  */
 
-import { post, type ApiResponse, unwrapApiResponse } from './request'
+import { get, post, type ApiResponse, unwrapApiResponse } from './request'
 
 const BASE = '/ai/rag'
 
@@ -112,5 +112,66 @@ export async function ragEvaluate(params: RagKbIdentifier & {
 }): Promise<RagEvaluateResponse> {
   return unwrapApiResponse(
     (await post(BASE + '/evaluate', params)) as unknown as ApiResponse<RagEvaluateResponse>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// RAGAS 测试集：喂知识库分段自动生成「问题-上下文-标准答案」三元组，落库供反复回归评测
+// ---------------------------------------------------------------------------
+
+export interface RagTestsetItem {
+  id: number
+  kb_id: number
+  kb_name: string | null
+  question: string
+  ground_truth: string
+  source_context?: string | null
+  synthesizer: string | null
+  created_at?: string | null
+}
+
+/** POST /ai/rag/testset/generate —— 慢接口，实测 10 个分段生成几条题目要 1~2 分钟，务必设够超时 */
+export async function generateTestset(kbId: number, size = 10): Promise<{ items: RagTestsetItem[]; total: number }> {
+  return unwrapApiResponse(
+    (await post(BASE + '/testset/generate', { kb_id: kbId, size }, { timeout: 300_000 })) as unknown as ApiResponse<{
+      items: RagTestsetItem[]
+      total: number
+    }>
+  )
+}
+
+/** GET /ai/rag/testset/list?kb_id=xxx */
+export async function listTestset(kbId: number): Promise<{ items: RagTestsetItem[]; total: number }> {
+  return unwrapApiResponse(
+    (await get(BASE + '/testset/list', { params: { kb_id: kbId } })) as unknown as ApiResponse<{
+      items: RagTestsetItem[]
+      total: number
+    }>
+  )
+}
+
+export interface BatchEvalResult {
+  id: number
+  question: string
+  answer: string | null
+  scores: RagEvaluateScores
+  error: string | null
+}
+
+export interface BatchEvalResponse {
+  results: BatchEvalResult[]
+  summary: RagEvaluateScores
+  summaryMin: RagEvaluateScores
+  total: number
+}
+
+/** POST /ai/rag/testset/evaluate —— 慢接口，耗时 ≈ 题目数 × 15~20s，务必设够超时 */
+export async function batchEvaluateTestset(kbId: number, testsetIds?: number[]): Promise<BatchEvalResponse> {
+  return unwrapApiResponse(
+    (await post(
+      BASE + '/testset/evaluate',
+      { kb_id: kbId, testsetIds },
+      { timeout: 600_000 }
+    )) as unknown as ApiResponse<BatchEvalResponse>
   )
 }

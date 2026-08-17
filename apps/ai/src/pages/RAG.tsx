@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Typography, Select, Button, Card, Spin, message, Tag, Space, Slider, Tooltip } from 'antd'
 import {
   SearchOutlined, LikeOutlined, LikeFilled, DislikeOutlined, DislikeFilled, CopyOutlined,
+  ExperimentOutlined,
 } from '@ant-design/icons'
 import { listKnowledgeBases, type KbItem } from '../service/knowledge-base'
 import { ragSearch, ragAsk, type RagSearchResponse, type RagAskResponse } from '../service/rag'
@@ -88,6 +90,7 @@ function ResultDocCard({ rank, distance, relevance_score, category, text, maxLen
 }
 
 export default function RAG() {
+  const navigate = useNavigate()
   const [kbList, setKbList] = useState<KbItem[]>([])
   const [loadingKb, setLoadingKb] = useState(true)
   const [selectedKb, setSelectedKb] = useState<KbItem | null>(null)
@@ -420,6 +423,20 @@ export default function RAG() {
                                 />
                               </Tooltip>
                             </>
+                          )}
+                          {selectedKb && (
+                            <Tooltip title="去 RAG 评测页跑这个问题（会带上问题；如果这个问题在测试集里，标准答案也会自动带上）">
+                              <Button
+                                type="text"
+                                size="small"
+                                icon={<ExperimentOutlined />}
+                                onClick={() => navigate(
+                                  `/skills/rag-evaluate?kb_id=${selectedKb.id}&question=${encodeURIComponent(pair.query)}`
+                                )}
+                              >
+                                去测评
+                              </Button>
+                            </Tooltip>
                           )}
                         </Space>
                       </>
