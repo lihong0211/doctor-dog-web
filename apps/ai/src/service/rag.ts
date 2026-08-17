@@ -41,6 +41,8 @@ export interface RagAskResponse {
   model: string
   rewritten_query?: string | null
   before: RagSearchSource[]
+  /** 落库的 agent_trace 行 id（graph_name="rag"），落库失败时为 null；用来调 /ai/langgraph/trace/feedback */
+  traceId?: number | null
 }
 
 /** RAGAS 评测打分：null 表示该指标未算（要么没传 ground_truth，要么该指标计算失败） */

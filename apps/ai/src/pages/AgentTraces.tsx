@@ -12,6 +12,7 @@ const GRAPH_FILTER_OPTIONS = [
   { value: 'loop', label: 'loop' },
   { value: 'parallel', label: 'parallel' },
   { value: 'hitl', label: 'hitl' },
+  { value: 'rag', label: 'rag' },
 ]
 
 const STATUS_FILTER_OPTIONS = [

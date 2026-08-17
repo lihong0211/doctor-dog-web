@@ -78,7 +78,7 @@ export const skillsRoutes: RouteItem[] = [
   { path: 'langchain', component: LangChain, label: 'LangChain' },
   { path: 'agent-hitl', component: AgentHitl, label: 'Agent 人工审核' },
   { path: 'agent-traces', component: AgentTraces, label: '执行记录' },
-  { path: 'agent-bad-cases', component: AgentBadCases, label: 'Bad Case 复核' },
+  { path: 'agent-bad-cases', component: AgentBadCases, label: '飞轮埋点' },
   { path: 'agent-saga-demo', component: AgentSagaDemo, label: '副作用回滚演示' },
   { path: 'function-call', component: FunctionCall, label: 'Function Call' },
   { path: 'mcp', component: MCP, label: 'MCP 助手' },

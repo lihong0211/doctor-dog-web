@@ -19,7 +19,7 @@ const skillItems: NavItem[] = [
   { key: '/skills/langchain', icon: <LinkOutlined />, label: 'LangChain' },
   { key: '/skills/agent-hitl', icon: <AuditOutlined />, label: '人工审核' },
   { key: '/skills/agent-traces', icon: <HistoryOutlined />, label: '执行记录' },
-  { key: '/skills/agent-bad-cases', icon: <BugOutlined />, label: 'Bad Case' },
+  { key: '/skills/agent-bad-cases', icon: <BugOutlined />, label: '飞轮埋点' },
   { key: '/skills/agent-saga-demo', icon: <RollbackOutlined />, label: '副作用回滚' },
   { key: '/skills/function-call', icon: <ToolOutlined />, label: 'Function Call' },
   { key: '/skills/mcp', icon: <CloudOutlined />, label: 'MCP' },

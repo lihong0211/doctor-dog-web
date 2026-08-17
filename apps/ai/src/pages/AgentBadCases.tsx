@@ -12,6 +12,7 @@ const GRAPH_FILTER_OPTIONS = [
   { value: 'loop', label: 'loop' },
   { value: 'parallel', label: 'parallel' },
   { value: 'hitl', label: 'hitl' },
+  { value: 'rag', label: 'rag' },
 ]
 
 export default function AgentBadCases() {
@@ -40,7 +41,7 @@ export default function AgentBadCases() {
       <Content style={{ overflow: 'auto', padding: 24, background: 'transparent', width: '100%' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
           <Title level={5} style={{ margin: 0, color: 'var(--ds-text)', fontWeight: 600 }}>
-            Bad Case 复核
+            飞轮埋点
           </Title>
           <div style={{ display: 'flex', gap: 8 }}>
             <Select
@@ -56,8 +57,8 @@ export default function AgentBadCases() {
           </div>
         </div>
         <Text type="secondary" style={{ display: 'block', marginBottom: 16 }}>
-          回流机制的挖掘入口：status=error（系统自己判定失败）或 feedback=bad（人工/用户标注不满意）任一命中即算 bad
-          case，供后续回流进知识库/prompt/训练集。
+          数据飞轮的挖掘入口：status=error（系统自己判定失败）或 feedback=bad（人工/用户标注不满意）任一命中即算 bad
+          case，供后续回流进知识库/prompt/训练集。覆盖 LangGraph 各图和 RAG 问答。
         </Text>
 
         <Card size="small">

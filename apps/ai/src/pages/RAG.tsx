@@ -1,8 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { Typography, Select, Button, Card, Spin, message, Tag, Space, Slider, Tooltip } from 'antd'
-import { SearchOutlined } from '@ant-design/icons'
+import {
+  SearchOutlined, LikeOutlined, LikeFilled, DislikeOutlined, DislikeFilled, CopyOutlined,
+} from '@ant-design/icons'
 import { listKnowledgeBases, type KbItem } from '../service/knowledge-base'
 import { ragSearch, ragAsk, type RagSearchResponse, type RagAskResponse } from '../service/rag'
+import { submitTraceFeedback, type TraceRating } from '../service/langgraph'
 import ReactMarkdown from 'react-markdown'
 import AskInput from '../components/AskInput'
 import './MCP/MCPGaode.css'
@@ -60,6 +63,8 @@ interface QAPair {
   askResponse: RagAskResponse | null
   loading: boolean
   error?: string
+  /** 用户对这条回答的反馈，null=未反馈；提交中用 'pending' 防止重复点击 */
+  feedback?: TraceRating | 'pending' | null
 }
 
 function ResultDocCard({ rank, distance, relevance_score, category, text, maxLen = 500 }: {
@@ -192,6 +197,27 @@ export default function RAG() {
       message.error(err)
     } finally {
       setAsking(false)
+    }
+  }
+
+  // 【回流机制】给一条 RAG 回答打好评/差评，对应 /ai/langgraph/trace/feedback
+  const handleFeedback = async (pairId: number, traceId: number, rating: TraceRating) => {
+    setQaPairs((prev) => prev.map((p) => (p.id === pairId ? { ...p, feedback: 'pending' } : p)))
+    try {
+      await submitTraceFeedback(traceId, rating)
+      setQaPairs((prev) => prev.map((p) => (p.id === pairId ? { ...p, feedback: rating } : p)))
+    } catch (e) {
+      message.error(e instanceof Error ? e.message : '反馈提交失败')
+      setQaPairs((prev) => prev.map((p) => (p.id === pairId ? { ...p, feedback: null } : p)))
+    }
+  }
+
+  const handleCopy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      message.success('已复制')
+    } catch {
+      message.error('复制失败')
     }
   }
 
@@ -360,9 +386,43 @@ export default function RAG() {
                         <Spin tip="生成回答中…" />
                       </div>
                     ) : pair.askResponse?.answer ? (
-                      <div className="markdown-body" style={{ fontSize: 13 }}>
-                        <ReactMarkdown>{pair.askResponse.answer}</ReactMarkdown>
-                      </div>
+                      <>
+                        <div className="markdown-body" style={{ fontSize: 13 }}>
+                          <ReactMarkdown>{pair.askResponse.answer}</ReactMarkdown>
+                        </div>
+                        <Space style={{ marginTop: 8 }}>
+                          <Tooltip title="复制">
+                            <Button
+                              type="text"
+                              size="small"
+                              icon={<CopyOutlined />}
+                              onClick={() => handleCopy(pair.askResponse!.answer)}
+                            />
+                          </Tooltip>
+                          {pair.askResponse.traceId != null && (
+                            <>
+                              <Tooltip title="回答不错">
+                                <Button
+                                  type="text"
+                                  size="small"
+                                  disabled={pair.feedback === 'pending'}
+                                  icon={pair.feedback === 'good' ? <LikeFilled style={{ color: '#52c41a' }} /> : <LikeOutlined />}
+                                  onClick={() => handleFeedback(pair.id, pair.askResponse!.traceId!, 'good')}
+                                />
+                              </Tooltip>
+                              <Tooltip title="回答有问题">
+                                <Button
+                                  type="text"
+                                  size="small"
+                                  disabled={pair.feedback === 'pending'}
+                                  icon={pair.feedback === 'bad' ? <DislikeFilled style={{ color: '#ff4d4f' }} /> : <DislikeOutlined />}
+                                  onClick={() => handleFeedback(pair.id, pair.askResponse!.traceId!, 'bad')}
+                                />
+                              </Tooltip>
+                            </>
+                          )}
+                        </Space>
+                      </>
                     ) : pair.error ? (
                       <Text type="danger">{pair.error}</Text>
                     ) : null}
