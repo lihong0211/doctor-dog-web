@@ -49,8 +49,11 @@ export default function MainLayout() {
     <nav className="ai-shell-nav" aria-label="技能导航">
       <div role="menu" className="ai-shell-menu">
         {skillItems.map(item => {
+          // startsWith(item.key) 单独用会误命中：'/skills/rag-evaluate' 是
+          // '/skills/rag' 的字符串前缀，会导致 RAG 和 RAG 评测同时高亮。
+          // 必须要求前缀后紧跟 '/'（子路由场景，如 vector-db/:id）或完全相等。
           const current = location.pathname === item.key ||
-            (item.key !== '/hub' && location.pathname.startsWith(item.key))
+            (item.key !== '/hub' && location.pathname.startsWith(item.key + '/'))
           return (
             <button
               key={item.key}
