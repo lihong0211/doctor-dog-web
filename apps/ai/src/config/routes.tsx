@@ -16,6 +16,7 @@ import RagEvaluate from '../pages/RagEvaluate'
 import Text2SQL from '../pages/Text2SQL'
 import LangChain from '../pages/LangChain'
 import AgentHitl from '../pages/AgentHitl'
+import AgentTraces from '../pages/AgentTraces'
 import AgentBadCases from '../pages/AgentBadCases'
 import AgentSagaDemo from '../pages/AgentSagaDemo'
 import MCP from '../pages/MCP'
@@ -76,6 +77,7 @@ export const skillsRoutes: RouteItem[] = [
   { path: 'text2sql', component: Text2SQL, label: 'Text2SQL' },
   { path: 'langchain', component: LangChain, label: 'LangChain' },
   { path: 'agent-hitl', component: AgentHitl, label: 'Agent 人工审核' },
+  { path: 'agent-traces', component: AgentTraces, label: '执行记录' },
   { path: 'agent-bad-cases', component: AgentBadCases, label: 'Bad Case 复核' },
   { path: 'agent-saga-demo', component: AgentSagaDemo, label: '副作用回滚演示' },
   { path: 'function-call', component: FunctionCall, label: 'Function Call' },

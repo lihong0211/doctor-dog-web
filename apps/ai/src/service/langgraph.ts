@@ -163,6 +163,43 @@ export async function listBadCases(graph?: string, limit = 50): Promise<{ cases:
   return unwrapApiResponse(res as ApiResponse<{ cases: BadCase[]; total: number }>)
 }
 
+/** 单步耗时，steps_detail 字段 JSON.parse 后的结构 */
+export interface TraceStep {
+  nodeId: string
+  duration_ms: number
+}
+
+/** 全量 trace 记录（不限 status/feedback），比 BadCase 多 total_steps/duration_ms/steps_detail */
+export interface TraceItem {
+  id: number
+  graph_name: string
+  thread_id: string | null
+  user_id: string | null
+  input_summary: string | null
+  output_summary: string | null
+  status: string
+  error_message: string | null
+  total_steps: number | null
+  duration_ms: number | null
+  /** 后端存的是 JSON 字符串，用 JSON.parse 转成 TraceStep[] 再渲染 */
+  steps_detail: string | null
+  feedback: TraceRating | null
+  feedback_note: string | null
+  created_at: string | null
+}
+
+/** GET /ai/langgraph/trace/list?graph=xxx&status=xxx&limit=n */
+export async function listTraces(
+  graph?: string,
+  status?: string,
+  limit = 50
+): Promise<{ traces: TraceItem[]; total: number }> {
+  const res = await get<{ traces: TraceItem[]; total: number }>(`${BASE}/trace/list`, {
+    params: { graph, status, limit },
+  })
+  return unwrapApiResponse(res as ApiResponse<{ traces: TraceItem[]; total: number }>)
+}
+
 // ---------------------------------------------------------------------------
 // 副作用回滚：Saga 补偿事务演示（create_booking → charge_payment，真实 MySQL 副作用）
 // ---------------------------------------------------------------------------
