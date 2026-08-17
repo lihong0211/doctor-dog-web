@@ -43,6 +43,25 @@ export interface RagAskResponse {
   before: RagSearchSource[]
 }
 
+/** RAGAS 评测打分：null 表示该指标未算（要么没传 ground_truth，要么该指标计算失败） */
+export interface RagEvaluateScores {
+  faithfulness?: number | null
+  answer_relevancy?: number | null
+  context_precision?: number | null
+  context_recall?: number | null
+  answer_correctness?: number | null
+  /** 计算失败的指标名 -> 错误信息 */
+  _errors?: Record<string, string>
+}
+
+export interface RagEvaluateResponse {
+  question: string
+  answer: string
+  contexts: string[]
+  ground_truth: string | null
+  scores: RagEvaluateScores
+}
+
 type RagKbIdentifier =
   | { knowledge_base_id?: number; kb_id?: number }
   | { knowledge_base_name?: string; kb_name?: string; db_name?: string; db?: string; name?: string; kb?: string }
@@ -75,5 +94,21 @@ export async function ragAsk(params: RagKbIdentifier & {
 }): Promise<RagAskResponse> {
   return unwrapApiResponse(
     (await post(BASE + '/ask', params)) as unknown as ApiResponse<RagAskResponse>
+  )
+}
+
+/**
+ * RAGAS 评测：不传 answer/contexts 时会先跑一次真实 RAG（复用 /ai/rag/ask 同一条 rag_chat 链路）
+ * 再打分；传了 ground_truth 才会算 context_precision/context_recall/answer_correctness。
+ */
+export async function ragEvaluate(params: RagKbIdentifier & {
+  question: string
+  top_k?: number
+  ground_truth?: string
+  answer?: string
+  contexts?: string[]
+}): Promise<RagEvaluateResponse> {
+  return unwrapApiResponse(
+    (await post(BASE + '/evaluate', params)) as unknown as ApiResponse<RagEvaluateResponse>
   )
 }
