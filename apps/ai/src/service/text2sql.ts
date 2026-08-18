@@ -51,6 +51,8 @@ export async function text2sql(params: {
 export interface Text2SqlInterrupt {
   question: string
   sql: string
+  /** 后端对 UPDATE 里字面值做的确定性核对：某列历史上从未出现过这个值时的提醒（不阻断，仅提示） */
+  warnings?: string[]
 }
 
 export interface Text2SqlHitlResult {

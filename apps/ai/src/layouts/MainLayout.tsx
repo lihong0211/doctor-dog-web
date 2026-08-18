@@ -4,7 +4,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
   ApiOutlined, AuditOutlined, BookOutlined, BugOutlined, CloudOutlined, CodeOutlined, DatabaseOutlined,
   ExperimentOutlined, LinkOutlined, MenuOutlined, RobotOutlined, RollbackOutlined,
-  SwapOutlined, ToolOutlined, DashboardOutlined, HistoryOutlined,
+  SwapOutlined, ToolOutlined, DashboardOutlined, HistoryOutlined, UnorderedListOutlined,
 } from '@ant-design/icons'
 import './MainLayout.css'
 
@@ -18,6 +18,7 @@ const skillItems: NavItem[] = [
   { key: '/skills/text2sql', icon: <CodeOutlined />, label: 'Text2SQL' },
   { key: '/skills/langchain', icon: <LinkOutlined />, label: 'LangChain' },
   { key: '/skills/agent-hitl', icon: <AuditOutlined />, label: '人工审核' },
+  { key: '/skills/agent-review', icon: <UnorderedListOutlined />, label: '审核列表' },
   { key: '/skills/agent-traces', icon: <HistoryOutlined />, label: '执行记录' },
   { key: '/skills/agent-bad-cases', icon: <BugOutlined />, label: '飞轮埋点' },
   { key: '/skills/agent-saga-demo', icon: <RollbackOutlined />, label: '副作用回滚' },

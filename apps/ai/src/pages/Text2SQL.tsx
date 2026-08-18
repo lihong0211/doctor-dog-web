@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { Layout, Typography, Input, Card, Spin, message, Select, Table, Tabs, Form, Tag, Button, Alert } from 'antd'
+import { useNavigate } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
-import { runText2SqlHitl, resumeText2SqlHitl, type Text2SqlInterrupt, type Text2SqlHitlResult } from '../service/text2sql'
+import { runText2SqlHitl, type Text2SqlInterrupt, type Text2SqlHitlResult } from '../service/text2sql'
 import { getTableData, TABLE_NAMES, TABLE_SCHEMAS } from '../service/table-data'
 import AskInput from '../components/AskInput'
 
@@ -129,12 +130,10 @@ function DataTab() {
 const DEFAULT_QUERY = EXAMPLE_QUERIES[0]
 
 function Text2SQLTab() {
+  const navigate = useNavigate()
   const [question, setQuestion] = useState(DEFAULT_QUERY)
   const [loading, setLoading] = useState(false)
-  const [resuming, setResuming] = useState(false)
-  const [threadId, setThreadId] = useState<string | null>(null)
   const [pending, setPending] = useState<Text2SqlInterrupt | null>(null)
-  const [editedSql, setEditedSql] = useState('')
   const [result, setResult] = useState<Text2SqlHitlResult | null>(null)
   const resultsEndRef = useRef<HTMLDivElement>(null)
 
@@ -153,10 +152,8 @@ function Text2SQLTab() {
     setPending(null)
     try {
       const out = await runText2SqlHitl({ question: q, model: 'qwen-turbo', maxRows: 500 })
-      setThreadId(out.threadId)
       if (out.waitingForInput && out.interrupt) {
         setPending(out.interrupt)
-        setEditedSql(out.interrupt.sql)
       } else {
         setResult(out)
       }
@@ -164,20 +161,6 @@ function Text2SQLTab() {
       message.error((e as Error).message || '请求失败')
     } finally {
       setLoading(false)
-    }
-  }
-
-  const decide = async (decision: boolean | string) => {
-    if (!threadId) return
-    setResuming(true)
-    try {
-      const out = await resumeText2SqlHitl(threadId, decision)
-      setResult(out)
-      setPending(null)
-    } catch (e: unknown) {
-      message.error((e as Error).message || '提交失败')
-    } finally {
-      setResuming(false)
     }
   }
 
@@ -211,20 +194,16 @@ function Text2SQLTab() {
         )}
 
         {pending && (
-          <Card size="small" title="需要人工审核" style={{ marginBottom: 16 }}>
+          <Card size="small" title="已提交，等待人工审核" style={{ marginBottom: 16 }}>
             <p style={{ whiteSpace: 'pre-wrap', marginBottom: 8, color: 'var(--ds-text-muted)' }}>{pending.question}</p>
             <TextArea
-              value={editedSql}
-              onChange={(e) => setEditedSql(e.target.value)}
+              value={pending.sql}
+              readOnly
               autoSize={{ minRows: 2, maxRows: 6 }}
-              disabled={resuming}
-              style={{ fontFamily: 'monospace', fontSize: 13, marginBottom: 12 }}
+              style={{ fontFamily: 'monospace', fontSize: 13, marginBottom: 12, background: 'var(--ant-color-fill-quaternary)' }}
             />
-            <Button type="primary" onClick={() => decide(editedSql.trim() || true)} loading={resuming}>
-              批准并执行
-            </Button>
-            <Button danger style={{ marginLeft: 8 }} onClick={() => decide(false)} disabled={resuming}>
-              拒绝
+            <Button type="primary" onClick={() => navigate('/skills/agent-review')}>
+              前往审核列表处理
             </Button>
           </Card>
         )}
