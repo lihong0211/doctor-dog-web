@@ -2,7 +2,7 @@ import { useState, type ReactNode } from 'react'
 import { Button, Drawer } from 'antd'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
-  ApiOutlined, AuditOutlined, BookOutlined, BugOutlined, CloudOutlined, CodeOutlined, DatabaseOutlined,
+  ApiOutlined, BookOutlined, BugOutlined, CloudOutlined, CodeOutlined, DatabaseOutlined,
   ExperimentOutlined, LinkOutlined, MenuOutlined, RobotOutlined, RollbackOutlined,
   SwapOutlined, ToolOutlined, DashboardOutlined, HistoryOutlined, UnorderedListOutlined,
 } from '@ant-design/icons'
@@ -17,7 +17,9 @@ const skillItems: NavItem[] = [
   { key: '/skills/rag-evaluate', icon: <DashboardOutlined />, label: 'RAG 评测' },
   { key: '/skills/text2sql', icon: <CodeOutlined />, label: 'Text2SQL' },
   { key: '/skills/langchain', icon: <LinkOutlined />, label: 'LangChain' },
-  { key: '/skills/agent-hitl', icon: <AuditOutlined />, label: '人工审核' },
+  // 人工审核演示页暂时隐藏（审核统一走下面的"审核列表"），不删代码，保留 routes.tsx 里的路由。
+  // 需要恢复时：加回 AuditOutlined import，取消注释：
+  // { key: '/skills/agent-hitl', icon: <AuditOutlined />, label: '人工审核' },
   { key: '/skills/agent-review', icon: <UnorderedListOutlined />, label: '审核列表' },
   { key: '/skills/agent-traces', icon: <HistoryOutlined />, label: '执行记录' },
   { key: '/skills/agent-bad-cases', icon: <BugOutlined />, label: '飞轮埋点' },
