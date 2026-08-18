@@ -298,6 +298,9 @@ const EXECUTE_SEGMENTS_TIMEOUT_MS = 5 * 60 * 1000 // 5 分钟，分段可能较�
 /** 分段策略：fixed 固定长度 / structure 结构感知（标题层级）/ hierarchy 父子切片 / semantic 语义切片 */
 export type ChunkingStrategy = 'fixed' | 'structure' | 'hierarchy' | 'semantic'
 
+/** 解析方式：fast 现有轻量解析（默认）/ precise MinerU（仅 PDF/DOCX/PPTX/XLSX/XLS/图片支持，其余格式忽略、仍走 fast） */
+export type ParsingStrategy = 'fast' | 'precise'
+
 export interface ExecuteSegmentsResultItem {
   document_id: number
   segment_count: number
@@ -315,6 +318,7 @@ export async function executeSegments(params: {
   chunking_strategy?: ChunkingStrategy
   hierarchy_level?: number
   retain_hierarchy?: boolean
+  parsing_strategy?: ParsingStrategy
 }): Promise<ExecuteSegmentsResponse> {
   const data = unwrapApiResponse(
     (await post(BASE + '/segments/execute', params, { timeout: EXECUTE_SEGMENTS_TIMEOUT_MS })) as unknown as ApiResponse<ExecuteSegmentsResponse>

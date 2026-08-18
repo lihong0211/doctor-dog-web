@@ -33,6 +33,7 @@ import {
   type KnowledgeBaseDocumentItem,
   type KnowledgeBaseSegmentItem,
   type ChunkingStrategy,
+  type ParsingStrategy,
 } from '../service/knowledge-base'
 import ReactMarkdown from 'react-markdown'
 import PdfPreview from '../components/PdfPreview'
@@ -82,6 +83,7 @@ export default function KnowledgeBaseNew() {
   const [form] = Form.useForm()
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const watchedChunkingStrategy = Form.useWatch('chunking_strategy', form) as ChunkingStrategy | undefined
+  const watchedParsingStrategy = Form.useWatch('parsing_strategy', form) as ParsingStrategy | undefined
 
   const notifyDuplicatedFiles = (res?: {
     duplicated_files?: string[]
@@ -186,10 +188,11 @@ export default function KnowledgeBaseNew() {
     const { chunk_size, chunk_overlap } = await form.validateFields(['chunk_size', 'chunk_overlap']).catch(() => null)
     if (chunk_size == null || chunk_overlap == null) return
     if (createKbId == null) return
-    const { chunking_strategy, hierarchy_level, retain_hierarchy } = form.getFieldsValue([
+    const { chunking_strategy, hierarchy_level, retain_hierarchy, parsing_strategy } = form.getFieldsValue([
       'chunking_strategy',
       'hierarchy_level',
       'retain_hierarchy',
+      'parsing_strategy',
     ])
     setStepLoading(true)
     try {
@@ -207,6 +210,7 @@ export default function KnowledgeBaseNew() {
         chunking_strategy: (chunking_strategy as ChunkingStrategy) ?? 'fixed',
         hierarchy_level: hierarchy_level != null ? Number(hierarchy_level) : undefined,
         retain_hierarchy: typeof retain_hierarchy === 'boolean' ? retain_hierarchy : undefined,
+        parsing_strategy: (parsing_strategy as ParsingStrategy) ?? 'fast',
       })
       if (isAddFilesMode && segRes?.results?.length) {
         setAddedFilesDocuments((prev) =>
@@ -376,7 +380,7 @@ export default function KnowledgeBaseNew() {
             <Form
               form={form}
               layout="vertical"
-              initialValues={{ chunk_size: 10, chunk_overlap: 200, chunking_strategy: 'fixed', hierarchy_level: 3, retain_hierarchy: true }}
+              initialValues={{ chunk_size: 10, chunk_overlap: 200, chunking_strategy: 'fixed', hierarchy_level: 3, retain_hierarchy: true, parsing_strategy: 'fast' }}
             >
               <Form.Item name="chunk_size" label="分段长度" rules={[{ required: true, message: '请输入分段长度' }]}>
                 <InputNumber min={100} max={5000} style={{ width: '100%' }} placeholder="250" />
@@ -384,6 +388,20 @@ export default function KnowledgeBaseNew() {
               <Form.Item name="chunk_overlap" label="分段重叠" rules={[{ required: true, message: '请输入分段重叠' }]}>
                 <InputNumber min={0} max={1000} style={{ width: '100%' }} placeholder="250" />
               </Form.Item>
+              <Form.Item name="parsing_strategy" label="解析方式">
+                <Radio.Group>
+                  <Radio.Button value="fast">快速解析</Radio.Button>
+                  <Radio.Button value="precise">精细解析（MinerU）</Radio.Button>
+                </Radio.Group>
+              </Form.Item>
+              {watchedParsingStrategy === 'precise' && (
+                <Alert
+                  type="warning"
+                  showIcon
+                  style={{ marginBottom: 16 }}
+                  message="仅 PDF/DOCX/PPTX/XLSX/XLS/图片支持 MinerU，其余格式（TXT/MD/DOC/PPT）会自动按快速解析处理；MinerU 需要服务器已安装，解析速度比快速解析慢很多"
+                />
+              )}
               <Form.Item name="chunking_strategy" label="分段策略">
                 <Radio.Group>
                   <Radio.Button value="fixed">固定长度</Radio.Button>

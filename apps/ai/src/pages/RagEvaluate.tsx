@@ -2,15 +2,20 @@ import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import {
   Layout, Typography, Select, Button, Card, Input, InputNumber, message, Tag, Space,
-  Progress, Collapse, Table,
+  Progress, Collapse, Table, Modal, Form, Popconfirm,
 } from 'antd'
-import { PlayCircleOutlined, ThunderboltOutlined, ReloadOutlined } from '@ant-design/icons'
+import {
+  PlayCircleOutlined, ThunderboltOutlined, ReloadOutlined, PlusOutlined, EditOutlined, DeleteOutlined,
+} from '@ant-design/icons'
 import { listKnowledgeBases, type KbItem } from '../service/knowledge-base'
 import {
   ragEvaluate,
   generateTestset,
   listTestset,
   batchEvaluateTestset,
+  createTestsetItem,
+  updateTestsetItem,
+  deleteTestsetItem,
   type RagEvaluateResponse,
   type RagTestsetItem,
   type BatchEvalResponse,
@@ -49,6 +54,11 @@ export default function RagEvaluate() {
 
   const [batchRunning, setBatchRunning] = useState(false)
   const [batchResult, setBatchResult] = useState<BatchEvalResponse | null>(null)
+
+  const [itemModalOpen, setItemModalOpen] = useState(false)
+  const [editingItem, setEditingItem] = useState<RagTestsetItem | null>(null)
+  const [savingItem, setSavingItem] = useState(false)
+  const [itemForm] = Form.useForm<{ question: string; ground_truth: string; source_context?: string }>()
 
   const [question, setQuestion] = useState('')
   const [groundTruth, setGroundTruth] = useState('')
@@ -160,6 +170,70 @@ export default function RagEvaluate() {
     message.success('已带入下方单条评测表单')
   }
 
+  const openCreateItemModal = () => {
+    if (!selectedKbId) {
+      message.warning('请先选择知识库')
+      return
+    }
+    setEditingItem(null)
+    itemForm.resetFields()
+    setItemModalOpen(true)
+  }
+
+  const openEditItemModal = (item: RagTestsetItem) => {
+    setEditingItem(item)
+    itemForm.setFieldsValue({
+      question: item.question,
+      ground_truth: item.ground_truth,
+      source_context: item.source_context ?? '',
+    })
+    setItemModalOpen(true)
+  }
+
+  const closeItemModal = () => {
+    setItemModalOpen(false)
+    setEditingItem(null)
+    itemForm.resetFields()
+  }
+
+  const saveItemModal = async () => {
+    let values: { question: string; ground_truth: string; source_context?: string }
+    try {
+      values = await itemForm.validateFields()
+    } catch {
+      return // 校验失败，表单自己会标红提示，不用额外弹 message
+    }
+    setSavingItem(true)
+    try {
+      if (editingItem) {
+        await updateTestsetItem(editingItem.id, values)
+        message.success('已保存')
+      } else {
+        if (!selectedKbId) return
+        await createTestsetItem({ kb_id: selectedKbId, ...values })
+        message.success('已新增')
+      }
+      setItemModalOpen(false)
+      setEditingItem(null)
+      itemForm.resetFields()
+      await loadTestset()
+    } catch (e) {
+      if (e instanceof Error) message.error(e.message)
+    } finally {
+      setSavingItem(false)
+    }
+  }
+
+  const deleteItem = async (item: RagTestsetItem) => {
+    try {
+      await deleteTestsetItem(item.id)
+      message.success('已删除')
+      await loadTestset()
+    } catch (e) {
+      message.error(e instanceof Error ? e.message : '删除失败')
+    }
+  }
+
   const run = async () => {
     if (!selectedKbId) {
       message.warning('请先选择知识库')
@@ -207,7 +281,7 @@ export default function RagEvaluate() {
 
   return (
     <Layout style={{ height: '100%', minHeight: 400, background: 'transparent', overflow: 'hidden' }}>
-      <Content style={{ overflow: 'auto', padding: 24, background: 'transparent', width: '100%', maxWidth: 960 }}>
+      <Content style={{ overflow: 'auto', padding: 24, background: 'transparent', width: '100%' }}>
         <Title level={5} style={{ margin: 0, marginBottom: 8, color: 'var(--ds-text)', fontWeight: 600 }}>
           RAG 效果评测（RAGAS）
         </Title>
@@ -236,6 +310,9 @@ export default function RagEvaluate() {
               <InputNumber min={1} max={20} value={genSize} onChange={(v) => setGenSize(v ?? 10)} style={{ width: 64 }} />
               <Button icon={<ThunderboltOutlined />} loading={generating} onClick={generate}>
                 生成测试集
+              </Button>
+              <Button icon={<PlusOutlined />} onClick={openCreateItemModal}>
+                新增
               </Button>
               <Button
                 type="primary"
@@ -267,20 +344,37 @@ export default function RagEvaluate() {
             rowKey="id"
             loading={loadingTestset}
             size="small"
-            scroll={{ x: 'max-content' }}
+            scroll={{ x: 900 }}
             pagination={{ pageSize: 10 }}
             columns={[
-              { title: '问题', dataIndex: 'question', key: 'question', ellipsis: true },
-              { title: '标准答案', dataIndex: 'ground_truth', key: 'ground_truth', ellipsis: true },
-              { title: '生成方式', dataIndex: 'synthesizer', key: 'synthesizer', width: 220, ellipsis: true },
+              { title: '问题', dataIndex: 'question', key: 'question', width: 220 },
+              { title: '标准答案', dataIndex: 'ground_truth', key: 'ground_truth', width: 360 },
+              { title: '生成方式', dataIndex: 'synthesizer', key: 'synthesizer', width: 180, ellipsis: true },
               {
                 title: '操作',
                 key: 'action',
-                width: 90,
+                width: 140,
                 render: (_, record) => (
-                  <Button type="link" size="small" onClick={() => pickTestsetItem(record)}>
-                    选用
-                  </Button>
+                  <Space size={4}>
+                    <Button type="link" size="small" onClick={() => pickTestsetItem(record)}>
+                      选用
+                    </Button>
+                    <Button
+                      type="link"
+                      size="small"
+                      icon={<EditOutlined />}
+                      onClick={() => openEditItemModal(record)}
+                    />
+                    <Popconfirm
+                      title="确定删除这条测试数据？"
+                      onConfirm={() => deleteItem(record)}
+                      okText="删除"
+                      okType="danger"
+                      cancelText="取消"
+                    >
+                      <Button type="link" size="small" danger icon={<DeleteOutlined />} />
+                    </Popconfirm>
+                  </Space>
                 ),
               },
             ]}
@@ -367,6 +461,29 @@ export default function RagEvaluate() {
           </>
         )}
       </Content>
+
+      <Modal
+        title={editingItem ? '编辑测试数据' : '新增测试数据'}
+        open={itemModalOpen}
+        onOk={saveItemModal}
+        onCancel={closeItemModal}
+        confirmLoading={savingItem}
+        okText="保存"
+        cancelText="取消"
+        destroyOnClose
+      >
+        <Form form={itemForm} layout="vertical">
+          <Form.Item name="question" label="问题" rules={[{ required: true, message: '请输入问题' }]}>
+            <TextArea autoSize={{ minRows: 2, maxRows: 4 }} />
+          </Form.Item>
+          <Form.Item name="ground_truth" label="标准答案" rules={[{ required: true, message: '请输入标准答案' }]}>
+            <TextArea autoSize={{ minRows: 2, maxRows: 4 }} />
+          </Form.Item>
+          <Form.Item name="source_context" label="原文依据（可选）">
+            <TextArea autoSize={{ minRows: 2, maxRows: 4 }} />
+          </Form.Item>
+        </Form>
+      </Modal>
     </Layout>
   )
 }

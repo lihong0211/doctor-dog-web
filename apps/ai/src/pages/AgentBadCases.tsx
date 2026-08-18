@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Layout, Typography, Card, Table, Select, Button, Tag, message } from 'antd'
+import { Layout, Typography, Card, Table, Select, Segmented, Button, Tag, message } from 'antd'
 import { ReloadOutlined } from '@ant-design/icons'
-import { listBadCases, type BadCase } from '../service/langgraph'
+import { listBadCases, listTraces, type BadCase } from '../service/langgraph'
 
 const { Content } = Layout
 const { Title, Text } = Typography
@@ -15,22 +15,40 @@ const GRAPH_FILTER_OPTIONS = [
   { value: 'rag', label: 'rag' },
 ]
 
+type ViewMode = 'bad' | 'all'
+
+const VIEW_MODE_OPTIONS = [
+  { value: 'bad', label: '仅 Bad Case' },
+  { value: 'all', label: '全部' },
+]
+
+const VIEW_MODE_DESC: Record<ViewMode, string> = {
+  bad: '数据飞轮的挖掘入口：status=error（系统自己判定失败）或 feedback=bad（人工/用户标注不满意）任一命中即算 bad case，供后续回流进知识库/prompt/训练集。覆盖 LangGraph 各图和 RAG 问答。',
+  all: '埋点采集的全量视图：不限 status/feedback，好 case 和 bad case 都在，供对比分析而不只是挖 bad case。反馈列是显式反馈（好评/差评），复制列是隐式反馈——用户复制走答案，即使没点赞也说明答案有用。',
+}
+
 export default function AgentBadCases() {
   const [graph, setGraph] = useState<string | undefined>(undefined)
+  const [viewMode, setViewMode] = useState<ViewMode>('bad')
   const [cases, setCases] = useState<BadCase[]>([])
   const [loading, setLoading] = useState(false)
 
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const { cases: list } = await listBadCases(graph, 100)
-      setCases(list)
+      if (viewMode === 'all') {
+        const { traces } = await listTraces(graph, undefined, 100)
+        setCases(traces)
+      } else {
+        const { cases: list } = await listBadCases(graph, 100)
+        setCases(list)
+      }
     } catch (e) {
       message.error((e as Error).message || '加载失败')
     } finally {
       setLoading(false)
     }
-  }, [graph])
+  }, [graph, viewMode])
 
   useEffect(() => {
     load()
@@ -44,6 +62,7 @@ export default function AgentBadCases() {
             飞轮埋点
           </Title>
           <div style={{ display: 'flex', gap: 8 }}>
+            <Segmented value={viewMode} onChange={(v) => setViewMode(v as ViewMode)} options={VIEW_MODE_OPTIONS} />
             <Select
               style={{ width: 140 }}
               value={graph}
@@ -57,8 +76,7 @@ export default function AgentBadCases() {
           </div>
         </div>
         <Text type="secondary" style={{ display: 'block', marginBottom: 16 }}>
-          数据飞轮的挖掘入口：status=error（系统自己判定失败）或 feedback=bad（人工/用户标注不满意）任一命中即算 bad
-          case，供后续回流进知识库/prompt/训练集。覆盖 LangGraph 各图和 RAG 问答。
+          {VIEW_MODE_DESC[viewMode]}
         </Text>
 
         <Card size="small">
@@ -86,6 +104,14 @@ export default function AgentBadCases() {
                 width: 90,
                 render: (f: string | null) =>
                   f ? <Tag color={f === 'bad' ? 'volcano' : 'green'}>{f}</Tag> : <Text type="secondary">-</Text>,
+              },
+              {
+                title: '复制',
+                dataIndex: 'copied',
+                key: 'copied',
+                width: 80,
+                render: (c: boolean) =>
+                  c ? <Tag color="blue">已复制</Tag> : <Text type="secondary">-</Text>,
               },
               { title: '输入', dataIndex: 'input_summary', key: 'input_summary', ellipsis: true },
               { title: '输出', dataIndex: 'output_summary', key: 'output_summary', ellipsis: true },

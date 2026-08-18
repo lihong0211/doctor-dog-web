@@ -3,7 +3,7 @@
  * 基于知识库的检索与问答，支持 Query 改写（CASEA）与 Rerank（DashScope）
  */
 
-import { get, post, type ApiResponse, unwrapApiResponse } from './request'
+import { get, post, put, del, type ApiResponse, unwrapApiResponse } from './request'
 
 const BASE = '/ai/rag'
 
@@ -173,5 +173,34 @@ export async function batchEvaluateTestset(kbId: number, testsetIds?: number[]):
       { kb_id: kbId, testsetIds },
       { timeout: 600_000 }
     )) as unknown as ApiResponse<BatchEvalResponse>
+  )
+}
+
+/** POST /ai/rag/testset/create —— 手动补一条测试集数据，不经过 RAGAS 生成 */
+export async function createTestsetItem(params: {
+  kb_id: number
+  question: string
+  ground_truth: string
+  source_context?: string
+}): Promise<RagTestsetItem> {
+  return unwrapApiResponse(
+    (await post(BASE + '/testset/create', params)) as unknown as ApiResponse<RagTestsetItem>
+  )
+}
+
+/** PUT /ai/rag/testset/{id} —— 只传要改的字段 */
+export async function updateTestsetItem(
+  id: number,
+  params: { question?: string; ground_truth?: string; source_context?: string }
+): Promise<RagTestsetItem> {
+  return unwrapApiResponse(
+    (await put(BASE + '/testset/' + id, params)) as unknown as ApiResponse<RagTestsetItem>
+  )
+}
+
+/** DELETE /ai/rag/testset/{id} */
+export async function deleteTestsetItem(id: number): Promise<{ id: number }> {
+  return unwrapApiResponse(
+    (await del(BASE + '/testset/' + id)) as unknown as ApiResponse<{ id: number }>
   )
 }

@@ -141,6 +141,12 @@ export async function submitTraceFeedback(traceId: number, rating: TraceRating, 
   unwrapApiResponse(res as ApiResponse<{ traceId: number; rating: TraceRating }>)
 }
 
+/** POST /ai/langgraph/trace/copy：隐式反馈，用户复制了这次回答 */
+export async function markTraceCopied(traceId: number): Promise<void> {
+  const res = await post<{ traceId: number }>(`${BASE}/trace/copy`, { traceId })
+  unwrapApiResponse(res as ApiResponse<{ traceId: number }>)
+}
+
 export interface BadCase {
   id: number
   graph_name: string
@@ -152,6 +158,8 @@ export interface BadCase {
   error_message: string | null
   feedback: TraceRating | null
   feedback_note: string | null
+  /** 隐式反馈：答案是否被复制过 */
+  copied: boolean
   created_at: string | null
 }
 
@@ -185,6 +193,8 @@ export interface TraceItem {
   steps_detail: string | null
   feedback: TraceRating | null
   feedback_note: string | null
+  /** 隐式反馈：答案是否被复制过 */
+  copied: boolean
   created_at: string | null
 }
 

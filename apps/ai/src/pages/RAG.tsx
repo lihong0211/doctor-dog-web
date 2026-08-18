@@ -7,7 +7,7 @@ import {
 } from '@ant-design/icons'
 import { listKnowledgeBases, type KbItem } from '../service/knowledge-base'
 import { ragSearch, ragAsk, type RagSearchResponse, type RagAskResponse } from '../service/rag'
-import { submitTraceFeedback, type TraceRating } from '../service/langgraph'
+import { submitTraceFeedback, markTraceCopied, type TraceRating } from '../service/langgraph'
 import ReactMarkdown from 'react-markdown'
 import AskInput from '../components/AskInput'
 import './MCP/MCPGaode.css'
@@ -215,10 +215,13 @@ export default function RAG() {
     }
   }
 
-  const handleCopy = async (text: string) => {
+  // 隐式反馈：复制答案，跟点赞点踩一样是回流信号，但不需要用户主动评价，
+  // 上报失败不影响复制体验本身，静默处理
+  const handleCopy = async (text: string, traceId?: number | null) => {
     try {
       await navigator.clipboard.writeText(text)
       message.success('已复制')
+      if (traceId != null) markTraceCopied(traceId).catch(() => {})
     } catch {
       message.error('复制失败')
     }
@@ -399,7 +402,7 @@ export default function RAG() {
                               type="text"
                               size="small"
                               icon={<CopyOutlined />}
-                              onClick={() => handleCopy(pair.askResponse!.answer)}
+                              onClick={() => handleCopy(pair.askResponse!.answer, pair.askResponse!.traceId)}
                             />
                           </Tooltip>
                           {pair.askResponse.traceId != null && (
