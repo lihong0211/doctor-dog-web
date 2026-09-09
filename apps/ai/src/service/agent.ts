@@ -11,31 +11,6 @@ function getBaseUrl(): string {
   return import.meta.env.DEV ? '' : 'https://home.doctor-dog.com'
 }
 
-/** 与后端 AGENT_META 一致 */
-export const AGENT_LIST: AgentMeta[] = [
-  {
-    id: 'research_agent',
-    name: '智能投研助手',
-    description: '深思熟虑型智能体，适用于投资研究场景，多步骤分析和推理，生成投资观点和研究报告。',
-    type: 'deliberative',
-    icon: '📊',
-  },
-  {
-    id: 'fund_qa_agent',
-    name: '迪士尼客服助手',
-    description: '反应式智能体，回答关于迪士尼乐园、电影、角色、门票、园区等问题，使用知识库检索。',
-    type: 'reactive',
-    icon: '🏰',
-  },
-  {
-    id: 'wealth_advisor_agent',
-    name: '财富管理投顾助手',
-    description: '混合型智能体，结合反应式与深思熟虑，提供财富管理咨询服务。',
-    type: 'hybrid',
-    icon: '💰',
-  },
-]
-
 export type AgentId = 'research_agent' | 'fund_qa_agent' | 'wealth_advisor_agent'
 
 export interface AgentMeta {
@@ -116,20 +91,6 @@ export const DEFAULT_INPUTS: Record<string, Record<string, unknown>> = {
     current_phase: null,
     error: null,
   },
-}
-
-/** GET /ai/agent/list - 返回智能体列表；若无后端则使用本地 AGENT_LIST */
-export async function listAgents(): Promise<Record<string, AgentMeta & { id: string }>> {
-  try {
-    const res = await get<Record<string, AgentMeta & { id: string }>>(`${BASE}/list`)
-    const data = unwrapApiResponse(res as ApiResponse<Record<string, AgentMeta & { id: string }>>)
-    return data
-  } catch {
-    return AGENT_LIST.reduce(
-      (acc, a) => ({ ...acc, [a.id]: { ...a, id: a.id } }),
-      {} as Record<string, AgentMeta & { id: string }>
-    )
-  }
 }
 
 /** GET /ai/agent/schema?agent_id=xxx */

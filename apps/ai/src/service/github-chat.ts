@@ -7,6 +7,8 @@ export interface IndexResult {
   chunk_count: number
   owner: string
   repo: string
+  repo_url?: string
+  indexed_at?: string
 }
 
 export async function indexRepo(repoUrl: string, token?: string): Promise<IndexResult> {
@@ -14,6 +16,11 @@ export async function indexRepo(repoUrl: string, token?: string): Promise<IndexR
     repo_url: repoUrl,
     github_token: token || undefined,
   }, { timeout: 300000 }) as unknown as ApiResponse<IndexResult>
+  return unwrapApiResponse(res)
+}
+
+export async function listIndexedRepos(): Promise<IndexResult[]> {
+  const res = await request.get('/ai/github-chat/list') as unknown as ApiResponse<IndexResult[]>
   return unwrapApiResponse(res)
 }
 

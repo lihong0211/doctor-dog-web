@@ -14,12 +14,9 @@ export async function mixtureChat(
   models: string[],
   opts: { onChunk: (c: StreamChunkMixture) => void; onError?: (e: unknown) => void }
 ): Promise<void> {
-  const { streamRequest } = await import('../utils/streamChat')
-  await streamRequest('/ai/mixture-agents/chat', { question, models }, {
-    onChunk: (raw) => {
-      const r = raw as unknown as StreamChunkMixture
-      if (r.type) opts.onChunk(r)
-    },
+  const { streamRequestRaw } = await import('../utils/streamChat')
+  await streamRequestRaw<StreamChunkMixture>('/ai/mixture-agents/chat', { question, models }, {
+    onChunk: opts.onChunk,
     onError: opts.onError,
   })
 }

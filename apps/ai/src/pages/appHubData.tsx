@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import {
   AppstoreOutlined,
   AudioOutlined,
+  BankOutlined,
   BarChartOutlined,
   BulbOutlined,
   CompassOutlined,
@@ -11,17 +12,20 @@ import {
   FilePdfOutlined,
   FileTextOutlined,
   ForkOutlined,
+  FundOutlined,
   GithubOutlined,
   GlobalOutlined,
   HeartOutlined,
   LineChartOutlined,
   MailOutlined,
+  MedicineBoxOutlined,
   PlaySquareOutlined,
   ReadOutlined,
   RocketOutlined,
   SearchOutlined,
   SmileOutlined,
   StarOutlined,
+  StockOutlined,
   SwapOutlined,
   TeamOutlined,
   ThunderboltOutlined,
@@ -42,6 +46,10 @@ export interface AppCard {
 export const CATEGORIES = ['全部', '对话Agent', '知识处理', '数据分析', '多媒体处理', '游戏娱乐', '娱乐体验', '推理模型']
 
 export const APPS: AppCard[] = [
+  { id: 0, title: '知识库 RAG', category: '知识处理', description: '多格式文档知识库管理，向量检索 + 语义重排，完整 RAG 流水线', path: '/skills/rag', icon: <DatabaseOutlined />, status: 'live', tags: ['知识库', 'RAG', 'BM25'] },
+  { id: 27, title: '全科医生智能体', category: '对话Agent', description: '多轮问诊采集患者信息，LangGraph 状态机驱动，生成深度诊断分析报告', path: '/apps/doctor-agent', icon: <MedicineBoxOutlined />, status: 'live', tags: ['问诊', 'LangGraph', '多轮对话'] },
+  { id: 28, title: '智能投研助手', category: '对话Agent', description: '深思熟虑型智能体，多步骤分析推理，3D 可视化展示 Agent 执行过程', path: '/apps/research-agent', icon: <FundOutlined />, status: 'live', tags: ['投研', 'LangGraph', '3D可视化'] },
+  { id: 29, title: '迪士尼客服助手', category: '对话Agent', description: '反应式智能体，基于知识库检索回答迪士尼乐园相关问题', path: '/apps/disney-service-agent', icon: <CustomerServiceOutlined />, status: 'live', tags: ['客服', '知识库', 'RAG'] },
   { id: 1, title: 'AI 数据分析', category: '数据分析', description: '上传 CSV/Excel，用自然语言提问，AI 自动生成 SQL 并返回结果', path: '/apps/data-analysis', icon: <BarChartOutlined />, status: 'live', tags: ['CSV', 'DuckDB', 'Text2SQL'] },
   { id: 2, title: 'Chat with GitHub', category: '知识处理', description: '输入 GitHub 仓库 URL，AI 为代码建立向量索引，支持 RAG 问答', path: '/apps/github-chat', icon: <GithubOutlined />, status: 'live', tags: ['RAG', 'Qdrant', 'Embedding'] },
   { id: 3, title: 'Chat with YouTube', category: '知识处理', description: '输入 YouTube 视频链接，AI 提取字幕并进行内容问答', path: '/apps/youtube-chat', icon: <VideoCameraOutlined />, status: 'live', tags: ['字幕', 'RAG', 'YouTube'] },
@@ -68,5 +76,7 @@ export const APPS: AppCard[] = [
   { id: 24, title: 'Gmail 智能助手', category: '知识处理', description: '连接 Gmail，AI 读取邮件、生成摘要和智能回复草稿', path: '/apps/gmail-assistant', icon: <MailOutlined />, status: 'needs-api', tags: ['Gmail', 'OAuth', '邮件'] },
   { id: 25, title: 'AI 音乐生成', category: '多媒体处理', description: '描述想要的音乐风格和情绪，AI 生成原创音乐', path: '/apps/music-gen', icon: <CustomerServiceOutlined />, status: 'needs-api', tags: ['音乐', 'Suno', '生成'] },
   { id: 26, title: 'MOSS TTS Nano', category: '多媒体处理', description: '0.1B 轻量 TTS 模型，支持中英文等 20 语言，上传参考音频即可克隆声音，纯 CPU 可运行', path: '/apps/moss-tts', icon: <CustomerServiceOutlined />, status: 'live', tags: ['TTS', '声音克隆', 'MOSS', 'CPU'] },
-  { id: 0, title: '知识库 RAG', category: '知识处理', description: '多格式文档知识库管理，向量检索 + 语义重排，完整 RAG 流水线', path: '/skills/rag', icon: <DatabaseOutlined />, status: 'live', tags: ['知识库', 'RAG', 'BM25'] },
+  
+  { id: 30, title: '财富管理投顾助手', category: '对话Agent', description: '混合型智能体，结合反应式与深思熟虑，提供财富管理咨询服务', path: '/apps/wealth-advisor-agent', icon: <BankOutlined />, status: 'live', tags: ['理财', '投顾', 'LangGraph'] },
+  { id: 31, title: 'AI 股票分析', category: '数据分析', description: 'Tushare 实时拉取股票历史行情，支持 ARIMA 预测、Prophet 周期分解、布林带异常检测、自动配图', path: '/apps/stock-analysis', icon: <StockOutlined />, status: 'live', tags: ['股票', 'ARIMA', 'Prophet', '布林带'] },
 ]

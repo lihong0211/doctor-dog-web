@@ -21,7 +21,6 @@ import AgentTraces from '../pages/AgentTraces'
 import AgentBadCases from '../pages/AgentBadCases'
 import AgentSagaDemo from '../pages/AgentSagaDemo'
 import MCP from '../pages/MCP'
-import Agent from '../pages/Agent'
 import FineTuning from '../pages/FineTuning'
 import DataAnalysis from '../pages/DataAnalysis'
 import GitHubChat from '../pages/GitHubChat'
@@ -49,6 +48,11 @@ import StartupTrend from '../pages/StartupTrend'
 import GmailAssistant from '../pages/GmailAssistant'
 import MusicGenerator from '../pages/MusicGenerator'
 import MossTTS from '../pages/MossTTS'
+import StockAnalysis from '../pages/StockAnalysis'
+import DoctorAgent from '../pages/DoctorAgent'
+import ResearchAgent from '../pages/ResearchAgent'
+import DisneyServiceAgent from '../pages/DisneyServiceAgent'
+import WealthAdvisorAgent from '../pages/WealthAdvisorAgent'
 
 export interface RouteItem {
   path: string
@@ -85,7 +89,6 @@ export const skillsRoutes: RouteItem[] = [
   { path: 'function-call', component: FunctionCall, label: 'Function Call' },
   { path: 'mcp', component: MCP, label: 'MCP 助手' },
   { path: 'a2a', component: A2A, label: 'A2A' },
-  { path: 'agent', component: Agent, label: 'Agent' },
   { path: 'fine-tuning', component: FineTuning, label: 'Fine Tuning' },
   { path: 'coze', component: () => <PlaceholderPage title="Coze" />, label: 'Coze' },
   { path: 'dify', component: () => <PlaceholderPage title="Dify" />, label: 'Dify' },
@@ -120,4 +123,9 @@ export const appRoutes: RouteItem[] = [
   { path: 'gmail-assistant', component: GmailAssistant, label: 'Gmail助手' },
   { path: 'music-gen', component: MusicGenerator, label: 'AI音乐生成' },
   { path: 'moss-tts', component: MossTTS, label: 'MOSS TTS Nano' },
+  { path: 'doctor-agent', component: DoctorAgent, label: '全科医生智能体' },
+  { path: 'research-agent', component: ResearchAgent, label: '智能投研助手' },
+  { path: 'disney-service-agent', component: DisneyServiceAgent, label: '迪士尼客服助手' },
+  { path: 'wealth-advisor-agent', component: WealthAdvisorAgent, label: '财富管理投顾助手' },
+  { path: 'stock-analysis', component: StockAnalysis, label: 'AI 股票分析' },
 ]

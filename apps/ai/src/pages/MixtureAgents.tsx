@@ -96,7 +96,7 @@ export default function MixtureAgents() {
         {(modelAnswers.length > 0 || streaming) && (
           <div style={{ marginBottom: 16 }}>
             <Text strong style={{ display: 'block', marginBottom: 8 }}>各模型回答：</Text>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
               {selectedModels.map(model => {
                 const found = modelAnswers.find(a => a.model === model)
                 return (
@@ -121,8 +121,8 @@ export default function MixtureAgents() {
         {/* 聚合结果 */}
         {(aggregate || (streaming && modelAnswers.length > 0)) && (
           <Card
-            title={<span><Tag color="gold">🤖 聚合最优答案</Tag></span>}
-            style={{ borderColor: '#faad14', background: '#fffbf0' }}
+            title={<span><Tag color="green">聚合最优答案</Tag></span>}
+            style={{ borderColor: 'var(--ai-primary)' }}
           >
             <Paragraph style={{ margin: 0, fontSize: 14, whiteSpace: 'pre-wrap' }}>
               {aggregate || <Spin size="small" />}

@@ -100,3 +100,62 @@ export async function streamRequest(
     onError?.(e instanceof Error ? e : new Error(String(e)))
   }
 }
+
+/**
+ * 发起 SSE 流式 POST 请求，原样透传解析后的 JSON（不做 thinking/response/done 归一化）
+ * 用于后端 chunk 结构自定义（如 { type, data }）的场景
+ */
+export async function streamRequestRaw<T = unknown>(
+  url: string,
+  data: Record<string, unknown>,
+  opts: { onChunk?: (chunk: T) => void; onError?: (error: Error) => void } = {}
+): Promise<void> {
+  const { onChunk, onError } = opts
+
+  try {
+    const baseUrl = getBaseUrl()
+    const fullUrl = baseUrl ? `${baseUrl}${url}` : url
+
+    const res = await fetch(fullUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({})) as { msg?: string }
+      throw new Error(err.msg || `HTTP ${res.status}`)
+    }
+
+    const reader = res.body?.getReader()
+    if (!reader) throw new Error('No response body')
+
+    const decoder = new TextDecoder('utf-8')
+    let buffer = ''
+
+    const handleLine = (line: string) => {
+      if (!line.startsWith('data: ')) return
+      const raw = line.slice(6)
+      if (raw === '[DONE]') return
+      try {
+        onChunk?.(JSON.parse(raw) as T)
+      } catch {
+        // ignore parse error
+      }
+    }
+
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+
+      buffer += decoder.decode(value, { stream: true })
+      const lines = buffer.split('\n')
+      buffer = lines.pop() || ''
+      lines.forEach(handleLine)
+    }
+
+    if (buffer) handleLine(buffer)
+  } catch (e) {
+    onError?.(e instanceof Error ? e : new Error(String(e)))
+  }
+}

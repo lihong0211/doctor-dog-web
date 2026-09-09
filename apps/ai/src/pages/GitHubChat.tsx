@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { Layout, Typography, Input, Button, Card, Space, Tag, message, Spin, Divider } from 'antd'
 import { GithubOutlined, SendOutlined, LoadingOutlined } from '@ant-design/icons'
-import { indexRepo, askGithub, type IndexResult } from '../service/github-chat'
+import ReactMarkdown from 'react-markdown'
+import { indexRepo, askGithub, listIndexedRepos, type IndexResult } from '../service/github-chat'
 
 const { Content } = Layout
 const { Title, Text } = Typography
@@ -19,11 +20,21 @@ export default function GitHubChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [inputText, setInputText] = useState('')
   const [streaming, setStreaming] = useState(false)
+  const [indexedRepos, setIndexedRepos] = useState<IndexResult[]>([])
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
+
+  useEffect(() => {
+    listIndexedRepos().then(setIndexedRepos).catch(() => {})
+  }, [])
+
+  const handleSelectIndexed = (result: IndexResult) => {
+    setIndexResult(result)
+    setMessages([])
+  }
 
   const handleIndex = async () => {
     if (!repoUrl.trim()) return message.warning('请输入 GitHub 仓库 URL')
@@ -34,6 +45,7 @@ export default function GitHubChat() {
       const result = await indexRepo(repoUrl.trim(), token.trim() || undefined)
       setIndexResult(result)
       message.success(`索引完成：${result.file_count} 个文件，${result.chunk_count} 个片段`)
+      listIndexedRepos().then(setIndexedRepos).catch(() => {})
     } catch (e) {
       message.error(e instanceof Error ? e.message : '索引失败')
     } finally {
@@ -85,6 +97,26 @@ export default function GitHubChat() {
 
         {/* 索引区 */}
         <Card title="索引仓库" style={{ marginBottom: 16, flexShrink: 0 }}>
+          {indexedRepos.length > 0 && (
+            <div style={{ marginBottom: 12 }}>
+              <Text type="secondary" style={{ fontSize: 12, display: 'block', marginBottom: 6 }}>
+                已索引仓库（点击直接提问，无需重新索引）
+              </Text>
+              <Space wrap>
+                {indexedRepos.map((r) => (
+                  <Tag
+                    key={r.index_id}
+                    color={indexResult?.index_id === r.index_id ? 'green' : 'default'}
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => handleSelectIndexed(r)}
+                  >
+                    {r.owner}/{r.repo}
+                  </Tag>
+                ))}
+              </Space>
+              <Divider style={{ margin: '12px 0' }} />
+            </div>
+          )}
           <Space.Compact style={{ width: '100%', marginBottom: 8 }}>
             <Input
               placeholder="GitHub 仓库 URL，例如：https://github.com/anthropics/anthropic-quickstarts"
@@ -159,18 +191,24 @@ export default function GitHubChat() {
                   <div
                     style={{
                       maxWidth: '80%',
-                      padding: '8px 14px',
+                      padding: msg.role === 'user' ? '10px 16px' : '12px 16px',
                       borderRadius: msg.role === 'user' ? '16px 4px 16px 16px' : '4px 16px 16px 16px',
-                      background: msg.role === 'user' ? 'var(--ai-primary)' : '#fff',
-                      color: msg.role === 'user' ? '#fff' : '#000',
-                      boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
-                      whiteSpace: 'pre-wrap',
+                      background: msg.role === 'user' ? 'var(--ds-primary)' : 'var(--ds-bg-chat)',
+                      border: msg.role === 'user' ? 'none' : '1px solid var(--ds-border)',
+                      color: msg.role === 'user' ? '#fff' : 'var(--ds-text)',
                       wordBreak: 'break-word',
                       fontSize: 14,
-                      lineHeight: 1.6,
                     }}
                   >
-                    {msg.content || (streaming && i === messages.length - 1 ? <LoadingOutlined /> : '')}
+                    {msg.role === 'user' ? (
+                      <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>{msg.content}</div>
+                    ) : msg.content ? (
+                      <div className="markdown-body" style={{ lineHeight: 1.65 }}>
+                        <ReactMarkdown>{msg.content}</ReactMarkdown>
+                      </div>
+                    ) : streaming && i === messages.length - 1 ? (
+                      <LoadingOutlined />
+                    ) : null}
                   </div>
                 </div>
               ))}

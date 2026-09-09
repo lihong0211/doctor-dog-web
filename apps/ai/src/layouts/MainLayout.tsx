@@ -27,7 +27,6 @@ const skillItems: NavItem[] = [
   { key: '/skills/function-call', icon: <ToolOutlined />, label: 'Function Call' },
   { key: '/skills/mcp', icon: <CloudOutlined />, label: 'MCP' },
   { key: '/skills/a2a', icon: <SwapOutlined />, label: 'A2A' },
-  { key: '/skills/agent', icon: <RobotOutlined />, label: 'Agent' },
   { key: '/skills/fine-tuning', icon: <ExperimentOutlined />, label: 'Fine-tuning' },
 ]
 
