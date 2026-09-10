@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { Layout, Typography, Card, Input, Button, Space, message, Alert } from 'antd'
 import { SmileOutlined, SendOutlined } from '@ant-design/icons'
+import ReactMarkdown from 'react-markdown'
 import { wellbeingChat } from '../service/mental-wellbeing'
 
 const { Content } = Layout
@@ -57,7 +58,7 @@ export default function MentalWellbeing() {
     <Layout style={{ height: '100%', background: 'var(--ai-canvas)' }}>
       <Content style={{ padding: 24, height: '100%', display: 'flex', flexDirection: 'column' }}>
         <Space align="center" style={{ marginBottom: 12 }}>
-          <SmileOutlined style={{ fontSize: 28, color: '#eb2f96' }} />
+          <SmileOutlined style={{ fontSize: 28, color: 'var(--ai-primary)' }} />
           <Title level={3} style={{ margin: 0 }}>AI 心理健康助手</Title>
         </Space>
         <Alert
@@ -77,11 +78,11 @@ export default function MentalWellbeing() {
           ))}
         </div>
 
-        <Card style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', borderColor: '#ffadd2' }}>
+        <Card style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
           {/* Messages */}
           <div ref={chatRef} style={{ flex: 1, overflow: 'auto', padding: '8px 0' }}>
             {messages.length === 0 && (
-              <div style={{ textAlign: 'center', padding: '40px 0', color: '#aaa' }}>
+              <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--ds-text-muted)' }}>
                 <SmileOutlined style={{ fontSize: 48, marginBottom: 8 }} />
                 <div>你好，我在这里陪你。有什么想聊的吗？</div>
               </div>
@@ -90,18 +91,24 @@ export default function MentalWellbeing() {
               <div key={i} style={{ display: 'flex', justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start', marginBottom: 12 }}>
                 <div style={{
                   maxWidth: '75%', padding: '10px 14px', borderRadius: 18,
-                  background: msg.role === 'user' ? '#eb2f96' : '#fff0f6',
-                  color: msg.role === 'user' ? '#fff' : '#333',
-                  border: msg.role === 'ai' ? '1px solid #ffadd2' : 'none',
-                  lineHeight: 1.7, fontSize: 14,
+                  background: msg.role === 'user' ? 'var(--ds-primary)' : 'var(--ds-bg-chat)',
+                  color: msg.role === 'user' ? '#fff' : 'var(--ds-text)',
+                  border: msg.role === 'ai' ? '1px solid var(--ds-border)' : 'none',
+                  fontSize: 14,
                 }}>
-                  {msg.content || (loading && i === messages.length - 1 ? '...' : '')}
+                  {msg.role === 'user' ? (
+                    <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.7 }}>{msg.content}</div>
+                  ) : msg.content ? (
+                    <div className="markdown-body" style={{ lineHeight: 1.7 }}>
+                      <ReactMarkdown>{msg.content}</ReactMarkdown>
+                    </div>
+                  ) : loading && i === messages.length - 1 ? '...' : ''}
                 </div>
               </div>
             ))}
           </div>
           {/* Input */}
-          <div style={{ borderTop: '1px solid #ffadd2', paddingTop: 12 }}>
+          <div style={{ borderTop: '1px solid var(--ds-border)', paddingTop: 12 }}>
             <Space.Compact style={{ width: '100%' }}>
               <Input
                 placeholder="分享你的感受..."
@@ -110,8 +117,7 @@ export default function MentalWellbeing() {
                 onPressEnter={handleSend}
                 disabled={loading}
               />
-              <Button type="primary" icon={<SendOutlined />} onClick={handleSend} loading={loading}
-                style={{ background: '#eb2f96', borderColor: '#eb2f96' }}>
+              <Button type="primary" icon={<SendOutlined />} onClick={handleSend} loading={loading}>
                 发送
               </Button>
             </Space.Compact>
