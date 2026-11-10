@@ -2,7 +2,7 @@ import { useState, type ReactNode } from 'react'
 import { Button, Drawer } from 'antd'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
-  ApiOutlined, BookOutlined, BugOutlined, CloudOutlined, CodeOutlined, DatabaseOutlined,
+  ApiOutlined, BookOutlined, BugOutlined, CloudOutlined, CloudServerOutlined, CodeOutlined, DatabaseOutlined,
   ExperimentOutlined, LinkOutlined, MenuOutlined, RobotOutlined, RollbackOutlined,
   SwapOutlined, ToolOutlined, DashboardOutlined, HistoryOutlined, UnorderedListOutlined,
 } from '@ant-design/icons'
@@ -26,6 +26,7 @@ const skillItems: NavItem[] = [
   { key: '/skills/agent-saga-demo', icon: <RollbackOutlined />, label: '副作用回滚' },
   { key: '/skills/function-call', icon: <ToolOutlined />, label: 'Function Call' },
   { key: '/skills/mcp', icon: <CloudOutlined />, label: 'MCP' },
+  { key: '/skills/mcp-manager', icon: <CloudServerOutlined />, label: 'MCP 服务管理' },
   { key: '/skills/a2a', icon: <SwapOutlined />, label: 'A2A' },
   { key: '/skills/fine-tuning', icon: <ExperimentOutlined />, label: 'Fine-tuning' },
 ]

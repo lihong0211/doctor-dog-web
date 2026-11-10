@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import MainLayout from './layouts/MainLayout'
 import PortalPage from './pages/Portal'
-import AppHub from './pages/AppHub'
-import ExperienceCenter from './pages/ExperienceCenter'
+import AppHub from './pages/experience/AppHub'
+import ExperienceCenter from './pages/legacy-models/ExperienceCenter'
 import { experienceRoutes, skillsRoutes, appRoutes } from './config/routes'
 
 function App() {

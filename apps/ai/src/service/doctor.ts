@@ -7,6 +7,9 @@ import { del, get, post, unwrapApiResponse, type ApiResponse } from './request'
 
 const BASE = '/ai/doctor'
 
+/** 问诊阶段：collecting=采集中，confirming=已汇总待患者确认，completed=已生成诊断 */
+export type DoctorPhase = 'collecting' | 'confirming' | 'completed'
+
 /** 患者信息字段（与后端 DoctorState.patient_info 对齐） */
 export interface PatientInfo {
   name?: string
@@ -31,7 +34,7 @@ export interface DoctorChatResponse {
   reply: string
   patient_info: PatientInfo
   completion_pct: number
-  phase: 'collecting' | 'completed'
+  phase: DoctorPhase
   assessment: string | null
 }
 
@@ -39,7 +42,7 @@ export interface DoctorChatResponse {
 export interface DoctorSessionResponse {
   session_id: string
   patient_info: PatientInfo
-  phase: 'collecting' | 'completed'
+  phase: DoctorPhase
   turn_count: number
   completion_pct: number
   assessment: string | null
@@ -74,7 +77,7 @@ export async function getDoctorSession(sessionId: string): Promise<DoctorSession
 export interface DoctorHistoryItem {
   session_id: string
   chief_complaint: string | null
-  phase: 'collecting' | 'completed'
+  phase: DoctorPhase
   turn_count: number
   completion_pct: number
   updated_at: string | null

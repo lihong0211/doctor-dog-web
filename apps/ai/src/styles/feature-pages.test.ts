@@ -1,5 +1,14 @@
 import { readFileSync, readdirSync } from 'node:fs'
+import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
+
+function listTsxFiles(dir: string): string[] {
+  return readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
+    const fullPath = join(dir, entry.name)
+    if (entry.isDirectory()) return listTsxFiles(fullPath)
+    return entry.name.endsWith('.tsx') ? [fullPath] : []
+  })
+}
 
 describe('feature page style contract', () => {
   it('provides the shared dark page patterns', () => {
@@ -17,9 +26,7 @@ describe('feature page style contract', () => {
   })
 
   it('does not allow light hard-coded backgrounds on feature page root layouts', () => {
-    const pageFiles = readdirSync('src/pages')
-      .filter(file => file.endsWith('.tsx'))
-      .map(file => `src/pages/${file}`)
+    const pageFiles = listTsxFiles('src/pages')
     const offenders = pageFiles.filter(file => {
       const source = readFileSync(file, 'utf8')
       return /<Layout style=\{\{ height: '100%', background: '#f/i.test(source)
@@ -31,7 +38,7 @@ describe('feature page style contract', () => {
   it('keeps shared skill workspaces and composers on dark theme surfaces', () => {
     const globalCss = readFileSync('src/index.css', 'utf8')
     const askInputCss = readFileSync('src/components/AskInput/index.css', 'utf8')
-    const mcpCss = readFileSync('src/pages/MCP/MCPGaode.css', 'utf8')
+    const mcpCss = readFileSync('src/pages/skills/MCP/MCPGaode.css', 'utf8')
 
     expect(globalCss).toContain('--ds-bg-secondary: var(--ai-surface-1)')
     expect(globalCss).toContain('--ds-text-secondary: var(--ai-text-secondary)')
@@ -44,8 +51,8 @@ describe('feature page style contract', () => {
   })
 
   it('keeps Fine-tuning model choices readable on dark cards', () => {
-    const fineTuningSource = readFileSync('src/pages/FineTuning.tsx', 'utf8')
-    const mcpCss = readFileSync('src/pages/MCP/MCPGaode.css', 'utf8')
+    const fineTuningSource = readFileSync('src/pages/skills/FineTuning.tsx', 'utf8')
+    const mcpCss = readFileSync('src/pages/skills/MCP/MCPGaode.css', 'utf8')
 
     expect(fineTuningSource).not.toContain("color: '#1e293b'")
     expect(mcpCss).toMatch(/\.mcp-gaode-recommended-btn\s*\{[^}]*color:\s*var\(--ai-text\)/s)
@@ -54,7 +61,7 @@ describe('feature page style contract', () => {
 
   it('keeps Text2SQL tab content scrollable and Data pagination visible', () => {
     const globalCss = readFileSync('src/index.css', 'utf8')
-    const text2SqlSource = readFileSync('src/pages/Text2SQL.tsx', 'utf8')
+    const text2SqlSource = readFileSync('src/pages/skills/Text2SQL.tsx', 'utf8')
 
     expect(globalCss).toMatch(/\.text2sql-tabs-fill \.ant-tabs-body-holder\s*\{[^}]*flex:\s*1[^}]*min-height:\s*0/s)
     expect(globalCss).toMatch(/\.text2sql-tabs-fill \.ant-tabs-body\s*\{[^}]*height:\s*100%/s)

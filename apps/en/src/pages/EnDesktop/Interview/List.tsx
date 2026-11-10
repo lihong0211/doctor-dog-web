@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ProTable } from '@ant-design/pro-components';
-import { Button, Select, Tag, message } from 'antd';
+import { Button, Input, Popconfirm, Select, Space, Tag, message } from 'antd';
 import request from '../../../request';
+import { requireAuth } from '../authGuard';
 import EditDrawer from './EditDrawer';
 import { MASTERY_COLORS, MASTERY_LEVELS, mainCategory, type QuestionItem } from './types';
 
@@ -10,6 +11,7 @@ export default function InterviewList() {
   const [questions, setQuestions] = useState<QuestionItem[]>([]);
   const [category, setCategory] = useState<string | undefined>();
   const [mastery, setMastery] = useState<string | undefined>();
+  const [keyword, setKeyword] = useState('');
 
   const load = () => {
     setLoading(true);
@@ -22,27 +24,49 @@ export default function InterviewList() {
 
   useEffect(load, []);
 
+  const handleDelete = (id: number) => {
+    if (!requireAuth()) return;
+    request
+      .post('/english/interview/delete', { id })
+      .then(() => {
+        message.success('删除成功');
+        load();
+      })
+      .catch((e) => message.error(typeof e === 'string' ? e : '删除失败'));
+  };
+
   const categoryOptions = useMemo(
     () => Array.from(new Set(questions.map((q) => mainCategory(q.category)).filter(Boolean))),
     [questions],
   );
 
-  const filtered = useMemo(
-    () =>
-      questions.filter(
-        (q) => (!category || mainCategory(q.category) === category) && (!mastery || q.mastery === mastery),
-      ),
-    [questions, category, mastery],
-  );
+  const filtered = useMemo(() => {
+    const kw = keyword.trim().toLowerCase();
+    return questions.filter(
+      (q) =>
+        (!category || mainCategory(q.category) === category) &&
+        (!mastery || q.mastery === mastery) &&
+        (!kw || q.question.toLowerCase().includes(kw) || q.key_points.toLowerCase().includes(kw)),
+    );
+  }, [questions, category, mastery, keyword]);
 
   return (
     <ProTable<QuestionItem>
       rowKey="id"
       loading={loading}
       dataSource={filtered}
-      scroll={{ y: 'calc(100dvh - 311px)' }}
+      scroll={{ x: 900, y: 'calc(100dvh - 311px)' }}
       search={false}
       toolBarRender={() => [
+        <Input.Search
+          key="keyword"
+          allowClear
+          placeholder="按题目/关键记忆点搜索"
+          style={{ width: 220 }}
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          onSearch={setKeyword}
+        />,
         <Select
           key="category"
           allowClear
@@ -89,16 +113,30 @@ export default function InterviewList() {
             )),
         },
         {
+          dataIndex: 'audios',
+          title: '录音条数',
+          width: 90,
+          align: 'center',
+          render: (_dom, entity) => entity.audios.length,
+        },
+        {
           title: '操作',
           valueType: 'option',
           fixed: 'right',
-          width: 80,
+          width: 130,
           render: (_dom, entity) => (
-            <EditDrawer
-              initialValues={entity}
-              trigger={<Button type="link">编辑</Button>}
-              onSubmitted={load}
-            />
+            <Space size="small">
+              <EditDrawer
+                initialValues={entity}
+                trigger={<Button type="link">编辑</Button>}
+                onSubmitted={load}
+              />
+              <Popconfirm title="确定删除该题目吗" onConfirm={() => handleDelete(entity.id)}>
+                <Button type="link" danger>
+                  删除
+                </Button>
+              </Popconfirm>
+            </Space>
           ),
         },
       ]}
