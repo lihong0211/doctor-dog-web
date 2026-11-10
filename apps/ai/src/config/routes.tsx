@@ -12,6 +12,7 @@ import PlaceholderPage from '../pages/PlaceholderPage'
 import FunctionCall from '../pages/skills/FunctionCall'
 import A2A from '../pages/skills/A2A'
 import RAG from '../pages/skills/RAG'
+import KnowledgeGraph from '../pages/skills/KnowledgeGraph'
 import RagEvaluate from '../pages/skills/RagEvaluate'
 import Text2SQL from '../pages/skills/Text2SQL'
 import LangChain from '../pages/skills/LangChain'
@@ -79,6 +80,7 @@ export const skillsRoutes: RouteItem[] = [
   { path: 'knowledge-base/new', component: KnowledgeBaseNew, label: '新增知识库' },
   { path: 'knowledge-base/:id', component: KnowledgeBase, label: 'KnowledgeBase' },
   { path: 'rag', component: RAG, label: 'RAG' },
+  { path: 'knowledge-graph', component: KnowledgeGraph, label: '知识图谱' },
   { path: 'rag-evaluate', component: RagEvaluate, label: 'RAG 评测' },
   { path: 'text2sql', component: Text2SQL, label: 'Text2SQL' },
   { path: 'langchain', component: LangChain, label: 'LangChain' },

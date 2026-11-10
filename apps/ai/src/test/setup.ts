@@ -18,6 +18,16 @@ vi.mock('@ant-design/icons', () => {
 
   return {
     ApiOutlined: TestIcon,
+    BankOutlined: TestIcon,
+    BugOutlined: TestIcon,
+    CloudServerOutlined: TestIcon,
+    DashboardOutlined: TestIcon,
+    FundOutlined: TestIcon,
+    HistoryOutlined: TestIcon,
+    MedicineBoxOutlined: TestIcon,
+    RollbackOutlined: TestIcon,
+    StockOutlined: TestIcon,
+    UnorderedListOutlined: TestIcon,
     AppstoreOutlined: TestIcon,
     AudioOutlined: TestIcon,
     BarChartOutlined: TestIcon,

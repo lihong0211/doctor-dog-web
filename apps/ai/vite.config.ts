@@ -1,10 +1,15 @@
 /// <reference types="vitest/config" />
-import { defineConfig } from 'vite'
+import { fileURLToPath } from 'node:url'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 
-export default defineConfig({
+export default defineConfig(({ command, mode }) => {
+  const env = loadEnv(mode, fileURLToPath(new URL('../..', import.meta.url)), '')
+  const localAutoConnect = command === 'serve' && mode !== 'test' && Boolean(env.KG_API_KEY)
+  return {
   base: '/ai/',
   plugins: [react()],
+  define: { __KG_LOCAL_AUTO_CONNECT__: JSON.stringify(localAutoConnect) },
   test: {
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
@@ -17,6 +22,11 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      '/ai/kg': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        headers: env.KG_API_KEY ? { 'X-API-Key': env.KG_API_KEY } : undefined,
+      },
       '/ai': {
         target: 'http://localhost:3001',
         changeOrigin: true,
@@ -42,4 +52,5 @@ export default defineConfig({
       },
     },
   },
+  }
 })

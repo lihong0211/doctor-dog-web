@@ -3,7 +3,7 @@ import { Button, Drawer } from 'antd'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
   ApiOutlined, BookOutlined, BugOutlined, CloudOutlined, CloudServerOutlined, CodeOutlined, DatabaseOutlined,
-  ExperimentOutlined, LinkOutlined, MenuOutlined, RobotOutlined, RollbackOutlined,
+  ExperimentOutlined, ForkOutlined, LinkOutlined, MenuOutlined, RobotOutlined, RollbackOutlined,
   SwapOutlined, ToolOutlined, DashboardOutlined, HistoryOutlined, UnorderedListOutlined,
 } from '@ant-design/icons'
 import './MainLayout.css'
@@ -14,6 +14,7 @@ const skillItems: NavItem[] = [
   { key: '/skills/vector-db', icon: <ApiOutlined />, label: 'VectorDB' },
   { key: '/skills/knowledge-base', icon: <BookOutlined />, label: 'Knowledge Base' },
   { key: '/skills/rag', icon: <DatabaseOutlined />, label: 'RAG' },
+  { key: '/skills/knowledge-graph', icon: <ForkOutlined />, label: '知识图谱' },
   { key: '/skills/rag-evaluate', icon: <DashboardOutlined />, label: 'RAG 评测' },
   { key: '/skills/text2sql', icon: <CodeOutlined />, label: 'Text2SQL' },
   { key: '/skills/langchain', icon: <LinkOutlined />, label: 'LangChain' },
