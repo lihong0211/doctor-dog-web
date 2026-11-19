@@ -7,7 +7,7 @@ import * as api from '../../service/knowledge-graph'
 
 vi.mock('../../service/knowledge-graph', () => ({
   getOverview: vi.fn(), getGraph: vi.fn(), searchGraph: vi.fn(), mergeSearch: vi.fn(), answerQuestion: vi.fn(),
-  isLocalAutoConnectEnabled: vi.fn(),
+  isAutoConnectEnabled: vi.fn(),
 }))
 const chart = vi.hoisted(() => ({ init: vi.fn(), setOption: vi.fn(), dispatchAction: vi.fn(),
   on: vi.fn(), off: vi.fn(), resize: vi.fn(), dispose: vi.fn() }))
@@ -23,7 +23,7 @@ const graph = { nodes: [{ id: 'movie-1', name: '肖申克的救赎', type: 'Movi
 
 beforeEach(() => {
   vi.resetAllMocks()
-  vi.mocked(api.isLocalAutoConnectEnabled).mockReturnValue(false)
+  vi.mocked(api.isAutoConnectEnabled).mockReturnValue(false)
   chart.init.mockReturnValue(chart)
   Object.defineProperty(window, 'matchMedia', { writable: true, value: vi.fn().mockImplementation(() => ({
     matches: false, addListener: vi.fn(), removeListener: vi.fn(), addEventListener: vi.fn(),
@@ -54,12 +54,12 @@ async function ask() {
 }
 
 describe('KnowledgeGraph', () => {
-  it('automatically connects with server-side local credentials and can ask without a browser key', async () => {
-    vi.mocked(api.isLocalAutoConnectEnabled).mockReturnValue(true)
+  it('automatically connects with server-side credentials and can ask without a browser key', async () => {
+    vi.mocked(api.isAutoConnectEnabled).mockReturnValue(true)
     render(<KnowledgeGraph />)
     await screen.findByText('1595')
     expect(screen.queryByLabelText('KG API Key')).not.toBeInTheDocument()
-    expect(screen.getByText('使用本地环境配置自动连接。')).toBeInTheDocument()
+    expect(screen.getByText('使用服务器配置自动连接。')).toBeInTheDocument()
     expect(api.getOverview).toHaveBeenCalledWith('', expect.any(AbortSignal))
     const user = userEvent.setup()
     await user.click(screen.getByRole('tab', { name: '检索问答' }))
