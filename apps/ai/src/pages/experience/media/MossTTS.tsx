@@ -156,7 +156,7 @@ export default function MossTTS() {
     }
   }, [text, sourceMode, rec.wavFile, uploadFile, builtinVoice])
 
-  const isOnline = status?.online ?? null
+  const isOnline = status?.loaded ?? status?.online ?? null
 
   const TAB: SourceMode[] = ['record', 'upload', 'builtin']
   const TAB_LABEL: Record<SourceMode, string> = { record: '🎙 录音', upload: '📁 上传文件', builtin: '🔊 内置音色' }

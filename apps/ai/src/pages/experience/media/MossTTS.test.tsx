@@ -13,7 +13,7 @@ vi.mock('@ant-design/icons', () => ({
 beforeEach(() => {
   vi.resetAllMocks()
   URL.revokeObjectURL = vi.fn()
-  vi.mocked(api.getMossTTSStatus).mockResolvedValue({ online: false, msg: '模型尚未加载（首次请求时自动触发）' })
+  vi.mocked(api.getMossTTSStatus).mockResolvedValue({ online: true, loaded: false, msg: '模型尚未加载（首次请求时自动触发）' })
   vi.mocked(api.mossTTSSynthesize).mockResolvedValue('blob:test-speech')
 })
 
