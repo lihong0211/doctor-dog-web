@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import {
-  CustomerServiceOutlined, CheckCircleOutlined, CloseCircleOutlined,
+  CustomerServiceOutlined, CheckCircleOutlined,
   UploadOutlined, AudioOutlined, DeleteOutlined,
 } from '@ant-design/icons'
 import { getMossTTSStatus, mossTTSSynthesize, type MossTTSStatus } from '../../../service/moss-tts'
@@ -127,7 +127,12 @@ export default function MossTTS() {
   const prevOutputUrl = useRef<string | null>(null)
   const rec = useRecorder()
 
-  useEffect(() => { getMossTTSStatus().then(setStatus) }, [])
+  const refreshStatus = useCallback(() => {
+    getMossTTSStatus().then(setStatus).catch(() => {
+      setStatus({ online: false, msg: '暂时无法获取模型状态，可尝试生成或刷新。' })
+    })
+  }, [])
+  useEffect(refreshStatus, [refreshStatus])
   useEffect(() => () => { if (prevOutputUrl.current) URL.revokeObjectURL(prevOutputUrl.current) }, [])
 
   const handleGenerate = useCallback(async () => {
@@ -143,6 +148,7 @@ export default function MossTTS() {
       const url = await mossTTSSynthesize(text.trim(), promptFile, demoId)
       prevOutputUrl.current = url
       setOutputUrl(url)
+      setStatus({ online: true, msg: '模型已加载，就绪' })
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e))
     } finally {
@@ -189,16 +195,16 @@ export default function MossTTS() {
       {/* Status bar */}
       <div style={{
         display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px', borderRadius: 8, marginBottom: 20,
-        background: isOnline === null ? 'rgba(61,90,128,0.1)' : isOnline ? 'rgba(12,240,122,0.05)' : 'rgba(239,68,68,0.07)',
-        border: `1px solid ${isOnline === null ? 'rgba(61,90,128,0.25)' : isOnline ? 'rgba(12,240,122,0.2)' : 'rgba(239,68,68,0.2)'}`,
+        background: isOnline === null ? 'rgba(61,90,128,0.1)' : isOnline ? 'rgba(12,240,122,0.05)' : 'rgba(249,115,22,0.07)',
+        border: `1px solid ${isOnline === null ? 'rgba(61,90,128,0.25)' : isOnline ? 'rgba(12,240,122,0.2)' : 'rgba(249,115,22,0.2)'}`,
       }}>
         {isOnline === null
           ? <span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, color: '#3D5A80' }}>● 检测中…</span>
           : isOnline
             ? <><CheckCircleOutlined style={{ color: '#0CF07A', fontSize: 13 }} /><span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, color: '#0CF07A' }}>服务在线 · 模型就绪</span></>
-            : <><CloseCircleOutlined style={{ color: '#EF4444', fontSize: 13 }} /><span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, color: '#EF4444' }}>服务未启动</span></>
+            : <><CustomerServiceOutlined style={{ color: '#F97316', fontSize: 13 }} /><span style={{ fontFamily: '"JetBrains Mono",monospace', fontSize: 11, color: '#F97316' }}>{status?.msg || '模型将在首次合成时加载'}</span></>
         }
-        <button onClick={() => getMossTTSStatus().then(setStatus)} style={{ marginLeft: 'auto', background: 'transparent', border: '1px solid rgba(0,229,200,0.15)', borderRadius: 6, color: '#3D5A80', fontSize: 10, padding: '2px 8px', cursor: 'pointer', fontFamily: '"JetBrains Mono",monospace' }}>刷新</button>
+        <button onClick={refreshStatus} style={{ marginLeft: 'auto', background: 'transparent', border: '1px solid rgba(0,229,200,0.15)', borderRadius: 6, color: '#3D5A80', fontSize: 10, padding: '2px 8px', cursor: 'pointer', fontFamily: '"JetBrains Mono",monospace' }}>刷新</button>
       </div>
 
       <div style={{ display: 'grid', gap: 16, maxWidth: 720 }}>
@@ -357,10 +363,13 @@ export default function MossTTS() {
         )}
 
         {/* Generate */}
-        <button className="moss-btn" disabled={loading || !isOnline} onClick={handleGenerate}
+        <button className="moss-btn" disabled={loading} onClick={handleGenerate}
           style={{ background: loading ? 'rgba(249,115,22,0.3)' : '#F97316', color: '#fff', width: '100%', padding: '12px 0' }}>
-          {loading ? '⏳ 生成中… 约需 5-15 秒' : '▶ 生成语音'}
+          {loading ? '⏳ 生成中… 首次加载可能需要 30-60 秒' : '▶ 生成语音'}
         </button>
+        <div style={{ color: '#526E8F', fontSize: 12, lineHeight: 1.6 }}>
+          首次合成或闲置后再次使用时需要加载模型，请稍候。
+        </div>
 
         {/* Output */}
         {outputUrl && (

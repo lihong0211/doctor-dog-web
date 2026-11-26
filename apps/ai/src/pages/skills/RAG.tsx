@@ -49,7 +49,6 @@ function getKbExamples(kbName: string): string[] {
   return []
 }
 const MODEL_OPTIONS = [
-  { label: 'qwen-turbo', value: 'qwen-turbo' },
   { label: 'qwen-plus', value: 'qwen-plus' },
   { label: 'qwen-max', value: 'qwen-max' },
 ]
@@ -98,7 +97,7 @@ export default function RAG() {
   const [topK, setTopK] = useState(5)
   /** 最大距离阈值（0~1）：超过此距离（即相关度不够）的结果会被过滤 */
   const [maxDistance, setMaxDistance] = useState(0.25)
-  const [model, setModel] = useState('qwen-turbo')
+  const [model, setModel] = useState('qwen-plus')
   const enableQueryRewrite = true
   const enableRerank = false
   const [searching, setSearching] = useState(false)

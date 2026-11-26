@@ -39,6 +39,15 @@ cp deploy/.env.example deploy/.env  # fill in DEPLOY_HOST / DEPLOY_USER / DEPLOY
 
 Requires `sshpass` and `timeout`/`gtimeout` locally (`brew install sshpass coreutils`).
 
+The server checkout must be able to authenticate to GitHub without prompts.
+For a dedicated deploy key, configure `core.sshCommand` in that checkout with
+the private key and writable `UserKnownHostsFile` paths, and verify the GitHub
+host key during initial setup. The script preserves this configuration when
+adding noninteractive SSH options. Server login credentials in `deploy/.env`
+and the server's GitHub deploy key authenticate two separate connections.
+
+Run the deployment SSH regression checks with `python3 deploy/test_deploy_ssh.py`.
+
 See `deploy/nginx/nginx.conf` for the Nginx routing config that
 needs to be in place on the server (replaces the old per-subdomain configs
 for `en.`, `blog.`, `ai.doctor-dog.com` — those subdomains are retired).

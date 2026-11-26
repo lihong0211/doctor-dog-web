@@ -15,6 +15,7 @@ export interface FinetuningOptions {
 
 export interface FinetuningChatRequest {
   messages: FinetuningMessage[]
+  lora?: string
   stream?: boolean
   compare?: boolean
   options?: FinetuningOptions

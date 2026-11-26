@@ -151,7 +151,7 @@ function Text2SQLTab() {
     setResult(null)
     setPending(null)
     try {
-      const out = await runText2SqlHitl({ question: q, model: 'qwen-turbo', maxRows: 500 })
+      const out = await runText2SqlHitl({ question: q, model: 'qwen-plus', maxRows: 500 })
       if (out.waitingForInput && out.interrupt) {
         setPending(out.interrupt)
       } else {

@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown'
 import { Tag, Spin, Card } from 'antd'
 import {
   finetuningChat,
+  finetuningChatStream,
   finetuningChatStreamCompare,
   type FinetuningMessage,
   type FinetuningOptions,
@@ -126,6 +127,7 @@ export default function FineTuning() {
   const [messages, setMessages] = useState<DisplayMessage[]>([])
   const [selectedLoraId, setSelectedLoraId] = useState<string>(LORA_MODELS[0].id)
   const [loading, setLoading] = useState(false)
+  const [compareEnabled, setCompareEnabled] = useState(false)
   const [streamingContent, setStreamingContent] = useState('')
   const [streamingBase, setStreamingBase] = useState('')
   const [streamingLora, setStreamingLora] = useState('')
@@ -168,10 +170,31 @@ export default function FineTuning() {
     const payload = {
       messages: history.map((m) => ({ role: m.role, content: m.content })) as FinetuningMessage[],
       options,
-      lora_id: selectedLoraId,
+      lora: selectedLoraId,
+      compare: compareEnabled,
     }
 
     try {
+      if (!compareEnabled) {
+        let content = ''
+        await finetuningChatStream(payload, {
+          onChunk(chunk) {
+            content += chunk
+            setStreamingContent(content)
+          },
+          onDone() {
+            setMessages(prev => [...prev, { role: 'assistant', content }])
+            setStreamingContent('')
+            setLoading(false)
+          },
+          onError(err) {
+            setMessages(prev => [...prev, { role: 'assistant', content: `错误: ${err}` }])
+            setStreamingContent('')
+            setLoading(false)
+          },
+        })
+        return
+      }
       let baseContent = ''
       let loraContent = ''
       await finetuningChatStreamCompare(payload, {
@@ -204,11 +227,13 @@ export default function FineTuning() {
     } catch (e) {
       // fallback to non-stream
       try {
-        const res = await finetuningChat({ messages: payload.messages, options })
+        const res = await finetuningChat(payload)
         const content = res.lora ?? res.base ?? res.message?.content ?? ''
         setMessages((prev) => [
           ...prev,
-          { role: 'assistant', content, base: res.base, lora: res.lora },
+          compareEnabled
+            ? { role: 'assistant', content, base: res.base, lora: res.lora }
+            : { role: 'assistant', content },
         ] as DisplayMessage[])
       } catch (e2) {
         setMessages((prev) => [
@@ -216,6 +241,7 @@ export default function FineTuning() {
           { role: 'assistant', content: `错误: ${(e2 as Error).message}` },
         ] as DisplayMessage[])
       }
+      setStreamingContent('')
       setLoading(false)
     }
   }
@@ -241,6 +267,13 @@ export default function FineTuning() {
             </div>
           </div>
           <p className="mcp-gaode-desc">{BASE_MODEL.description}</p>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 12, cursor: loading ? 'default' : 'pointer' }}>
+            <input type="checkbox" checked={compareEnabled} disabled={loading} onChange={event => setCompareEnabled(event.target.checked)} />
+            对比基座模型
+          </label>
+          <p className="mcp-gaode-desc" style={{ marginTop: 8, fontSize: 12 }}>
+            {compareEnabled ? '同时查看原版与微调模型的回答。' : '仅使用所选 LoRA 模型回答。'}首次使用或闲置后再次使用时，需要等待模型加载。
+          </p>
         </div>
 
         {/* LoRA 模型选择 */}
@@ -312,9 +345,9 @@ export default function FineTuning() {
             <div className="mcp-gaode-empty">
               <div className="mcp-gaode-empty-row">
                 <span style={{ fontSize: 36 }}>{selectedLora.icon}</span>
-                <span className="mcp-gaode-empty-text">基座 vs {selectedLora.name}</span>
+                <span className="mcp-gaode-empty-text">{compareEnabled ? `基座 vs ${selectedLora.name}` : selectedLora.name}</span>
               </div>
-              <p className="mcp-gaode-empty-hint">发送消息后，将同时对比基座模型与 LoRA 模型的回答</p>
+              <p className="mcp-gaode-empty-hint">{compareEnabled ? '发送消息后，将同时对比基座模型与 LoRA 模型的回答' : '发送消息，使用所选微调模型回答；开启对比可同时查看基座回答。'}</p>
             </div>
           )}
 
@@ -365,6 +398,14 @@ export default function FineTuning() {
               </div>
             )
           })}
+
+          {streamingContent && (
+            <div className="mcp-gaode-row mcp-gaode-row-assistant">
+              <div className="mcp-gaode-bubble mcp-gaode-bubble-assistant mcp-gaode-bubble-text markdown-body">
+                <ReactMarkdown>{streamingContent}</ReactMarkdown>
+              </div>
+            </div>
+          )}
 
           {/* 加载中 */}
           {loading && !streamingContent && !streamingBase && !streamingLora && (

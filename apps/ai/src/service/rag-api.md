@@ -25,7 +25,7 @@
 | question             | string         | 是     | 用户问题（与 query 二选一）           |
 | query                | string         | 同上   | 同上                                  |
 | top_k                | int            | 否     | 检索条数，默认 5，范围 1–20          |
-| model                | string         | 否     | 生成答案所用模型，默认 `qwen-turbo` |
+| model                | string         | 否     | 生成答案所用模型，默认 `qwen-plus` |
 | enable_query_rewrite | bool           | 否     | 是否启用 Query 改写，默认 false       |
 | enable_rerank        | bool           | 否     | 是否启用 Rerank，默认 false           |
 | conversation_history | string\| array | 否     | 对话历史，供 Query 改写使用           |
@@ -56,7 +56,7 @@
         "relevance_score": null
       }
     ],
-    "model": "qwen-turbo",
+    "model": "qwen-plus",
     "query_rewrite": null,
     "rewritten_query": null,
     "rerank": null

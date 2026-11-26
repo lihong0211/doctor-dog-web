@@ -70,8 +70,11 @@ set -e
 # 关掉 git 的交互式凭据提示：需要输入用户名/密码或确认 host key 时直接失败，
 # 而不是在没有 TTY 的非交互 shell 里挂住等一个永远不会来的输入
 export GIT_TERMINAL_PROMPT=0
-export GIT_SSH_COMMAND="ssh -o BatchMode=yes -o ConnectTimeout=15"
 cd "${DEPLOY_PATH}"
+# GIT_SSH_COMMAND 优先于 core.sshCommand；先读取仓库配置，保留部署私钥和 known_hosts 路径。
+# 转义美元符号，让变量和命令替换在服务器执行。
+REPO_SSH_COMMAND=\$(git config --get core.sshCommand || true)
+export GIT_SSH_COMMAND="\${REPO_SSH_COMMAND:-ssh} -o BatchMode=yes -o ConnectTimeout=15"
 echo "==> git pull"
 git pull
 echo "==> 重启 nginx"
