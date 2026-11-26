@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Alert, Button, Empty, Input, Select, Spin, Tabs, Tag } from 'antd'
 import ReactMarkdown from 'react-markdown'
 import {
-  answerQuestion, getGraph, getOverview, isLocalAutoConnectEnabled, mergeSearch, searchGraph,
+  answerQuestion, getGraph, getOverview, isAutoConnectEnabled, mergeSearch, searchGraph,
   type GraphData, type GraphOverview, type GraphQuery, type MergeContext, type SearchMode, type SearchResult,
 } from '../../service/knowledge-graph'
 import KnowledgeGraphCanvas from './KnowledgeGraphCanvas'
@@ -37,7 +37,7 @@ function valueText(value: unknown): string {
 }
 
 export default function KnowledgeGraph() {
-  const autoConnect = isLocalAutoConnectEnabled()
+  const autoConnect = isAutoConnectEnabled()
   const [draftKey, setDraftKey] = useState('')
   const [activeKey, setActiveKey] = useState('')
   const [connecting, setConnecting] = useState(false)
@@ -221,7 +221,7 @@ export default function KnowledgeGraph() {
       {overview && <Tag color="success">已连接</Tag>}</header>
     <section className="ai-panel kg-connection" aria-label="图谱连接">
       <div><h2>{overview ? '电影图谱已连接' : autoConnect ? '正在连接电影知识图谱' : '输入访问密钥，连接电影知识图谱'}</h2>
-        <p>{autoConnect ? '使用本地环境配置自动连接。' : '访问密钥仅保留在当前页面内存中，刷新后需重新输入。'}</p></div>
+        <p>{autoConnect ? '使用服务器配置自动连接。' : '访问密钥仅保留在当前页面内存中，刷新后需重新输入。'}</p></div>
       {autoConnect ? <Button loading={connecting} onClick={() => void connect('')}>重新连接</Button> :
       <form onSubmit={event => { event.preventDefault(); void connect() }}><Input.Password aria-label="KG API Key" placeholder={overview ? '输入新密钥以切换连接' : 'KG API Key'}
         autoComplete="off" value={draftKey} onChange={event => setDraftKey(event.target.value)} />

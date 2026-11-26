@@ -1,9 +1,9 @@
 import request, { unwrapApiResponse, type ApiResponse } from './request'
 
-declare const __KG_LOCAL_AUTO_CONNECT__: boolean
+declare const __KG_AUTO_CONNECT__: boolean
 
-export function isLocalAutoConnectEnabled(): boolean {
-  return import.meta.env.DEV && __KG_LOCAL_AUTO_CONNECT__
+export function isAutoConnectEnabled(): boolean {
+  return typeof __KG_AUTO_CONNECT__ !== 'undefined' && __KG_AUTO_CONNECT__
 }
 
 export type SearchMode = 'cypher' | 'local' | 'global'
@@ -23,6 +23,7 @@ export interface MergeContext extends SearchResult {
 export interface GraphQuery { query?: string; entity_type?: string; entity_id?: string; limit?: number }
 
 const auth = (key: string, signal?: AbortSignal) => ({
+  baseURL: '',
   ...(key ? { headers: { 'X-API-Key': key } } : {}), signal,
 })
 const base = '/ai/kg'

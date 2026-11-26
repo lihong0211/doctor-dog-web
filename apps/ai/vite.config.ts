@@ -6,10 +6,11 @@ import react from '@vitejs/plugin-react'
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, fileURLToPath(new URL('../..', import.meta.url)), '')
   const localAutoConnect = command === 'serve' && mode !== 'test' && Boolean(env.KG_API_KEY)
+  const productionAutoConnect = command === 'build' && env.KG_PROXY_AUTH_ENABLED === 'true'
   return {
   base: '/ai/',
   plugins: [react()],
-  define: { __KG_LOCAL_AUTO_CONNECT__: JSON.stringify(localAutoConnect) },
+  define: mode === 'test' ? {} : { __KG_AUTO_CONNECT__: JSON.stringify(localAutoConnect || productionAutoConnect) },
   test: {
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
